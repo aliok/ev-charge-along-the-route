@@ -1,5 +1,4 @@
 // netlify/functions/maps-redirect.js
-import fetch from 'node-fetch';
 import config from '../../utils/config.js'; // Import config
 import {
     genericHeaders,
