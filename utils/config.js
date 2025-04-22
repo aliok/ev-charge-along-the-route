@@ -70,4 +70,5 @@ const getConfig = () => {
 };
 
 // Export the function as the default export
-export default getConfig;
+export { getConfig };
+

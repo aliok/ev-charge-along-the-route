@@ -1,5 +1,5 @@
 // netlify/functions/maps-redirect.js
-import getConfig from '../../utils/config.js'; // Import the getConfig function
+import { getConfig } from '../../utils/config.js';
 import {
     genericHeaders,
     corsHeaders // Will be called after getting config

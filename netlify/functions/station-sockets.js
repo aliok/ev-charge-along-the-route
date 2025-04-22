@@ -1,5 +1,5 @@
 // netlify/functions/station-sockets.js
-import getConfig from '../../utils/config.js'; // Import the getConfig function
+import { getConfig } from '../../utils/config.js';
 import {
     commonHeaders,
     getFormattedTimestamp,

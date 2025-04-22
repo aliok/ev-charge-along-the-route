@@ -1,7 +1,5 @@
 // utils/helpers.js
 
-// Note: config is no longer imported here directly
-
 // Headers specific to the EPDK API
 export const commonHeaders = {
     'User-Agent': 'Dart/3.1 (dart:io)',
