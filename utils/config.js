@@ -1,63 +1,73 @@
 // utils/config.js
 
+// --- Logging for initial module load ---
+// console.log("[config.js module] Evaluating module...");
+
+// --- Handle process-wide settings ONCE at module load time ---
+const tlsShouldBeDisabled = process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0';
+if (tlsShouldBeDisabled) {
+    // Apply the setting globally *once*.
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    console.warn('[SECURITY WARNING] NODE_TLS_REJECT_UNAUTHORIZED is set to 0 during module load. TLS verification is disabled.');
+}
+// --- End process-wide settings ---
+
+
 /**
- * Reads environment variables and provides default values.
- * Centralizes configuration access.
+ * Reads environment variables and provides default values ON DEMAND.
+ * Call this function within your handler to get the current config.
  */
-const config = {
-    /**
-     * Base URL for the EPDK SARJ API.
-     * Can be overridden by setting the BASE_URL environment variable.
-     */
-    baseUrl: process.env.BASE_URL || 'https://sarjtr.epdk.gov.tr:443/sarjet/api',
+const getConfig = () => {
+    // --- Add logging INSIDE the function call for debugging ---
+    // console.log("[getConfig function] Reading environment variables...");
+    // console.log(`[getConfig function] Raw process.env.BASE_URL: ${process.env.BASE_URL}`);
+    // console.log(`[getConfig function] Raw process.env.FETCH_TIMEOUT: ${process.env.FETCH_TIMEOUT}`);
+    // ---
 
-    /**
-     * Timeout in milliseconds for fetching station data from EPDK API.
-     * Default: 5000 (5 seconds).
-     * Can be overridden by setting the FETCH_TIMEOUT environment variable.
-     */
-    fetchTimeout: parseInt(process.env.FETCH_TIMEOUT || '5000', 10),
+    const config = {
+        /**
+         * Base URL for the EPDK SARJ API.
+         */
+        baseUrl: process.env.BASE_URL || 'https://sarjtr.epdk.gov.tr:443/sarjet/api',
 
-    /**
-     * Timeout in milliseconds for resolving Google Maps redirects.
-     * Default: 10000 (10 seconds).
-     * Can be overridden by setting the MAPS_REDIRECT_TIMEOUT environment variable.
-     */
-    mapsRedirectTimeout: parseInt(process.env.MAPS_REDIRECT_TIMEOUT || '10000', 10),
+        /**
+         * Timeout in milliseconds for fetching station data from EPDK API.
+         */
+        fetchTimeout: parseInt(process.env.FETCH_TIMEOUT || '5000', 10),
 
-    /**
-     * Origin allowed for CORS requests. Read from environment variable.
-     * IMPORTANT: Set ALLOWED_CORS_ORIGIN in Netlify UI per deploy context.
-     * This is crucial for security, especially for the maps-redirect endpoint.
-     * Default: 'http://localhost:63342' for local development.
-     */
-    allowedCorsOrigin: process.env.ALLOWED_CORS_ORIGIN || 'http://localhost:63342',
+        /**
+         * Timeout in milliseconds for resolving Google Maps redirects.
+         */
+        mapsRedirectTimeout: parseInt(process.env.MAPS_REDIRECT_TIMEOUT || '10000', 10),
 
-    /**
-     * Controls whether to disable Node.js TLS verification.
-     * Read from environment variable NODE_TLS_REJECT_UNAUTHORIZED.
-     * Value should be '0' to disable (NOT RECOMMENDED FOR PRODUCTION).
-     * Default: '1' (enabled).
-     * IMPORTANT: Set NODE_TLS_REJECT_UNAUTHORIZED=0 in Netlify UI if needed.
-     */
-    disableTlsRejectUnauthorized: process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0',
+        /**
+         * Origin allowed for CORS requests.
+         */
+        allowedCorsOrigin: process.env.ALLOWED_CORS_ORIGIN || 'http://localhost:63342',
+
+        /**
+         * Returns true if TLS verification should be disabled (based on initial check).
+         * This value itself doesn't change, but reflects the initial setting.
+         */
+        isTlsRejectUnauthorizedDisabled: tlsShouldBeDisabled, // Reflects initial setting
+    };
+
+    // --- Log the generated config object INSIDE the function call ---
+    // console.log("[getConfig function] Generated config object:", JSON.stringify(config, null, 2));
+    // ---
+
+    // Validate parsed numbers - if parseInt resulted in NaN, use default again
+    if (isNaN(config.fetchTimeout)) {
+        console.warn(`[getConfig function] Invalid FETCH_TIMEOUT value "${process.env.FETCH_TIMEOUT}". Defaulting to 5000.`);
+        config.fetchTimeout = 5000;
+    }
+    if (isNaN(config.mapsRedirectTimeout)) {
+        console.warn(`[getConfig function] Invalid MAPS_REDIRECT_TIMEOUT value "${process.env.MAPS_REDIRECT_TIMEOUT}". Defaulting to 10000.`);
+        config.mapsRedirectTimeout = 10000;
+    }
+
+    return config;
 };
 
-// --- Log Configuration on Startup (Optional but helpful for debugging) ---
-// Note: In Netlify Functions, this might log on every invocation if cold start.
-console.log("--- Configuration ---");
-console.log(`Base URL: ${config.baseUrl}`);
-console.log(`Fetch Timeout: ${config.fetchTimeout}ms`);
-console.log(`Maps Redirect Timeout: ${config.mapsRedirectTimeout}ms`);
-console.log(`Allowed CORS Origin: ${config.allowedCorsOrigin}`);
-console.log(`Disable TLS Reject Unauthorized: ${config.disableTlsRejectUnauthorized}`);
-console.log("--------------------");
-
-// Apply the TLS setting globally *once* if needed.
-// This is a process-wide setting.
-if (config.disableTlsRejectUnauthorized) {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    console.warn('[SECURITY WARNING] NODE_TLS_REJECT_UNAUTHORIZED is set to 0. TLS verification is disabled.');
-}
-
-export default config; // Export the config object
+// Export the function as the default export
+export default getConfig;

@@ -1,32 +1,34 @@
 // netlify/functions/maps-redirect.js
-import config from '../../utils/config.js'; // Import config
+import getConfig from '../../utils/config.js'; // Import the getConfig function
 import {
     genericHeaders,
-    corsHeaders
+    corsHeaders // Will be called after getting config
 } from '../../utils/helpers.js';
 
+// Native fetch is used (ensure node-fetch is uninstalled)
+
 export const handler = async (event, context) => {
-    // Use config value for CORS headers (via helper)
-    const commonResponseHeaders = corsHeaders();
+    // --- Call getConfig() at the start of the handler ---
+    const config = getConfig();
+    // Optional: Log the config obtained for this specific request
+    // console.log("[maps-redirect.js] Config for this request:", JSON.stringify(config, null, 2));
+
+    // --- Generate CORS Headers using the current config's origin ---
+    const commonResponseHeaders = corsHeaders(config.allowedCorsOrigin);
 
     // Handle CORS Preflight (OPTIONS request) first
     if (event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 204, // No Content
-            headers: commonResponseHeaders,
-        };
+        return { statusCode: 204, headers: commonResponseHeaders };
     }
+    // --- End CORS Handling ---
 
     // --- Server-Side Origin Check ---
-    const requestOrigin = event.headers['origin']; // Header names are lowercase in Netlify event obj
-    const allowedOrigin = config.allowedCorsOrigin;
+    const requestOrigin = event.headers['origin'];
+    const allowedOrigin = config.allowedCorsOrigin; // Use origin from config for this request
 
-    // Only perform the check if the allowed origin is specific (not '*')
-    // and if the request actually includes an Origin header (browser CORS requests should)
     if (allowedOrigin && allowedOrigin !== '*' && requestOrigin) {
         let originMatch = false;
         try {
-            // Robust comparison using URL objects handles ports, trailing slashes etc.
             const requestOriginUrl = new URL(requestOrigin);
             const allowedOriginUrl = new URL(allowedOrigin);
             if (requestOriginUrl.origin === allowedOriginUrl.origin) {
@@ -40,12 +42,11 @@ export const handler = async (event, context) => {
             console.warn(`[REDIRECT FN REJECTED] Origin mismatch. Request Origin: '${requestOrigin}'. Allowed Origin: '${allowedOrigin}'`);
             return {
                 statusCode: 403, // Forbidden
-                headers: commonResponseHeaders, // Still send CORS headers for the error response
+                headers: commonResponseHeaders,
                 body: JSON.stringify({ error: 'Forbidden: Invalid Origin' }),
             };
         }
     } else if (allowedOrigin && allowedOrigin !== '*' && !requestOrigin) {
-        // If we expect a specific origin, but no Origin header was sent, reject it.
         console.warn(`[REDIRECT FN REJECTED] Missing Origin header when specific origin expected. Allowed Origin: '${allowedOrigin}'`);
         return {
             statusCode: 403, // Forbidden
@@ -56,7 +57,7 @@ export const handler = async (event, context) => {
     // --- End Server-Side Origin Check ---
 
 
-    // Only allow GET requests (now checked after Origin)
+    // Only allow GET requests
     if (event.httpMethod !== 'GET') {
         return {
             statusCode: 405, // Method Not Allowed
@@ -87,16 +88,17 @@ export const handler = async (event, context) => {
 
     // --- Timeout Implementation ---
     const controller = new AbortController();
-    // Use config value for timeout, ensuring it's less than Netlify's limit
+    // Use timeout from the config object obtained for this request
     const effectiveTimeout = Math.min(config.mapsRedirectTimeout, 9500);
     const timeoutId = setTimeout(() => {
         controller.abort();
     }, effectiveTimeout);
     // --- End Timeout Implementation ---
 
+    console.log(`[REDIRECT FN] Origin OK. Resolving ${shortUrl} with ${effectiveTimeout}ms timeout`);
+
     try {
-        console.log(`[REDIRECT FN] Origin OK. Resolving ${shortUrl} with ${effectiveTimeout / 1000}s timeout`);
-        // Pass genericHeaders
+        // Using native fetch
         const response = await fetch(shortUrl, {
             method: 'GET',
             headers: genericHeaders,
@@ -120,7 +122,7 @@ export const handler = async (event, context) => {
     } catch (err) {
         clearTimeout(timeoutId);
         if (err.name === 'AbortError') {
-            console.error(`[REDIRECT FN TIMEOUT] Request to ${shortUrl} timed out after ${effectiveTimeout / 1000} seconds.`);
+            console.error(`[REDIRECT FN TIMEOUT] Request to ${shortUrl} timed out after ${effectiveTimeout}ms.`);
             return {
                 statusCode: 504, // Gateway Timeout
                 headers: commonResponseHeaders,
@@ -128,7 +130,6 @@ export const handler = async (event, context) => {
             };
         } else {
             console.error(`[REDIRECT FN ERROR] Failed to resolve redirect for ${shortUrl}:`, err);
-            // Use 502 if it seems like a network/upstream issue, 500 otherwise
             const statusCode = (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED') ? 502 : 500;
             return {
                 statusCode: statusCode,

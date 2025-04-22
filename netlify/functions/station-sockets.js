@@ -1,24 +1,28 @@
 // netlify/functions/station-sockets.js
-import config from '../../utils/config.js'; // Import config
+import getConfig from '../../utils/config.js'; // Import the getConfig function
 import {
     commonHeaders,
     getFormattedTimestamp,
     getCurrentAvailability,
-    corsHeaders
+    corsHeaders // Will be called after getting config
 } from '../../utils/helpers.js';
 
-export const handler = async (event, context) => {
-    console.log("Received event:", JSON.stringify(event, null, 2));
+// Native fetch is used (ensure node-fetch is uninstalled)
 
-    const commonResponseHeaders = corsHeaders();
+export const handler = async (event, context) => {
+    // --- Call getConfig() at the start of the handler ---
+    const config = getConfig();
+    // Optional: Log the config obtained for this specific request
+    // console.log("[station-sockets.js] Config for this request:", JSON.stringify(config, null, 2));
+
+    // --- Generate CORS Headers using the current config's origin ---
+    const commonResponseHeaders = corsHeaders(config.allowedCorsOrigin);
 
     // Handle CORS Preflight (OPTIONS request)
     if (event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 204, // No Content
-            headers: commonResponseHeaders,
-        };
+        return { statusCode: 204, headers: commonResponseHeaders };
     }
+    // --- End CORS Handling ---
 
     // Only allow GET requests
     if (event.httpMethod !== 'GET') {
@@ -32,20 +36,14 @@ export const handler = async (event, context) => {
     // --- Manually Parse stationId from event.path ---
     let stationId = null;
     try {
-        // Example event.path: "/api/station/1234567/sockets"
         const pathParts = event.path.split('/');
-        // Expected array: ["", "api", "station", "1234567", "sockets"] (length 5)
-
-        // Basic validation of the path structure
         if (pathParts.length === 5 && pathParts[1] === 'api' && pathParts[2] === 'station' && pathParts[4] === 'sockets') {
-            // Extract the ID (the 4th element, index 3)
             stationId = pathParts[3];
         } else {
             console.warn(`[PROXY FN WARN] Path "${event.path}" did not match expected format /api/station/:id/sockets`);
         }
     } catch (e) {
         console.error(`[PROXY FN ERROR] Error occurred while trying to parse path "${event.path}":`, e);
-        // stationId remains null, will be caught by the check below
     }
     // --- End Manual Parsing ---
 
@@ -72,14 +70,18 @@ export const handler = async (event, context) => {
 
     // --- Timeout Implementation ---
     const controller = new AbortController();
-    const effectiveTimeout = Math.min(config.fetchTimeout, 9500); // Ensure slightly less than 10s Netlify limit
+    // Use timeout from the config object obtained for this request
+    const effectiveTimeout = Math.min(config.fetchTimeout, 9500); // Ensure slightly less than default Netlify limit
     const timeoutId = setTimeout(() => {
         controller.abort();
     }, effectiveTimeout);
     // --- End Timeout Implementation ---
 
+    // Log constructed URL and timeout
+    console.log(`[PROXY FN] Fetching ${url} (ID: ${stationId}) with ${effectiveTimeout}ms timeout`);
+
     try {
-        console.log(`[PROXY FN] Fetching ${url} (ID: ${stationId}) with ${effectiveTimeout / 1000}s timeout`);
+        // Using native fetch
         const response = await fetch(url, {
             headers: commonHeaders,
             signal: controller.signal
@@ -125,7 +127,7 @@ export const handler = async (event, context) => {
         clearTimeout(timeoutId);
 
         if (err.name === 'AbortError') {
-            console.error(`[PROXY FN TIMEOUT] Request to ${url} timed out after ${effectiveTimeout / 1000} seconds.`);
+            console.error(`[PROXY FN TIMEOUT] Request to ${url} timed out after ${effectiveTimeout}ms.`);
             return {
                 statusCode: 504, // Gateway Timeout
                 headers: commonResponseHeaders,

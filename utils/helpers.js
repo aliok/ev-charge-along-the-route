@@ -1,5 +1,6 @@
 // utils/helpers.js
-import config from './config.js'; // Import the configuration
+
+// Note: config is no longer imported here directly
 
 // Headers specific to the EPDK API
 export const commonHeaders = {
@@ -56,18 +57,20 @@ export const getCurrentAvailability = (availabilityArray) => {
     if (currentStatusEntry) {
         return currentStatusEntry.status;
     } else {
-        console.warn(`[WARN] No active availability interval found for current time: ${currentTime.toISOString()}. Available intervals:`, JSON.stringify(availabilityArray));
+        // console.warn(`[WARN] No active availability interval found for current time: ${currentTime.toISOString()}. Available intervals:`, JSON.stringify(availabilityArray));
         return 'UNKNOWN';
     }
 };
 
-// Common CORS Headers - Reads origin from config
-export const corsHeaders = () => {
-    // Read the origin directly from the imported config object
-    const allowedOrigin = config.allowedCorsOrigin;
-
+// Common CORS Headers - Accepts origin as an argument
+export const corsHeaders = (origin) => {
+    if (!origin) {
+        // Fallback just in case, though it should always be provided now
+        console.warn("[corsHeaders] Warning: Origin not provided, using default fallback.");
+        origin = 'http://localhost:63342'; // Default fallback
+    }
     return {
-        'Access-Control-Allow-Origin': allowedOrigin,
+        'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Headers': 'Content-Type', // Allow only necessary headers
         'Access-Control-Allow-Methods': 'GET, OPTIONS', // Specify allowed methods
     };
