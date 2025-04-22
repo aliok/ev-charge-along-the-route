@@ -1,0 +1,19 @@
+# netlify.toml
+
+[build]
+# Directory containing the serverless functions
+functions = "netlify/functions"
+
+# Redirect rule for the station sockets endpoint
+# Maps /api/station/:id/sockets to the station-sockets function
+[[redirects]]
+from = "/api/station/:stationID/sockets"
+to = "/.netlify/functions/station-sockets"
+status = 200 # Use 200 for a rewrite (acting like a proxy)
+
+# Redirect rule for the maps redirect endpoint
+# Maps /api/maps/redirect to the maps-redirect function
+[[redirects]]
+from = "/api/maps/redirect"
+to = "/.netlify/functions/maps-redirect"
+status = 200 # Use 200 for a rewrite
