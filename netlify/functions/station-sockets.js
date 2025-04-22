@@ -3,37 +3,23 @@ import { getConfig } from '../../utils/config.js';
 import {
     commonHeaders,
     getFormattedTimestamp,
-    getCurrentAvailability,
-    corsHeaders // Will be called after getting config
+    getCurrentAvailability
 } from '../../utils/helpers.js';
 
-// Native fetch is used (ensure node-fetch is uninstalled)
+// Native fetch is used
 
 export const handler = async (event, context) => {
-    // --- Call getConfig() at the start of the handler ---
     const config = getConfig();
-    // Optional: Log the config obtained for this specific request
-    // console.log("[station-sockets.js] Config for this request:", JSON.stringify(config, null, 2));
-
-    // --- Generate CORS Headers using the current config's origin ---
-    const commonResponseHeaders = corsHeaders(config.allowedCorsOrigin);
-
-    // Handle CORS Preflight (OPTIONS request)
-    if (event.httpMethod === 'OPTIONS') {
-        return { statusCode: 204, headers: commonResponseHeaders };
-    }
-    // --- End CORS Handling ---
 
     // Only allow GET requests
     if (event.httpMethod !== 'GET') {
         return {
-            statusCode: 405, // Method Not Allowed
-            headers: commonResponseHeaders,
+            statusCode: 405,
             body: JSON.stringify({ error: 'Method Not Allowed' }),
         };
     }
 
-    // --- Manually Parse stationId from event.path ---
+    // --- Manually Parse stationId ---
     let stationId = null;
     try {
         const pathParts = event.path.split('/');
@@ -47,17 +33,15 @@ export const handler = async (event, context) => {
     }
     // --- End Manual Parsing ---
 
-    // Check if stationId was successfully parsed
     if (!stationId) {
         console.error(`[PROXY FN ERROR] Could not extract station ID from path: ${event.path}`);
         return {
             statusCode: 400,
-            headers: commonResponseHeaders,
             body: JSON.stringify({ error: 'Could not determine station ID from request path' }),
         };
     }
 
-    // --- Calculate Timestamp for API ---
+    // --- Calculate Timestamp ---
     const now = new Date();
     const previousMinute = new Date(now.getTime() - 60 * 1000);
     previousMinute.setSeconds(0, 0);
@@ -65,35 +49,24 @@ export const handler = async (event, context) => {
     const encodedTime = encodeURIComponent(apiTimestamp);
     // --- End Timestamp Calculation ---
 
-    // Use config value for Base URL and the parsed stationId
     const url = `${config.baseUrl}/stations/id/${stationId}/${encodedTime}`;
 
-    // --- Timeout Implementation ---
+    // --- Timeout ---
     const controller = new AbortController();
-    // Use timeout from the config object obtained for this request
-    const effectiveTimeout = Math.min(config.fetchTimeout, 9500); // Ensure slightly less than default Netlify limit
-    const timeoutId = setTimeout(() => {
-        controller.abort();
-    }, effectiveTimeout);
-    // --- End Timeout Implementation ---
+    const effectiveTimeout = Math.min(config.fetchTimeout, 9500);
+    const timeoutId = setTimeout(() => controller.abort(), effectiveTimeout);
 
-    // Log constructed URL and timeout
     console.log(`[PROXY FN] Fetching ${url} (ID: ${stationId}) with ${effectiveTimeout}ms timeout`);
 
     try {
-        // Using native fetch
-        const response = await fetch(url, {
-            headers: commonHeaders,
-            signal: controller.signal
-        });
+        const response = await fetch(url, { headers: commonHeaders, signal: controller.signal });
         clearTimeout(timeoutId);
 
         if (!response.ok) {
             const errorBody = await response.text();
             console.error(`[PROXY FN ERROR] Origin server response for ID ${stationId}: ${response.status} ${response.statusText}`, errorBody);
             return {
-                statusCode: 502, // Bad Gateway
-                headers: commonResponseHeaders,
+                statusCode: 502,
                 body: JSON.stringify({ error: `Origin server responded with ${response.status} for station ${stationId}` })
             };
         }
@@ -116,30 +89,25 @@ export const handler = async (event, context) => {
 
         return {
             statusCode: 200,
-            headers: {
-                ...commonResponseHeaders, // Include CORS
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(simplifiedSockets),
         };
 
     } catch (err) {
         clearTimeout(timeoutId);
+        let statusCode = 500;
+        let errorBody = { error: `Internal error fetching station detail for ID ${stationId}. ${err.message}` };
 
         if (err.name === 'AbortError') {
+            statusCode = 504;
+            errorBody = { error: `Request to upstream server timed out for station ID ${stationId}` };
             console.error(`[PROXY FN TIMEOUT] Request to ${url} timed out after ${effectiveTimeout}ms.`);
-            return {
-                statusCode: 504, // Gateway Timeout
-                headers: commonResponseHeaders,
-                body: JSON.stringify({ error: `Request to upstream server timed out for station ID ${stationId}` }),
-            };
         } else {
             console.error(`[PROXY FN ERROR] Internal processing error or network issue for station ID ${stationId}:`, err);
-            return {
-                statusCode: 500, // Internal Server Error
-                headers: commonResponseHeaders,
-                body: JSON.stringify({ error: `Internal error fetching station detail for ID ${stationId}. ${err.message}` }),
-            };
         }
+        return {
+            statusCode: statusCode,
+            body: JSON.stringify(errorBody),
+        };
     }
 };

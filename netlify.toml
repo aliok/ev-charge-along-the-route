@@ -1,19 +1,25 @@
 # netlify.toml
 
 [build]
+# Command to run the build script defined in package.json
+command = "npm run build"
+# Directory containing the PROCESSED site files (including index.html)
+publish = "dist"
 # Directory containing the serverless functions
 functions = "netlify/functions"
 
-# Redirect rule for the station sockets endpoint
-# Maps /api/station/:id/sockets to the station-sockets function
+# Set environment variables for build AND functions runtime
+[build.environment]
+NODE_TLS_REJECT_UNAUTHORIZED = "0" # Set globally if needed
+
 [[redirects]]
-from = "/api/station/:stationID/sockets"
+from = "/api/station/:id/sockets"
 to = "/.netlify/functions/station-sockets"
-status = 200 # Use 200 for a rewrite (acting like a proxy)
+status = 200
 
 # Redirect rule for the maps redirect endpoint
 # Maps /api/maps/redirect to the maps-redirect function
 [[redirects]]
 from = "/api/maps/redirect"
 to = "/.netlify/functions/maps-redirect"
-status = 200 # Use 200 for a rewrite
+status = 200

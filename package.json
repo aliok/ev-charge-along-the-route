@@ -1,17 +1,31 @@
 {
-  "name": "ev-charge-proxy",
+  "name": "netlify-proxy-functions",
   "version": "1.0.0",
-  "description": "Netlify functions for EPDK proxy and Maps redirect",
+  "description": "Netlify functions proxy and Maps redirect with static HTML",
   "main": "index.js",
   "scripts": {
+    "// Clean the output directory before build": "",
+    "clean": "rm -rf ./dist",
+    "// Build HTML by substituting env vars using Node.js script": "",
+    "build:html": "node ./scripts/build-html.mjs",
+    "// Main build command: clean, then build HTML (and potentially other assets)": "",
+    "build": "npm run clean && npm run build:html",
+    "// Local development server (runs functions and serves static files from 'dist')": "",
+    "dev": "netlify dev",
+    "// Reminder: Run 'npm run build' manually once before 'npm run dev' to generate ./dist": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "netlify",
     "serverless",
-    "proxy"
+    "proxy",
+    "static",
+    "envsubst"
   ],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
 }

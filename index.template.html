@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- Default lang attribute, updated by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n-key="title">EV Stations Along Route</title> <!-- Updated Title, translation applied by JS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        #map-container { position: relative; flex-grow: 1; overflow: hidden; min-height: 300px; /* Ensure container has min height */ }
+        #map { height: 100%; min-height: 300px; }
+        /* Loading Overlay */
+        #loading-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1500; /* Above map, below messages? */
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.1rem; font-weight: 500; color: #374151;
+            text-align: center; padding: 20px;
+            pointer-events: none; /* Allow interactions with underlying map if needed, though usually hidden */
+        }
+        #loading-overlay.hidden { display: none; }
+
+        /* InfoWindow Styling */
+        .poi-info-window { font-family: 'Inter', sans-serif; padding: 0.5rem; max-width: 320px; }
+        .poi-info-window .title-area { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.1rem; }
+        .poi-info-window h3 { font-size: 1.1rem; font-weight: 600; display: inline-block; vertical-align: top; margin-left: 8px; flex-grow: 1; }
+        /* InfoWindow Actions (Brand + Ignore) */
+        .poi-info-window .info-actions { display: flex; gap: 4px; margin-left: 8px; vertical-align: top; flex-shrink: 0; }
+        .poi-info-window .info-actions button { background: none; border: none; padding: 0; cursor: pointer; font-size: 1.1rem; line-height: 1; color: #9ca3af; /* Default gray */}
+        .poi-info-window .info-actions button:hover { opacity: 0.7; }
+        .poi-info-window .info-actions button.active-fav { color: #f59e0b; /* Amber-500 for favorite */ }
+        .poi-info-window .info-actions button.active-blk { color: #ef4444; /* Red-500 for blacklist */ }
+        .poi-info-window .info-actions button.ignore-station svg { width: 18px; height: 18px; } /* Size ignore icon */
+
+        .poi-info-window .info-subtitle { font-size: 0.85rem; color: #6b7280; margin-left: 8px; margin-top: -2px; margin-bottom: 0.4rem; display: block; clear: left; /* Ensure subtitle is below logo/title */}
+        .poi-info-window img.info-logo { max-width: 30px; max-height: 30px; float: left; margin-right: 8px; border-radius: 4px; display: block; margin-bottom: 0.6rem; background-color: #eee; object-fit: contain; }
+        .poi-info-window p { margin-bottom: 0.25rem; font-size: 0.9rem; line-height: 1.3; }
+        .poi-info-window a { color: #2563EB; text-decoration: none; }
+        .poi-info-window a:hover { text-decoration: underline; }
+        .poi-info-window .info-section { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #eee; }
+        .poi-info-window .info-section:first-of-type { margin-top: 0.3rem; padding-top: 0.3rem; border-top: none; }
+        .poi-info-window .info-section h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; color: #4b5563; }
+        .poi-info-window .detour-info { font-size: 0.85rem; color: #555; font-weight: 600; display: inline; /* Make text and button inline */ }
+        /* Detour Retry Button Style */
+        .poi-info-window .detour-info button.retry-button {
+            font-size: 0.75rem; /* text-xs */
+            color: #2563EB; /* text-blue-600 */
+            text-decoration: underline;
+            margin-left: 0.5rem; /* ml-2 */
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            vertical-align: baseline; /* Align with text */
+        }
+        .poi-info-window .detour-info button.retry-button:hover {
+            color: #1D4ED8; /* text-blue-800 */
+        }
+        .poi-info-window .detour-info button.retry-button:focus {
+            outline: 1px dotted #2563EB;
+        }
+        /* Socket Info Styles */
+        .poi-info-window .socket-list { list-style: none; padding-left: 0; margin-top: 0; }
+        .poi-info-window .socket-item {
+            padding-bottom: 0.3rem; margin-bottom: 0.3rem; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;
+        }
+        .poi-info-window .socket-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .poi-info-window .socket-details { display: flex; flex-direction: column; }
+        .poi-info-window .socket-type-power { display: flex; align-items: baseline; }
+        .poi-info-window .socket-power-emoji { margin-left: 5px; font-size: 0.8rem; color: #6b7280; }
+        .poi-info-window .socket-type { font-weight: 600; margin-right: 4px;}
+        .poi-info-window .socket-power { color: #374151; font-size: 0.8rem; }
+        .poi-info-window .socket-price { font-size: 0.8rem; color: #1f2937; margin-top: 1px; min-height: 1em; }
+        .poi-info-window .socket-status { font-weight: 600; text-align: right; min-width: 60px; }
+        .poi-info-window .status-free { color: #16A34A; }
+        .poi-info-window .status-occupied { color: #DC2626; }
+        .poi-info-window .status-unknown { color: #6B7280; }
+        .poi-info-window .status-loading { color: #9ca3af; font-style: italic; font-size: 0.8rem;}
+        .poi-info-window .status-disclaimer {
+            font-size: 0.8rem; color: #4b5563; margin-top: 0.6rem;
+            padding: 3px 0; border-top: 1px solid #eee;
+        }
+        /* Google Maps Link Style */
+        .poi-info-window .map-link { font-size: 0.85rem; padding: 2px 6px; background-color: #f3f4f6; border-radius: 4px; }
+        .poi-info-window .map-link:hover { background-color: #e5e7eb; }
+        /* Section for Links and Static Info */
+        .poi-info-window .links-static-info-section { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #eee; }
+        /* Esc key hint */
+        .poi-info-window .esc-hint {
+            font-size: 0.7rem; /* text-xs */
+            color: #9ca3af; /* gray-400 */
+            text-align: right;
+            margin-top: 0.5rem; /* mt-2 */
+        }
+        .poi-info-window .esc-hint .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        /* --- Rest of your existing styles --- */
+        .poi-info-window::after { content: ""; clear: both; display: table; }
+
+        /* Media Query for Mobile InfoWindow Size */
+        @media (max-width: 640px) {
+            .poi-info-window {
+                max-width: 90vw; /* Adjust max-width for smaller screens */
+            }
+            /* Ensure GM InfoWindow internal structure respects the size */
+            .gm-style .gm-style-iw-c { max-width: 90vw !important; }
+            .gm-style .gm-style-iw-d { max-width: 90vw !important; overflow-x: hidden !important; } /* Prevent internal scroll */
+        }
+
+        .pac-container { z-index: 1051 !important; border-radius: 8px; font-family: 'Inter', sans-serif; }
+        .pac-item { padding: 8px 12px; font-size: 0.9rem; }
+        .pac-item:hover { background-color: #f0f0f0; }
+        .pac-item-query { font-weight: 500; }
+        #message-box {
+            position: fixed; bottom: 200px; /* Position from bottom of viewport */
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            background-color: rgba(239, 68, 68, 0.9); color: white; padding: 10px 20px;
+            border-radius: 8px; z-index: 2000; display: none; font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 90%; /* Limit width relative to container */
+            /* Pointer events none allows clicking map 'through' the message box if needed */
+            pointer-events: none;
+        }
+        /* Controls Container for Map Type and Language */
+        #top-right-controls {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            display: flex; gap: 8px;
+            align-items: flex-start; /* Align items to the top */
+        }
+        #map-type-control {
+            background-color: white;
+            border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.2); overflow: hidden;
+        }
+        #map-type-control button {
+            display: inline-block; padding: 6px 10px; font-size: 0.8rem; font-weight: 600; /* Increased weight */
+            color: #374151; background-color: white; border: none; cursor: pointer;
+            transition: background-color 0.2s ease;
+            min-width: 40px; /* Ensure buttons have some width */
+        }
+        #map-type-control button:hover { background-color: #f3f4f6; }
+        #map-type-control button.active { background-color: #e5e7eb; color: #1f2937; }
+
+        /* Language Dropdown Styles */
+        #language-control { position: relative; }
+        #language-selector-btn {
+            background-color: white; border: none;
+            padding: 6px 10px; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            cursor: pointer; display: flex; align-items: center; gap: 4px;
+            font-size: 0.8rem; font-weight: 600; color: #374151;
+            min-height: 31px; /* Match Map Type Button Height */
+        }
+        #language-selector-btn:hover { background-color: #f3f4f6; }
+        #language-flag { font-size: 1rem; line-height: 1; } /* Adjust flag size */
+        #language-code { line-height: 1; }
+        #language-dropdown {
+            display: none; /* Hidden by default */
+            position: absolute; top: 100%; right: 0; margin-top: 4px;
+            background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 6; overflow: hidden; min-width: 100px;
+        }
+        #language-dropdown.show { display: block; }
+        #language-dropdown button {
+            display: block; width: 100%; padding: 8px 12px;
+            background: none; border: none; cursor: pointer; text-align: left;
+            font-size: 0.85rem; color: #374151; display: flex; align-items: center; gap: 6px;
+        }
+        #language-dropdown button:hover { background-color: #f3f4f6; }
+        #language-dropdown button .flag { font-size: 1rem; }
+        #language-dropdown button.active { font-weight: 600; background-color: #e5e7eb; }
+
+        /* Styles for POI Marker Container and Icon */
+        .poi-marker-content-container {
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; /* Add hand cursor on hover */
+        }
+        /* Favorite Badge on Marker - Moved Below */
+        .marker-fav-badge {
+            font-size: 11px;
+            line-height: 1;
+            margin-top: 4px;
+            pointer-events: none;
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .poi-icon-container {
+            width: 36px; height: 36px; border-radius: 50%; border: 2px solid #16A34A;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); background-color: #eee; box-sizing: border-box;
+            display: flex; justify-content: center; align-items: center; overflow: hidden;
+            transition: transform 0.15s ease-in-out, border-color 0.15s ease-in-out;
+        }
+        .poi-marker-content-container:hover .poi-icon-container {
+            transform: scale(1.1);
+            border-color: #F97316;
+        }
+        .poi-icon-container svg { width: 70%; height: 70%; display: block; }
+        .poi-icon-container img.poi-marker-img {
+            width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 50%;
+            border: none; box-shadow: none; background-color: transparent;
+        }
+        /* Marker Badges Container */
+        .marker-badges {
+            display: flex;
+            gap: 4px;
+            margin-top: 3px;
+            align-items: center;
+            height: 16px;
+        }
+        /* Individual Marker Badge Style */
+        .marker-badge {
+            padding: 1px 5px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 14px;
+            border-radius: 4px;
+            color: white;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .badge-ac { background-color: #3b82f6; }
+        .badge-dc { background-color: #f97316; }
+        .badge-power-1 { background-color: #6b7280; color: #fff;}
+        .badge-power-2 { background-color: #10b981; color: #fff;}
+        .badge-power-3 { background-color: #ef4444; color: #fff;}
+
+        /* Detour Text below badges */
+        .poi-marker-detour-text {
+            font-size: 12px; line-height: 1.2; color: black; background-color: white;
+            text-align: center; white-space: nowrap; margin-top: 3px;
+            font-weight: 500; padding: 1px 3px; border-radius: 3px;
+            min-height: 15px;
+        }
+
+        /* Styles for custom Start/Destination markers */
+        .custom-marker-content {
+            padding: 4px 8px; border-radius: 8px; color: white; font-size: 14px; font-weight: bold;
+            text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3); white-space: nowrap;
+        }
+        .start-marker-content { background-color: #EA4335; }
+        .dest-marker-content { background-color: #4285F4; }
+
+        /* Top Left Controls (Filters, Brand Mode) */
+        #top-left-controls {
+            position: absolute; top: 10px; left: 10px; z-index: 5; display: flex; gap: 8px;
+        }
+        #filter-toggle-btn, #brand-filter-mode-btn {
+            background-color: white; border: none;
+            padding: 8px; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.2); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px;
+            position: relative;
+        }
+        /* Filter Active Indicator Dot */
+        #filter-toggle-btn.filters-active::after {
+            content: '';
+            position: absolute;
+            top: 4px; right: 4px;
+            width: 8px; height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            border: 1px solid white;
+            box-shadow: 0 0 3px rgba(0,0,0,0.3);
+            pointer-events: none;
+        }
+        #filter-toggle-btn svg { width: 20px; height: 20px; fill: #374151; }
+        #brand-filter-mode-btn svg { width: 20px; height: 20px; fill: #374151; }
+        #brand-filter-mode-btn span { /* Style for the star emoji if used */
+            font-size: 1.25rem; line-height: 1;
+            color: #f59e0b;
+        }
+        #filter-toggle-btn:hover, #brand-filter-mode-btn:hover:not(:disabled) { background-color: #f3f4f6; }
+        #brand-filter-mode-btn:disabled {
+            opacity: 0.6; cursor: not-allowed; background-color: #f9fafb;
+        }
+        #brand-filter-mode-btn:disabled svg { fill: #9ca3af; }
+
+
+        #filter-panel {
+            position: absolute; top: 0; left: 0; width: 280px; height: 100%; background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 10; padding: 1.5rem 1rem 1rem 1rem;
+            transform: translateX(-100%); transition: transform 0.3s ease-in-out; overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+        #filter-panel.open { transform: translateX(0); }
+        #filter-panel h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #1f2937; }
+        #filter-panel .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        #filter-panel #reset-filters-btn {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #4b5563;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 3px 8px;
+            cursor: pointer;
+            transition: background-color 0.1s, border-color 0.1s;
+        }
+        #filter-panel #reset-filters-btn:hover { background-color: #e5e7eb; }
+
+        #filter-panel .filter-section { margin-bottom: 1.25rem; }
+        #filter-panel .filter-section h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #4b5563; }
+        #filter-panel label {
+            margin-bottom: 0.4rem; font-size: 0.85rem; color: #374151; cursor: pointer;
+            display: flex; align-items: center;
+        }
+        #filter-panel label .label-text { margin-left: 0.5rem; /* Space between input and text */}
+        #filter-panel input[type="radio"], #filter-panel input[type="checkbox"] { margin-right: 0; /* Removed margin-right */ cursor: pointer; flex-shrink: 0; }
+        /* Power Filter Layout Fix */
+        #filter-power label.power-label { display: flex; margin-bottom: 0.5rem; align-items: center; /* Vertically align items */ }
+        #filter-panel .power-label span.power-emoji-span {
+            font-size: 1rem; margin-right: 0.25rem; width: 2.5em; /* Increased width for emoji */
+            display: inline-block; text-align: left; flex-shrink: 0;
+        }
+        #filter-panel .power-label .label-text { flex-grow: 1; /* Allow text to take remaining space */ }
+
+        #filter-panel #close-filter-btn {
+            position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; padding: 4px;
+        }
+        #filter-panel #close-filter-btn svg { width: 18px; height: 18px; fill: #6b7280; }
+        #filter-panel #close-filter-btn:hover svg { fill: #1f2937; }
+
+        /* Brand Filter Styles */
+        #brand-list-view-controls { display: flex; gap: 8px; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb;}
+        #brand-list-view-controls button {
+            font-size: 0.75rem; font-weight: 500; color: #4b5563; background-color: #f3f4f6;
+            border: 1px solid #d1d5db; border-radius: 4px; padding: 3px 8px; cursor: pointer;
+            transition: background-color 0.1s, border-color 0.1s;
+        }
+        #brand-list-view-controls button:hover { background-color: #e5e7eb; }
+        #brand-list-view-controls button.active { background-color: #dbeafe; border-color: #93c5fd; color: #1e40af;}
+
+        #filter-brands .brand-list { max-height: 150px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 4px; padding: 0.25rem; background-color: #f9fafb; }
+        #filter-brands .brand-item { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0.5rem; border-bottom: 1px solid #e5e7eb; }
+        #filter-brands .brand-item:last-child { border-bottom: none; }
+        #filter-brands .brand-item.hidden-by-view { display: none; }
+        #filter-brands .brand-name { font-size: 0.85rem; color: #1f2937; flex-grow: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #filter-brands .brand-controls { display: flex; gap: 5px; flex-shrink: 0; }
+        #filter-brands .brand-controls button {
+            background: none; border: 1px solid #d1d5db; border-radius: 4px;
+            padding: 2px 4px; cursor: pointer; font-size: 0.9rem; line-height: 1;
+            color: #6b7280;
+            transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+        }
+        #filter-brands .brand-controls button:hover { background-color: #f3f4f6; }
+        #filter-brands .brand-controls button.brand-fav.active { color: #f59e0b; border-color: #f59e0b; background-color: #fffbeb; }
+        #filter-brands .brand-controls button.brand-blk.active { color: #ef4444; border-color: #ef4444; background-color: #fee2e2; }
+        #filter-brands .brand-controls button { position: relative; }
+        #filter-brands .brand-controls button::after {
+            content: attr(data-tooltip);
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-4px);
+            background-color: rgba(0,0,0,0.75); color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 3px;
+            white-space: nowrap; z-index: 10; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; pointer-events: none;
+        }
+        #filter-brands .brand-controls button:hover::after { opacity: 1; visibility: visible; }
+        /* Status paragraphs for brand/ignored lists */
+        .filter-status-paragraph {
+            font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;
+            padding: 0.25rem 0.5rem; text-align: center;
+        }
+
+
+        /* Ignored Stations Filter Styles */
+        #filter-ignored-stations .ignored-list { max-height: 120px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 4px; padding: 0.25rem; background-color: #f9fafb; margin-top: 0.5rem;}
+        #filter-ignored-stations .ignored-item { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0.5rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem;}
+        #filter-ignored-stations .ignored-item:last-child { border-bottom: none; }
+        #filter-ignored-stations .ignored-name { flex-grow: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #374151; }
+        #filter-ignored-stations .ignored-id { font-size: 0.75rem; color: #6b7280; margin-left: 4px; }
+        #filter-ignored-stations .ignored-controls { display: flex; gap: 6px; flex-shrink: 0; }
+        #filter-ignored-stations .ignored-controls button {
+            font-size: 0.75rem; font-weight: 500; color: #1d4ed8; background: none; border: none;
+            padding: 2px 5px; cursor: pointer; text-decoration: underline;
+        }
+        #filter-ignored-stations .ignored-controls button:hover { color: #1e3a8a; }
+        #filter-ignored-stations .ignored-controls button.map-btn {
+            text-decoration: none;
+            padding: 2px;
+            color: #4b5563;
+        }
+        #filter-ignored-stations .ignored-controls button.map-btn:hover {
+            color: #1f2937;
+        }
+        #filter-ignored-stations .ignored-controls button.map-btn svg {
+            width: 16px; height: 16px; display: block;
+        }
+
+
+        /* Route Offset Controls Styles */
+        #offset-controls {
+            position: absolute; bottom: 10px; left: 10px; z-index: 5; background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.2); padding: 8px 10px;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 190px;
+        }
+        #offset-controls .offset-group {
+            display: flex; align-items: center; gap: 8px;
+        }
+        #offset-controls .offset-label {
+            font-size: 0.75rem; font-weight: 500; color: #4b5563;
+            min-width: 35px;
+            text-align: right;
+        }
+        #offset-controls .offset-value {
+            font-size: 0.8rem; font-weight: 600; color: #1f2937;
+            min-width: 55px;
+            text-align: left;
+        }
+        #offset-controls button {
+            padding: 4px 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 1px solid #d1d5db; border-radius: 4px;
+            background-color: white; color: #374151;
+            cursor: pointer; line-height: 1.2;
+            min-width: 30px;
+            text-align: center;
+        }
+        #offset-controls button:hover { background-color: #f3f4f6; }
+        #offset-controls button:active { background-color: #e5e7eb; }
+        #offset-controls button:disabled {
+            opacity: 0.5; cursor: not-allowed; background-color: #f9fafb;
+        }
+
+
+        /* Styles for Input Field Addons (Clear/Paste/Location Buttons) */
+        .input-addon-btn {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem; /* Adjusted horizontal padding */
+            color: #9ca3af; /* text-gray-400 */
+            cursor: pointer;
+            z-index: 1; /* Ensure buttons are above input background */
+        }
+        .input-addon-btn:hover:not(:disabled) { color: #4b5563; /* text-gray-600 */ }
+        .input-addon-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+        .input-addon-btn svg { width: 1.25rem; height: 1.25rem; } /* h-5 w-5 */
+
+        /* Position Clear button (rightmost) */
+        .clear-btn { right: 0.1rem; }
+        /* Position Paste button */
+        .paste-btn { right: 2.3rem; }
+        /* Position Use Location button (leftmost addon) */
+        .use-location-btn { right: 4.5rem; }
+
+        /* Adjust input padding to accommodate THREE buttons */
+        input.with-addons {
+            padding-right: 6.9rem; /* Approx space for 3 buttons + padding */
+        }
+        /* Style for input when loading/resolving */
+        input.input-loading {
+            opacity: 0.7;
+            cursor: wait;
+            background-color: #f9fafb; /* gray-50 */
+        }
+
+
+        /* Shortcut Hint Styles */
+        .shortcut-hint-x {
+            display: none; /* Hidden by default */
+        }
+        @media (min-height: 1080px) {
+            .shortcut-hint-x {
+                display: block; /* Visible only on tall screens */
+            }
+        }
+
+        /* Filter Panel text paragraphs */
+        .filter-text-hint {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* text-gray-500 */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+        .filter-text-hint-small {
+            font-size: 0.7rem; /* Smaller */
+            color: #6b7280; /* text-gray-500 */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+<!-- Control Panel -->
+<div id="control-panel" class="bg-white shadow-md p-4 rounded-b-lg z-10 relative">
+    <!-- Hamburger -->
+    <button id="hamburger-btn" type="button" class="absolute top-4 right-4 md:hidden hidden p-1 rounded-md text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-label="Toggle controls">
+        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+    </button>
+
+    <!-- Inputs -->
+    <div id="input-container" class="">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label for="start-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n-key="labelStart">Start (Turkey Only)</label>
+                <div class="relative rounded-md shadow-sm">
+                    <input type="text" id="start-input" data-i18n-key="[placeholder]placeholderEnterStart" placeholder="Enter starting point, paste link/coords, or click map" class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 with-addons">
+                    <!-- Use Location Button -->
+                    <button type="button" id="use-location-start-btn" class="input-addon-btn use-location-btn" data-i18n-key="[aria-label]ariaUseLocationStart;[title]titleUseLocationStart" aria-label="Use current location for start" title="Use current location for start">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" > <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /> </svg>
+                    </button>
+                    <!-- Paste Button -->
+                    <button type="button" id="paste-start-btn" class="input-addon-btn paste-btn" data-i18n-key="[aria-label]ariaPasteStart;[title]titlePasteStart" aria-label="Paste start location" title="Paste start location">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" /></svg>
+                    </button>
+                    <!-- Clear Button -->
+                    <button type="button" id="clear-start-btn" class="input-addon-btn clear-btn hidden" data-i18n-key="[aria-label]ariaClearStart;[title]titleClearStart" aria-label="Clear start location" title="Clear start location">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label for="end-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n-key="labelDestination">Destination (Turkey Only)</label>
+                <div class="relative rounded-md shadow-sm">
+                    <input type="text" id="end-input" data-i18n-key="[placeholder]placeholderEnterDestination" placeholder="Enter destination, paste link/coords, or click map" class="w-full p-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 with-addons">
+                    <!-- Use Location Button -->
+                    <button type="button" id="use-location-end-btn" class="input-addon-btn use-location-btn" data-i18n-key="[aria-label]ariaUseLocationEnd;[title]titleUseLocationEnd" aria-label="Use current location for destination" title="Use current location for destination">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" > <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /> </svg>
+                    </button>
+                    <!-- Paste Button -->
+                    <button type="button" id="paste-end-btn" class="input-addon-btn paste-btn" data-i18n-key="[aria-label]ariaPasteEnd;[title]titlePasteEnd" aria-label="Paste destination" title="Paste destination">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" /></svg>
+                    </button>
+                    <!-- Clear Button -->
+                    <button type="button" id="clear-end-btn" class="input-addon-btn clear-btn hidden" data-i18n-key="[aria-label]ariaClearEnd;[title]titleClearEnd" aria-label="Clear destination" title="Clear destination">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Shortcut Hint - Moved here, conditional visibility via class -->
+        <div class="shortcut-hint-x text-xs text-gray-500 mt-2 text-center" data-i18n-key="shortcutHintX">
+            Tip: Press '<span class="font-semibold">X</span>' to clear route.
+        </div>
+    </div>
+
+
+    <!-- Distance Slider -->
+    <div id="distance-container" class="flex items-center gap-3 mb-2 mt-2"> <!-- Added mt-2 for spacing -->
+        <label for="distance-slider" class="flex-shrink-0 text-sm font-medium text-gray-700 whitespace-nowrap">
+            <span data-i18n-key="labelDistance">🐦 Dist:</span> <span id="distance-value">5</span> <span data-i18n-key="unitKm">km</span>
+        </label>
+        <input type="range" id="distance-slider" min="1" max="20" value="5" class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+    </div>
+
+</div>
+
+<div id="map-container">
+    <div id="map"></div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden">
+        <span data-i18n-key="messageLoadingStations">Loading charging stations...</span>
+    </div>
+    <!-- Top Right Controls Container -->
+    <div id="top-right-controls">
+        <!-- Map Type Control -->
+        <div id="map-type-control">
+            <button data-maptypeid="roadmap" class="active" data-i18n-key="mapTypeRoadmap">Roadmap</button>
+            <button data-maptypeid="hybrid" data-i18n-key="mapTypeHybrid">Hybrid</button>
+            <button data-maptypeid="terrain" data-i18n-key="mapTypeTerrain">Terrain</button>
+        </div>
+        <!-- Language Control Dropdown -->
+        <div id="language-control">
+            <button id="language-selector-btn" type="button" aria-haspopup="true" aria-expanded="false" data-i18n-key="[aria-label]ariaSelectLanguage" aria-label="Select Language">
+                <span id="language-flag">🇬🇧</span>
+                <span id="language-code">EN</span>
+            </button>
+            <div id="language-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="language-selector-btn">
+                <!-- Options populated by JS -->
+            </div>
+        </div>
+    </div>
+    <!-- Top Left Controls -->
+    <div id="top-left-controls">
+        <!-- Filter Toggle Button -->
+        <button id="filter-toggle-btn" data-i18n-key="[aria-label]ariaToggleFilters;[title]titleToggleFilters" aria-label="Toggle Filters Panel" title="Toggle Filters Panel">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L13 10.414V15a1 1 0 01-.293.707l-2 2A1 1 0 019 17v-6.586L4.293 6.707A1 1 0 014 6V3z" clip-rule="evenodd" />
+            </svg>
+            <!-- Active filter indicator dot managed by CSS -->
+        </button>
+        <!-- Brand Filter Mode Button -->
+        <button id="brand-filter-mode-btn" data-i18n-key="[aria-label]ariaToggleBrandFilter" aria-label="Toggle Brand Filter Mode">
+            <!-- Icon/Title set by JS based on mode and language -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.18l.877-.584a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.877.584a1.651 1.651 0 0 1 0 1.18l-.877.584a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.877-.584ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+    <!-- Filter Panel -->
+    <div id="filter-panel">
+        <button id="close-filter-btn" data-i18n-key="[aria-label]ariaCloseFilters" aria-label="Close Filters">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="filter-header">
+            <h3 data-i18n-key="filterHeader">Filters</h3>
+            <button id="reset-filters-btn" data-i18n-key="[title]titleResetFilters" title="Reset all filters to default">
+                <span data-i18n-key="buttonResetFilters">Reset Filters</span>
+            </button>
+        </div>
+
+
+        <div class="filter-section" id="filter-connector-type">
+            <h4 data-i18n-key="filterConnectorType">Connector Type</h4>
+            <label><input type="radio" name="connectorType" value="ALL" checked><span class="label-text" data-i18n-key="filterAll">All</span></label>
+            <label><input type="radio" name="connectorType" value="AC"><span class="label-text">AC</span></label>
+            <label><input type="radio" name="connectorType" value="DC"><span class="label-text">DC</span></label>
+        </div>
+
+        <div class="filter-section" id="filter-power">
+            <h4 data-i18n-key="filterMinPower">Min Power (Any Socket)</h4>
+            <label class="power-label"><input type="checkbox" name="powerLevel" value="low" checked> <span class="power-emoji-span">⚡</span> <span class="label-text" data-i18n-key="filterPowerLow">(&lt; 60 kW)</span></label>
+            <label class="power-label"><input type="checkbox" name="powerLevel" value="medium" checked> <span class="power-emoji-span">⚡⚡</span> <span class="label-text" data-i18n-key="filterPowerMedium">(60-120 kW)</span></label>
+            <label class="power-label"><input type="checkbox" name="powerLevel" value="high" checked> <span class="power-emoji-span">⚡⚡⚡</span> <span class="label-text" data-i18n-key="filterPowerHigh">(&gt; 120 kW)</span></label>
+        </div>
+
+        <div class="filter-section" id="filter-service-type">
+            <h4 data-i18n-key="filterServiceType">Service Type</h4>
+            <label><input type="checkbox" name="serviceType" value="PUBLIC" checked><span class="label-text" data-i18n-key="filterServicePublic">Public</span></label>
+            <label><input type="checkbox" name="serviceType" value="PRIVATE"><span class="label-text" data-i18n-key="filterServicePrivate">Private/Restricted</span></label>
+            <!-- Add more types if available in your data -->
+        </div>
+
+        <!-- Brand Preferences Moved to Bottom -->
+        <div class="filter-section" id="filter-brands">
+            <h4 data-i18n-key="filterBrandPrefs">Brand Preferences</h4>
+            <!-- View Controls for Brand List -->
+            <div id="brand-list-view-controls">
+                <button data-view="all" class="active" data-i18n-key="filterViewAll">All</button>
+                <button data-view="fav" data-i18n-key="filterViewFavs">Favs ⭐</button>
+                <button data-view="blk" data-i18n-key="filterViewBlocked">Blocked 🚫</button>
+            </div>
+            <!-- Brand list will be populated here by JS -->
+            <div class="brand-list" id="brand-list-container">
+                <!-- Items populated dynamically -->
+            </div>
+            <p class="filter-text-hint" data-i18n-key="filterBrandHint1">Use buttons above to manage/view brands.</p>
+            <p class="filter-text-hint-small" data-i18n-key="filterBrandHint2">Map filter mode is set via icon button on map.</p>
+        </div>
+
+        <!-- Ignored Stations Moved to Bottom -->
+        <div class="filter-section" id="filter-ignored-stations">
+            <h4 data-i18n-key="filterIgnoredStations">Ignored Stations</h4>
+            <!-- Ignored stations list will be populated here -->
+            <div class="ignored-list" id="ignored-stations-list">
+                <!-- Items populated dynamically -->
+            </div>
+            <p class="filter-text-hint" data-i18n-key="filterIgnoreHint">Use the 👁️‍🗨️🚫 icon in station popups to ignore.</p>
+        </div>
+
+
+    </div>
+    <!-- Route Offset Controls -->
+    <div id="offset-controls">
+        <div class="offset-group">
+            <span class="offset-label" data-i18n-key="offsetStart">Start:</span>
+            <span id="start-offset-display" class="offset-value">0 km</span>
+            <button id="offset-start-inc" data-i18n-key="[title]titleOffsetStartInc" title="Increase Start Offset (+5km)">+</button>
+            <button id="offset-start-dec" data-i18n-key="[title]titleOffsetStartDec" title="Decrease Start Offset (-5km)">-</button>
+        </div>
+        <div class="offset-group">
+            <span class="offset-label" data-i18n-key="offsetDest">Dest:</span>
+            <span id="dest-offset-display" class="offset-value">0 km</span>
+            <button id="offset-dest-inc" data-i18n-key="[title]titleOffsetDestInc" title="Increase Destination Offset (+5km)">+</button>
+            <button id="offset-dest-dec" data-i18n-key="[title]titleOffsetDestDec" title="Decrease Destination Offset (-5km)">-</button>
+        </div>
+    </div>
+</div>
+
+<div id="message-box"></div>
+
+<!-- MAKE SURE to replace __GOOGLE_MAPS_API_KEY__ below -->
+<script src="https://maps.googleapis.com/maps/api/js?key=__GOOGLE_MAPS_API_KEY__&callback=initMap&libraries=places,geometry,geocoding,marker" async defer></script>
+
+<script>
+    // --- API Configuration ---
+    const STATIONS_JSON_PATH = '/data/stations.json';
+    const STATION_SOCKETS_API_URL_TEMPLATE = '/api/station/{id}/sockets';
+    const SHORT_URL_RESOLVER_PROXY_TEMPLATE = '/api/maps/redirect?url={encoded_url}';
+    const API_HEADERS = {
+        'User-Agent': 'RoutePlannerApp/1.0',
+        'Accept': 'application/json',
+    };
+
+    // --- Internationalization (i18n) ---
+    let currentLang = 'en'; // Default language, may be overridden by loadLanguage()
+    const LANGUAGE_STORAGE_KEY = 'evRouteLangPref';
+
+    const translations = {
+        en: {
+            // General UI & Title
+            langName: "English",
+            langFlag: "🇬🇧",
+            title: "EV Stations Along Route",
+            ariaSelectLanguage: "Select Language",
+            labelStart: "Start (Turkey Only)",
+            placeholderEnterStart: "Enter starting point, paste link/coords, or click map",
+            labelDestination: "Destination (Turkey Only)",
+            placeholderEnterDestination: "Enter destination, paste link/coords, or click map",
+            ariaUseLocationStart: "Use current location for start",
+            titleUseLocationStart: "Use current location for start",
+            ariaUseLocationEnd: "Use current location for destination",
+            titleUseLocationEnd: "Use current location for destination",
+            ariaPasteStart: "Paste start location",
+            titlePasteStart: "Paste start location",
+            ariaPasteEnd: "Paste destination",
+            titlePasteEnd: "Paste destination",
+            ariaClearStart: "Clear start location",
+            titleClearStart: "Clear start location",
+            ariaClearEnd: "Clear destination",
+            titleClearEnd: "Clear destination",
+            shortcutHintX: "Tip: Press '<span class=\"font-semibold\">X</span>' to clear route.",
+            labelDistance: "🐦 Dist:",
+            unitKm: "km",
+            unitMinuteShort: "min",
+            unitHourShort: "hr",
+            mapTypeRoadmap: "Roadmap",
+            mapTypeHybrid: "Hybrid",
+            mapTypeTerrain: "Terrain",
+            ariaToggleFilters: "Toggle Filters Panel",
+            titleToggleFilters: "Toggle Filters Panel",
+            ariaToggleBrandFilter: "Toggle Brand Filter Mode",
+            // Brand Filter Mode Titles (set dynamically)
+            titleBrandModeAll: "Showing all (non-blacklisted, non-ignored) brands. Click to show only favorites.",
+            titleBrandModeFavOnly: "Showing only favorite brands. Click to show all.",
+            titleBrandModeDisabled: "Mark brands as favorite (⭐) to enable 'Favorites Only' mode",
+            // Filter Panel
+            ariaCloseFilters: "Close Filters",
+            filterHeader: "Filters",
+            buttonResetFilters: "Reset Filters",
+            titleResetFilters: "Reset all filters to default",
+            filterConnectorType: "Connector Type",
+            filterAll: "All",
+            // AC/DC don't need translation
+            filterMinPower: "Min Power (Any Socket)",
+            filterPowerLow: "(< 60 kW)",
+            filterPowerMedium: "(60-120 kW)",
+            filterPowerHigh: "(> 120 kW)",
+            filterServiceType: "Service Type",
+            filterServicePublic: "Public",
+            filterServicePrivate: "Private/Restricted",
+            filterBrandPrefs: "Brand Preferences",
+            filterViewAll: "All",
+            filterViewFavs: "Favs ⭐",
+            filterViewBlocked: "Blocked 🚫",
+            filterBrandHint1: "Use buttons above to manage/view brands.",
+            filterBrandHint2: "Map filter mode is set via icon button on map.",
+            filterIgnoredStations: "Ignored Stations",
+            filterIgnoreHint: "Use the 👁️‍🗨️🚫 icon in station popups to ignore.",
+            filterStatusNoBrands: "No brand data available.",
+            filterStatusNoIgnored: "No stations ignored.",
+            filterStatusNoBrandsView: "No brands match this view.",
+            tooltipFavorite: "Favorite",
+            tooltipBlacklist: "Blacklist",
+            buttonUnignore: "Un-ignore",
+            titleOpenMap: "Open on Map",
+            // Offset Controls
+            offsetStart: "Start:",
+            offsetDest: "Dest:",
+            titleOffsetStartInc: "Increase Start Offset (+5km)",
+            titleOffsetStartDec: "Decrease Start Offset (-5km)",
+            titleOffsetDestInc: "Increase Destination Offset (+5km)",
+            titleOffsetDestDec: "Decrease Destination Offset (-5km)",
+            // Location Parsing Types (for messages)
+            locationTypeCoordinates: "Coordinates",
+            locationTypePlaceId: "Place ID",
+            locationTypeMapClick: "Map Click",
+            locationTypeFeatureClick: "Feature Click",
+            locationTypeCurrentLocation: "Current Location",
+            locationTypeSearchTerm: "Search Term",
+            locationTypeAddressName: "Address/Name",
+            locationTypePlusCode: "Plus Code",
+            locationTypePasted: "Pasted Item",
+            locationTypeUnknown: "Unknown Type",
+            // Messages
+            messageLoadingStations: "Loading charging stations...",
+            messageLoadedStations: "Loaded {count} station(s). They will appear when a route is set.", // Plural handled in translate()
+            messageGeoNotSupported: "Geolocation not supported. Showing default map.",
+            messageGeoError: "Could not get your location. Showing default map.",
+            messageGeoPermissionDenied: "Location permission denied. Showing default map.",
+            messageGeoUnavailable: "Location information unavailable. Showing default map.",
+            messageGeoTimeout: "Location request timed out. Showing default map.",
+            messageErrorGmapsLoad: "Error: Google Maps components failed to load.",
+            messageErrorMapCreate: "Error creating the map.",
+            messageErrorMapServices: "Error initializing map services.",
+            messageErrorAutocomplete: "Error setting up Autocomplete.",
+            messageAutocompleteUnavailable: "Autocomplete unavailable",
+            messageInvalidLocation: "Please select a valid location from the list.",
+            messageProcessingLocation: "Processing {parsedType}...",
+            messagePastedError: "Could not understand pasted text.",
+            messagePastedNoResults: "No results found for the pasted text.",
+            messageNotInTurkey: "Location ({parsedType}) is not in Turkey.",
+            messageSetLocation: "Set {type} location from {parsedType}.", // {type} = start/end
+            messageCalculatingRoute: "Calculating route...",
+            messageRouteCalcFailedDisplay: "Route calculated, but could not display it.",
+            messageDirectionsFailed: "Directions request failed: {status}",
+            messageRouteCalculated: "Route calculated. {count} station(s) found matching initial criteria.", // Plural handled in translate()
+            messageNoStationsFound: "No stations found matching initial criteria near the route.",
+            messageStationsFound: "{count} station(s) found matching criteria.", // Plural handled in translate()
+            messageGeomLibMissing: "Geometry library missing.",
+            messageOffsetsOverlap: "Offsets cannot overlap or exceed route length.",
+            messageStationIgnored: "Station {id} ignored. Manage in Filters.",
+            messageStationUnignored: "Station {id} un-ignored.",
+            messageShowOnlyFavs: "Showing only favorite brands ⭐",
+            messageNeedFavs: "Mark some brands as favorite (⭐) first.",
+            messageShowAllBrands: "Showing all (non-blacklisted, non-ignored) brands",
+            messageFiltersReset: "All filters reset to default.",
+            messageClearedAll: "Start, Destination, and Route cleared.",
+            messageClipboardUnsupported: "Clipboard API not supported or permission denied.",
+            messageClipboardEmpty: "Clipboard is empty.",
+            messageClipboardError: "Could not read clipboard. Check permissions?",
+            messageGettingLocation: "Getting current location...",
+            messageCurrentLocationError: "Could not get current location.",
+            messageResolveShortUrlError: "Could not resolve short URL via proxy.",
+            messageResolveProxyFormatError: "Proxy returned unexpected format. Could not resolve short URL.",
+            messageResolveProxyResponseError: "Proxy returned invalid or empty response.",
+            messageResolveProxyNotFoundError: "Short URL resolver endpoint not found on server.",
+            messageResolveProxyStatusError: "Error contacting URL resolver (Status: {status}).",
+            messageUseFullUrl: "Please open this short link and paste the full URL.",
+            messageResolvingShortUrl: "Resolving short URL via proxy...",
+            // InfoWindow & Markers
+            iwOpenMap: "Open in Google Maps",
+            iwVisitWebsite: "Visit Website",
+            iwOperator: "Operator:",
+            iwAddress: "Address:",
+            iwPhone: "Phone:",
+            iwNA: "N/A",
+            iwSockets: "Sockets",
+            iwNoSockets: "No socket information available.",
+            iwLoading: "Loading...",
+            iwUnknown: "Unknown",
+            iwFree: "FREE",
+            iwInuse: "IN USE", // Key changed to match logic
+            iwOccupied: "OCCUPIED",
+            iwCharging: "CHARGING",
+            iwSocketStatusError: "Could not load live status.",
+            iwDisclaimer: "Live status may not be fully accurate. Please verify using the provider's app.",
+            iwDetourCalculating: "Calculating detour...",
+            iwDetourFailed: "Detour calc failed.",
+            iwRetry: "Retry",
+            iwDetourNegligible: "Negligible detour.",
+            iwDetourInfo: "Detour: {extraDistStr}, {extraDurStr}",
+            iwIgnored: "(Ignored)",
+            iwEscHint: "(<span class=\"font-mono\">Esc</span> to close)",
+            markerLogoAlt: "Logo for {name}",
+            markerStart: "Start",
+            markerDest: "Destination",
+            markerDetourError: "detour?",
+            markerTitleStartDefault: "Route Start",
+            markerTitleEndDefault: "Route End",
+            currentLocation: "Current Location", // Used as display name and internal type identifier
+            brandFavoriteAction: "Favorite Brand",
+            brandBlacklistAction: "Blacklist Brand",
+            ignoreStationAction: "Ignore this Station",
+        },
+        tr: {
+            // General UI & Title
+            langName: "Türkçe",
+            langFlag: "🇹🇷",
+            title: "Rota Boyunca EV İstasyonları",
+            ariaSelectLanguage: "Dil Seçin",
+            labelStart: "Başlangıç (Sadece Türkiye)",
+            placeholderEnterStart: "Başlangıç noktası girin, link/koordinat yapıştırın veya haritaya tıklayın",
+            labelDestination: "Varış Noktası (Sadece Türkiye)",
+            placeholderEnterDestination: "Varış noktası girin, link/koordinat yapıştırın veya haritaya tıklayın",
+            ariaUseLocationStart: "Başlangıç için mevcut konumu kullan",
+            titleUseLocationStart: "Başlangıç için mevcut konumu kullan",
+            ariaUseLocationEnd: "Varış için mevcut konumu kullan",
+            titleUseLocationEnd: "Varış için mevcut konumu kullan",
+            ariaPasteStart: "Başlangıç konumunu yapıştır",
+            titlePasteStart: "Başlangıç konumunu yapıştır",
+            ariaPasteEnd: "Varış konumunu yapıştır",
+            titlePasteEnd: "Varış konumunu yapıştır",
+            ariaClearStart: "Başlangıç konumunu temizle",
+            titleClearStart: "Başlangıç konumunu temizle",
+            ariaClearEnd: "Varış konumunu temizle",
+            titleClearEnd: "Varış konumunu temizle",
+            shortcutHintX: "İpucu: Rotayı temizlemek için '<span class=\"font-semibold\">X</span>' tuşuna basın.",
+            labelDistance: "🐦 Mesafe:",
+            unitKm: "km",
+            unitMinuteShort: "dk",
+            unitHourShort: "sa",
+            mapTypeRoadmap: "Yol H.",
+            mapTypeHybrid: "Hibrit",
+            mapTypeTerrain: "Arazi",
+            ariaToggleFilters: "Filtre Panelini Aç/Kapat",
+            titleToggleFilters: "Filtre Panelini Aç/Kapat",
+            ariaToggleBrandFilter: "Marka Filtre Modunu Değiştir",
+            // Brand Filter Mode Titles (set dynamically)
+            titleBrandModeAll: "Tüm (kara listeye alınmamış, yok sayılmamış) markalar gösteriliyor. Sadece favorileri göstermek için tıklayın.",
+            titleBrandModeFavOnly: "Sadece favori markalar gösteriliyor. Tümünü göstermek için tıklayın.",
+            titleBrandModeDisabled: "'Sadece Favoriler' modunu etkinleştirmek için markaları favori (⭐) olarak işaretleyin.",
+            // Filter Panel
+            ariaCloseFilters: "Filtreleri Kapat",
+            filterHeader: "Filtreler",
+            buttonResetFilters: "Filtreleri Sıfırla",
+            titleResetFilters: "Tüm filtreleri varsayılana sıfırla",
+            filterConnectorType: "Konnektör Tipi",
+            filterAll: "Tümü",
+            // AC/DC don't need translation
+            filterMinPower: "Min Güç (Herhangi Bir Soket)",
+            filterPowerLow: "(< 60 kW)",
+            filterPowerMedium: "(60-120 kW)",
+            filterPowerHigh: "(> 120 kW)",
+            filterServiceType: "Hizmet Türü",
+            filterServicePublic: "Halka Açık",
+            filterServicePrivate: "Özel/Kısıtlı",
+            filterBrandPrefs: "Marka Tercihleri",
+            filterViewAll: "Tümü",
+            filterViewFavs: "Favoriler ⭐",
+            filterViewBlocked: "Engellenenler 🚫",
+            filterBrandHint1: "Markaları yönetmek/görüntülemek için yukarıdaki düğmeleri kullanın.",
+            filterBrandHint2: "Harita filtre modu, haritadaki simge düğmesi ile ayarlanır.",
+            filterIgnoredStations: "Yok Sayılan İstasyonlar",
+            filterIgnoreHint: "Yok saymak için istasyon açılır pencerelerindeki 👁️‍🗨️🚫 simgesini kullanın.",
+            filterStatusNoBrands: "Marka verisi mevcut değil.",
+            filterStatusNoIgnored: "Yok sayılan istasyon yok.",
+            filterStatusNoBrandsView: "Bu görünüme uyan marka yok.",
+            tooltipFavorite: "Favori",
+            tooltipBlacklist: "Kara Liste",
+            buttonUnignore: "Yok Saymayı Kaldır",
+            titleOpenMap: "Haritada Aç",
+            // Offset Controls
+            offsetStart: "Başl:",
+            offsetDest: "Varış:",
+            titleOffsetStartInc: "Başlangıç Ofsetini Artır (+5km)",
+            titleOffsetStartDec: "Başlangıç Ofsetini Azalt (-5km)",
+            titleOffsetDestInc: "Varış Ofsetini Artır (+5km)",
+            titleOffsetDestDec: "Varış Ofsetini Azalt (-5km)",
+            // Location Parsing Types (for messages)
+            locationTypeCoordinates: "Koordinatlar",
+            locationTypePlaceId: "Yer Kimliği",
+            locationTypeMapClick: "Harita Tıklaması",
+            locationTypeFeatureClick: "Harita Öğesi Tıklaması",
+            locationTypeCurrentLocation: "Mevcut Konum",
+            locationTypeSearchTerm: "Arama Terimi",
+            locationTypeAddressName: "Adres/İsim",
+            locationTypePlusCode: "Plus Kodu",
+            locationTypePasted: "Yapıştırılan Öğe",
+            locationTypeUnknown: "Bilinmeyen Tür",
+            // Messages
+            messageLoadingStations: "Şarj istasyonları yükleniyor...",
+            messageLoadedStations: "{count} istasyon yüklendi. Rota belirlendiğinde görünecekler.", // Plural handled in translate()
+            messageGeoNotSupported: "Konum belirleme desteklenmiyor. Varsayılan harita gösteriliyor.",
+            messageGeoError: "Konumunuz alınamadı. Varsayılan harita gösteriliyor.",
+            messageGeoPermissionDenied: "Konum izni reddedildi. Varsayılan harita gösteriliyor.",
+            messageGeoUnavailable: "Konum bilgisi mevcut değil. Varsayılan harita gösteriliyor.",
+            messageGeoTimeout: "Konum isteği zaman aşımına uğradı. Varsayılan harita gösteriliyor.",
+            messageErrorGmapsLoad: "Hata: Google Haritalar bileşenleri yüklenemedi.",
+            messageErrorMapCreate: "Harita oluşturulurken hata oluştu.",
+            messageErrorMapServices: "Harita servisleri başlatılırken hata oluştu.",
+            messageErrorAutocomplete: "Otomatik tamamlama ayarlanırken hata oluştu.",
+            messageAutocompleteUnavailable: "Otomatik tamamlama kullanılamıyor",
+            messageInvalidLocation: "Lütfen listeden geçerli bir konum seçin.",
+            messageProcessingLocation: "{parsedType} işleniyor...", // Parsed type will be translated via its key
+            messagePastedError: "Yapıştırılan metin anlaşılamadı.",
+            messagePastedNoResults: "Yapıştırılan metin için sonuç bulunamadı.",
+            messageNotInTurkey: "Konum ({parsedType}) Türkiye'de değil.", // Parsed type will be translated via its key
+            messageSetLocation: "{type} konumu, {parsedType} kaynağından ayarlandı.", // {type} = başlangıç/varış, parsedType translated via key
+            messageCalculatingRoute: "Rota hesaplanıyor...",
+            messageRouteCalcFailedDisplay: "Rota hesaplandı, ancak görüntülenemedi.",
+            messageDirectionsFailed: "Yol tarifi isteği başarısız: {status}",
+            messageRouteCalculated: "Rota hesaplandı. Başlangıç kriterlerine uyan {count} istasyon bulundu.", // Plural handled in translate()
+            messageNoStationsFound: "Rota yakınında başlangıç kriterlerine uyan istasyon bulunamadı.",
+            messageStationsFound: "Kriterlere uyan {count} istasyon bulundu.", // Plural handled in translate()
+            messageGeomLibMissing: "Geometri kütüphanesi eksik.",
+            messageOffsetsOverlap: "Ofsetler çakışamaz veya rota uzunluğunu aşamaz.",
+            messageStationIgnored: "{id} numaralı istasyon yok sayıldı. Filtrelerden yönetin.",
+            messageStationUnignored: "{id} numaralı istasyonun yok sayılması kaldırıldı.",
+            messageShowOnlyFavs: "Sadece favori markalar gösteriliyor ⭐",
+            messageNeedFavs: "Önce bazı markaları favori (⭐) olarak işaretleyin.",
+            messageShowAllBrands: "Tüm (kara listeye alınmamış, yok sayılmamış) markalar gösteriliyor",
+            messageFiltersReset: "Tüm filtreler varsayılana sıfırlandı.",
+            messageClearedAll: "Başlangıç, Varış ve Rota temizlendi.",
+            messageClipboardUnsupported: "Pano API'si desteklenmiyor veya izin reddedildi.",
+            messageClipboardEmpty: "Pano boş.",
+            messageClipboardError: "Pano okunamadı. İzinleri kontrol edin?",
+            messageGettingLocation: "Mevcut konum alınıyor...",
+            messageCurrentLocationError: "Mevcut konum alınamadı.",
+            messageResolveShortUrlError: "Kısa URL vekil sunucu aracılığıyla çözülemedi.",
+            messageResolveProxyFormatError: "Vekil sunucu beklenmeyen format döndürdü. Kısa URL çözülemedi.",
+            messageResolveProxyResponseError: "Vekil sunucu geçersiz veya boş yanıt döndürdü.",
+            messageResolveProxyNotFoundError: "Kısa URL çözümleyici uç noktası sunucuda bulunamadı.",
+            messageResolveProxyStatusError: "URL çözümleyici ile iletişim hatası (Durum: {status}).",
+            messageUseFullUrl: "Lütfen bu kısa bağlantıyı açıp tam URL'yi yapıştırın.",
+            messageResolvingShortUrl: "Kısa URL vekil sunucu aracılığıyla çözülüyor...",
+            // InfoWindow & Markers
+            iwOpenMap: "Google Haritalar'da Aç",
+            iwVisitWebsite: "Web Sitesini Ziyaret Et",
+            iwOperator: "Operatör:",
+            iwAddress: "Adres:",
+            iwPhone: "Telefon:",
+            iwNA: "Yok",
+            iwSockets: "Soketler",
+            iwNoSockets: "Soket bilgisi mevcut değil.",
+            iwLoading: "Yükleniyor...",
+            iwUnknown: "Bilinmiyor",
+            iwFree: "BOŞ",
+            iwInuse: "KULLANIMDA", // Key changed to match logic, translation updated
+            iwOccupied: "MEŞGUL",
+            iwCharging: "ŞARJ OLUYOR",
+            iwSocketStatusError: "Canlı durum yüklenemedi.",
+            iwDisclaimer: "Canlı durum tam olarak doğru olmayabilir. Lütfen sağlayıcının uygulamasından doğrulayın.",
+            iwDetourCalculating: "Sapma hesaplanıyor...",
+            iwDetourFailed: "Sapma hesaplama başarısız.",
+            iwRetry: "Tekrar Dene",
+            iwDetourNegligible: "Önemsiz sapma.",
+            iwDetourInfo: "Ekstra: {extraDistStr}, {extraDurStr}", // Changed wording slightly
+            iwIgnored: "(Yok Sayıldı)",
+            iwEscHint: "(Kapatmak için <span class=\"font-mono\">Esc</span>)",
+            markerLogoAlt: "{name} için logo",
+            markerStart: "Başlangıç",
+            markerDest: "Varış",
+            markerDetourError: "sapma?",
+            markerTitleStartDefault: "Rota Başlangıcı",
+            markerTitleEndDefault: "Rota Varışı",
+            currentLocation: "Mevcut Konum", // Used as display name and internal type identifier
+            brandFavoriteAction: "Favori Marka",
+            brandBlacklistAction: "Markayı Kara Listeye Al",
+            ignoreStationAction: "Bu İstasyonu Yok Say",
+        }
+    };
+
+    function loadLanguage() {
+        const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        let detectedLang = 'en'; // Default
+
+        if (savedLang && translations[savedLang]) {
+            currentLang = savedLang;
+            console.log(`Loaded language from localStorage: ${currentLang}`);
+        } else {
+            // Try detecting browser language
+            const browserLang = navigator.language?.split('-')[0]?.toLowerCase(); // e.g., 'en' from 'en-US'
+            if (browserLang && translations[browserLang]) {
+                detectedLang = browserLang;
+                currentLang = detectedLang;
+                console.log(`Detected browser language: ${currentLang}. No preference saved yet.`);
+            } else {
+                currentLang = 'en'; // Fallback to English
+                console.log(`Browser language (${browserLang}) not supported or undetectable, defaulting to: ${currentLang}`);
+            }
+            // Optionally save the detected language as the initial preference
+            // localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLang);
+        }
+        document.documentElement.lang = currentLang; // Set lang attribute on <html>
+    }
+
+    function setLanguage(lang) {
+        if (lang && translations[lang] && lang !== currentLang) {
+            currentLang = lang;
+            localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLang);
+            console.log(`Language preference set to: ${currentLang}. Reloading page.`);
+            window.location.reload(); // Reload the page
+        } else if (lang === currentLang) {
+            console.log(`Language already set to: ${lang}. No action needed.`);
+        } else {
+            console.warn(`Attempted to set invalid language: ${lang}`);
+        }
+    }
+
+    // --- Helper to get translation key for a parsed location type ---
+    function getParsedTypeTranslationKey(parsedTypeString) {
+        // Map the internal string representation to the translation key
+        switch (parsedTypeString) {
+            case 'Coordinates': return 'locationTypeCoordinates';
+            case 'Place ID':
+            case 'Place ID (from URL query)':
+            case 'Place ID (from URL path)':
+            case 'Place ID (standalone)': return 'locationTypePlaceId';
+            case 'Map Click': return 'locationTypeMapClick';
+            case 'Feature Click': return 'locationTypeFeatureClick';
+            case 'Current Location': return 'locationTypeCurrentLocation';
+            case 'Search Term':
+            case 'Search Term (from URL query)':
+            case 'Search Term (from URL path)': return 'locationTypeSearchTerm';
+            case 'Address/Name':
+            case 'Place Name (from URL path)': return 'locationTypeAddressName';
+            case 'Plus Code': return 'locationTypePlusCode';
+            case 'Pasted': return 'locationTypePasted';
+            default: return 'locationTypeUnknown';
+        }
+    }
+
+    function translate(key, params = {}) {
+        const langDict = translations[currentLang] || translations.en; // Fallback to English dict
+        let text = langDict[key] || translations.en[key]; // Fallback chain: current -> english
+
+        // If still not found, use the key itself as fallback
+        if (text === undefined) {
+            console.warn(`Translation missing for key: ${key} in lang: ${currentLang}`);
+            text = key;
+        }
+
+        // Replace placeholders like {count}, {status}, {type}, {parsedType}, {id}
+        Object.keys(params).forEach(paramKey => {
+            let replacement = params[paramKey];
+            // Special handling for 'parsedType' to translate it first
+            if (paramKey === 'parsedType') {
+                const typeKey = getParsedTypeTranslationKey(replacement); // Get the key e.g., 'locationTypeCoordinates'
+                replacement = translate(typeKey); // Translate the type itself
+            }
+            const regex = new RegExp(`\\{${paramKey}\\}`, 'g');
+            text = text.replace(regex, replacement);
+        });
+
+        // Basic pluralization for keys containing 'station(s)' or 'Stations'
+        if ((key.includes('station') || key.includes('Stations')) && params.count !== undefined) {
+            const count = Number(params.count);
+            if (currentLang === 'tr') {
+                // Turkish doesn't typically pluralize after numbers in this context
+                text = text.replace('{count} station(s)', `${count} istasyon`)
+                    .replace('{count} istasyon', `${count} istasyon`); // Handle singular if needed
+            } else { // English
+                text = text.replace('{count} station(s)', count === 1 ? `${count} station` : `${count} stations`)
+                    .replace('{count} station', count === 1 ? `${count} station` : `${count} stations`); // Handle singular if needed
+            }
+        }
+
+        return text;
+    }
+
+    // Updates elements marked with data-i18n-key
+    function applyTranslations() {
+        document.querySelectorAll('[data-i18n-key]').forEach(element => {
+            const keyAttr = element.dataset.i18nKey;
+            // Format: "key" or "[attr]key1;[attr2]key2"
+            const translationsToApply = keyAttr.split(';').map(part => {
+                const match = part.match(/^\[([^\]]+)\](.+)$/);
+                if (match) {
+                    return { attr: match[1], key: match[2] };
+                } else {
+                    // Default to textContent if no attribute specified
+                    return { attr: 'textContent', key: part };
+                }
+            });
+
+            translationsToApply.forEach(({ attr, key }) => {
+                const translatedText = translate(key);
+                try {
+                    if (attr === 'textContent') {
+                        // Simplified: Set textContent directly for most elements
+                        // Use innerHTML only if translation itself contains HTML (like the hint)
+                        if (element.classList.contains('shortcut-hint-x') || element.classList.contains('esc-hint') || element.id === 'loading-overlay') {
+                            element.innerHTML = translatedText;
+                        } else {
+                            element.textContent = translatedText;
+                        }
+                    } else if (attr === 'innerHTML') {
+                        element.innerHTML = translatedText; // Use carefully
+                    } else {
+                        element.setAttribute(attr, translatedText);
+                    }
+                } catch (e) {
+                    console.error(`Error applying translation key "${key}" (attr: ${attr}) to element:`, element, e);
+                }
+            });
+        });
+        // Update language dropdown button text/flag
+        updateLanguageDropdownUI();
+        // Update dynamically generated content if needed
+        // updateDynamicTranslations(); // No longer needed due to page refresh on lang change
+    }
+
+    // Updates dynamic parts of the UI that *might* be needed before full initialization or refresh
+    function updateDynamicTranslations() {
+        // Most dynamic updates are now handled by page refresh on language change.
+        // We might only need to update things that depend on state *before* a refresh happens,
+        // or things that are generated purely client-side without a refresh.
+
+        // 1. Brand Filter Mode Button Title (updated as state changes)
+        updateBrandFilterModeButton();
+
+        // 2. Filter Panel Lists (Populated/Refreshed when panel opens or filters change)
+        // These use translate() when generating items, so they'll be correct on initial load/panel open.
+        // populateBrandFilterList(); // Call if panel is opened or brands change
+        // populateIgnoredStationsList(); // Call if panel is opened or ignored list changes
+
+        // 3. Open InfoWindow content (Rebuilt when opened or data changes)
+        // Uses translate() when built, so should be correct when opened.
+
+        // 4. Marker Titles (Set on creation/update)
+        // Uses translate() when set, so should be correct.
+
+        // 5. Distance/Offset Units (Set by applyTranslations and updateOffsetDisplay)
+        updateOffsetDisplay();
+
+        console.log("Minimal dynamic UI updates applied (most handled by refresh).");
+    }
+
+    // --- Global Variables ---
+    let map;
+    let directionsService;
+    let directionsRenderer;
+    let geocoder;
+    let autocompleteStart, autocompleteEnd;
+    let startLocation = null;
+    let endLocation = null;
+    let startMarker = null; // AdvancedMarkerElement
+    let endMarker = null;   // AdvancedMarkerElement
+    let allPoiMarkers = []; // AdvancedMarkerElement instances for stations
+    let visiblePoiMarkers = []; // Markers currently matching distance AND filters
+    let selectedPoiMarker = null; // Track the marker whose InfoWindow is open
+    const DEFAULT_POI_ZINDEX = 1;
+    const HOVER_POI_ZINDEX = 9;  // zIndex for hover (below selected)
+    const SELECTED_POI_ZINDEX = 10; // Higher zIndex for the selected marker
+    let currentRoutePolylinePath = null;
+    let effectiveRoutePath = null; // Path adjusted by offsets
+    let infoWindow; // Google Maps InfoWindow
+    let distanceThresholdKm = 5; // Default value, may be overridden by loaded settings
+    let isRouteActive = false;
+    let originalRouteDistance = null; // meters
+    let originalRouteDuration = null; // seconds
+    let startOffsetKm = 0; // Start offset in KM
+    let endOffsetKm = 0; // Destination offset in KM (from the end)
+    const OFFSET_INCREMENT_KM = 5; // How much to change offset per click
+
+    const MAX_PRECALCULATE_DETOURS = 10;
+    const DEFAULT_EV_SVG_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#059669"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 11.5L13 17v-4h-2v4L7.5 13.5H11V9h2v4.5h3.5z"/></svg>`;
+    const DEFAULT_EV_SVG_DATA_URI = `data:image/svg+xml;base64,${btoa(DEFAULT_EV_SVG_ICON)}`;
+    const MAX_API_RETRIES = 3; // Max retries for API calls
+    const SOCKET_API_RETRY_DELAY = 1000; // ms delay for socket API retry
+    const DIRECTIONS_API_RETRY_DELAY = 750; // ms delay for Directions API retry
+    // Detour messages now use translate()
+    const DETOUR_ERROR_KEY = 'iwDetourFailed';
+    const DETOUR_LOADING_KEY = 'iwDetourCalculating';
+
+    // --- Preferences & Settings ---
+    const GENERAL_SETTINGS_STORAGE_KEY = 'evRouteGeneralSettings_v1';
+    const BRAND_PREFS_STORAGE_KEY = 'evRouteBrandPrefs_v2';
+    const IGNORED_STATIONS_STORAGE_KEY = 'evRouteIgnoredStations';
+    let allUniqueBrands = [];
+    let favoriteBrands = new Set();
+    let blacklistedBrands = new Set();
+    let ignoredStationIds = new Set(); // Set to store IDs of ignored stations (ALWAYS as strings)
+    let brandFilterMode = 'all'; // 'all' or 'favoritesOnly'
+    const DEFAULT_DISTANCE_THRESHOLD = 5;
+    const DEFAULT_MAP_TYPE_ID = 'roadmap';
+
+    // --- SVG Icons ---
+    const EYE_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" /><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.18l.877-.584a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.877.584a1.651 1.651 0 0 1 0 1.18l-.877.584a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.877-.584ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" clip-rule="evenodd" /></svg>`;
+    const STAR_ICON_HTML = `<span>⭐</span>`;
+    const IGNORE_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.18l-.877-.584a1.651 1.651 0 0 0-1.8-.001l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.552.368a10.029 10.029 0 0 0-2.53-1.884l-1.745-1.745ZM10 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM6.604 9.166a.75.75 0 0 0-1.06 1.06l1.43 1.43a2.5 2.5 0 0 1 3.086-3.086l-1.43-1.43a.75.75 0 0 0-1.06-1.06l-1.956 1.956Z" clip-rule="evenodd" /></svg>`;
+    const MAP_PIN_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.145l.005-.002.007-.004.012-.007a7.489 7.489 0 0 0 .98-.641 14.049 14.049 0 0 0 2.017-1.61.182.182 0 0 0 .006-.007 15.007 15.007 0 0 0 2.49-3.842 17.94 17.94 0 0 0 .848-4.011c0-3.564-2.618-6.5-6-6.5S4 3.936 4 7.5c0 1.57.414 3.015.848 4.011a17.94 17.94 0 0 0 2.49 3.842l.006.006a14.05 14.05 0 0 0 2.997 2.251l.012.007.007.004.005.002a5.745 5.745 0 0 0 .28.145l.019.008.006.003ZM10 11.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" /></svg>`;
+    const LOCATION_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /> </svg>`;
+
+
+    // UI Elements
+    let controlPanel, inputContainer, hamburgerButton, startInput, endInput;
+    let clearStartBtn, clearEndBtn, pasteStartBtn, pasteEndBtn, useLocationStartBtn, useLocationEndBtn, messageBox;
+    let distanceContainer, distanceSlider, distanceValueDisplay;
+    let mapTypeControlContainer, mapTypeButtons = [];
+    // Language UI elements
+    let languageControlContainer, languageSelectorButton, languageDropdown, languageFlagDisplay, languageCodeDisplay;
+    let loadingOverlay; // Added loading overlay element
+
+    let filterToggleButton, filterPanel, closeFilterButton, resetFiltersButton; // Filter UI elements
+    let brandFilterModeButton; // New button for brand filter mode
+    let filterInputs = {}; // To hold references to filter controls
+    let brandListContainer, brandListViewControls; // Container and view controls for brand filter list
+    let ignoredStationsListContainer; // Container for ignored stations list
+    let offsetControlsContainer, startOffsetDisplay, destOffsetDisplay; // Offset UI elements
+    let offsetStartIncBtn, offsetStartDecBtn, offsetDestIncBtn, offsetDestDecBtn;
+
+    // --- Default Filter States ---
+    const defaultFilters = {
+        connectorType: 'ALL',
+        powerLevels: ['low', 'medium', 'high'],
+        serviceTypes: ['PUBLIC']
+    };
+
+    // Filter State (Basic filters, brands/ignored handled by sets/mode)
+    let currentFilters = JSON.parse(JSON.stringify(defaultFilters)); // Start with defaults
+
+    const defaultCenter = { lat: 39.0, lng: 35.0 }; // Turkey center
+    const defaultZoom = 6;
+    const userLocationZoom = 12;
+
+    // --- Initialization ---
+    function initMap() {
+        console.log("initMap called (EV Stations)");
+        loadLanguage(); // Load language preference first (detects browser lang if needed)
+
+        // --- Get UI Elements ---
+        controlPanel = document.getElementById('control-panel');
+        inputContainer = document.getElementById('input-container');
+        hamburgerButton = document.getElementById('hamburger-btn');
+        startInput = document.getElementById('start-input');
+        endInput = document.getElementById('end-input');
+        clearStartBtn = document.getElementById('clear-start-btn');
+        clearEndBtn = document.getElementById('clear-end-btn');
+        pasteStartBtn = document.getElementById('paste-start-btn');
+        pasteEndBtn = document.getElementById('paste-end-btn');
+        useLocationStartBtn = document.getElementById('use-location-start-btn');
+        useLocationEndBtn = document.getElementById('use-location-end-btn');
+        messageBox = document.getElementById('message-box');
+        distanceContainer = document.getElementById('distance-container');
+        distanceSlider = document.getElementById('distance-slider');
+        distanceValueDisplay = document.getElementById('distance-value');
+        mapTypeControlContainer = document.getElementById('map-type-control');
+        mapTypeButtons = mapTypeControlContainer.querySelectorAll('button');
+        // Language UI elements
+        languageControlContainer = document.getElementById('language-control');
+        languageSelectorButton = document.getElementById('language-selector-btn');
+        languageDropdown = document.getElementById('language-dropdown');
+        languageFlagDisplay = document.getElementById('language-flag');
+        languageCodeDisplay = document.getElementById('language-code');
+        loadingOverlay = document.getElementById('loading-overlay'); // Get loading overlay
+
+        // Filter UI elements
+        filterToggleButton = document.getElementById('filter-toggle-btn');
+        brandFilterModeButton = document.getElementById('brand-filter-mode-btn');
+        filterPanel = document.getElementById('filter-panel');
+        closeFilterButton = document.getElementById('close-filter-btn');
+        resetFiltersButton = document.getElementById('reset-filters-btn');
+        filterInputs.connectorType = document.querySelectorAll('#filter-connector-type input[name="connectorType"]');
+        filterInputs.powerLevel = document.querySelectorAll('#filter-power input[name="powerLevel"]');
+        filterInputs.serviceType = document.querySelectorAll('#filter-service-type input[name="serviceType"]');
+        brandListContainer = document.getElementById('brand-list-container');
+        brandListViewControls = document.getElementById('brand-list-view-controls');
+        ignoredStationsListContainer = document.getElementById('ignored-stations-list');
+
+        // Offset UI elements
+        offsetControlsContainer = document.getElementById('offset-controls');
+        startOffsetDisplay = document.getElementById('start-offset-display');
+        destOffsetDisplay = document.getElementById('dest-offset-display');
+        offsetStartIncBtn = document.getElementById('offset-start-inc');
+        offsetStartDecBtn = document.getElementById('offset-start-dec');
+        offsetDestIncBtn = document.getElementById('offset-dest-inc');
+        offsetDestDecBtn = document.getElementById('offset-dest-dec');
+
+        // --- Check Core Elements ---
+        if (!loadingOverlay || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !languageCodeDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
+            console.error("Required UI elements not found!"); alert("Initialization Error: Missing UI elements."); return;
+        }
+        if (typeof google === 'undefined' || typeof google.maps === 'undefined' || !google.maps.marker) {
+            console.error("Google Maps API or Advanced Marker library not loaded!"); showTemporaryMessage(translate('messageErrorGmapsLoad'), true); return;
+        }
+
+        // --- Show Loading Indicator ---
+        loadingOverlay.classList.remove('hidden');
+        applyTranslations(); // Apply translations early to show loading message correctly
+
+        // --- Load Settings and Determine Initial Map Center ---
+        loadSettings(); // Settings load happens before language load
+
+        if (navigator.geolocation) {
+            console.log("Attempting geolocation...");
+            navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, { timeout: 5000 });
+            useLocationStartBtn.disabled = false;
+            useLocationEndBtn.disabled = false;
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            showTemporaryMessage(translate('messageGeoNotSupported'), false);
+            useLocationStartBtn.disabled = true;
+            useLocationEndBtn.disabled = true;
+            initializeMapAndServices(defaultCenter, defaultZoom);
+        }
+
+        // Setup language dropdown (will be populated after map init potentially)
+        setupLanguageDropdown();
+    }
+    function geolocationSuccess(position) {
+        const userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        console.log("Geolocation successful:", userLocation);
+        initializeMapAndServices(userLocation, userLocationZoom);
+    }
+    function geolocationError(error) {
+        console.warn(`Geolocation error (${error.code}): ${error.message}`);
+        let messageKey = 'messageGeoError'; // Default error message key
+        if (error.code === error.PERMISSION_DENIED) {
+            messageKey = 'messageGeoPermissionDenied';
+            useLocationStartBtn.disabled = true;
+            useLocationEndBtn.disabled = true;
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+            messageKey = 'messageGeoUnavailable';
+        } else if (error.code === error.TIMEOUT) {
+            messageKey = 'messageGeoTimeout';
+        }
+        showTemporaryMessage(translate(messageKey), true);
+        initializeMapAndServices(defaultCenter, defaultZoom);
+    }
+    function initializeMapAndServices(center, zoom) {
+        console.log(`Initializing map at [${center.lat}, ${center.lng}] with zoom ${zoom}`);
+        // loadSettings already called before geolocation attempt
+
+        try {
+            // Settings (including map type) are already loaded
+            const loadedMapTypeId = currentFilters.mapTypeId || DEFAULT_MAP_TYPE_ID;
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: center,
+                zoom: zoom,
+                mapTypeId: loadedMapTypeId, // Use loaded or default map type
+                mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
+                mapId: 'DEMO_MAP_ID' // Use your actual Map ID if needed
+            });
+            console.log("Map object successfully initialized in initializeMapAndServices with type:", map.getMapTypeId());
+        } catch (error) { console.error("Error initializing map object:", error); showTemporaryMessage(translate('messageErrorMapCreate'), true); return; }
+
+        // Update UI elements based on loaded settings *after* map is created
+        updateFilterControlsUI();
+        updateDistanceSliderUI();
+        updateMapTypeButtons(map.getMapTypeId()); // Use the actual map type set
+        updateBrandFilterModeButton(); // This will use translate() internally
+        updateFilterIndicator();
+        applyTranslations(); // Apply translations again to ensure map-dependent elements are correct
+
+        try {
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({ map: map, suppressMarkers: true });
+            infoWindow = new google.maps.InfoWindow({ maxWidth: 350 });
+            infoWindow.addListener('closeclick', () => {
+                console.log("InfoWindow closeclick triggered.");
+                resetSelectedMarkerZIndex();
+            });
+            geocoder = new google.maps.Geocoder(); console.log("Map services initialized.");
+        } catch (error) { console.error("Error initializing map services:", error); showTemporaryMessage(translate('messageErrorMapServices'), true); }
+        try {
+            if (google.maps.places && google.maps.places.Autocomplete) {
+                const autocompleteOptions = { fields: ["geometry", "name", "address_components"], componentRestrictions: { country: "TR" }, strictBounds: false };
+                autocompleteStart = new google.maps.places.Autocomplete(startInput, autocompleteOptions);
+                autocompleteEnd = new google.maps.places.Autocomplete(endInput, autocompleteOptions);
+                autocompleteStart.addListener('place_changed', onPlaceChanged('start'));
+                autocompleteEnd.addListener('place_changed', onPlaceChanged('end')); console.log("Autocomplete setup complete.");
+            } else { throw new Error("google.maps.places.Autocomplete not found!"); }
+        } catch (error) { console.error("Error setting up Autocomplete:", error); showTemporaryMessage(translate('messageErrorAutocomplete'), true); startInput.disabled = true; endInput.disabled = true; startInput.placeholder = translate('messageAutocompleteUnavailable'); endInput.placeholder = translate('messageAutocompleteUnavailable'); }
+
+        console.log("Map initialized, now calling fetchInitialStations...");
+        fetchInitialStations(); // This will also populate the brand filter list and ignored list, and hide loading overlay
+
+        // --- Event Listeners ---
+        if (directionsRenderer) directionsRenderer.addListener('directions_changed', handleDirectionsChanged);
+        // Distance slider listeners
+        distanceSlider.addEventListener('input', handleDistanceChange);
+        distanceSlider.addEventListener('change', () => {
+            distanceThresholdKm = parseInt(distanceSlider.value, 10);
+            saveSettings();
+            triggerDetourPrecalculation();
+            const count = applyFilters();
+            if(isRouteActive) {
+                showTemporaryMessage(translate('messageStationsFound', {count: count}), false);
+            }
+        });
+        hamburgerButton.addEventListener('click', () => { inputContainer.classList.toggle('hidden'); distanceContainer.classList.toggle('hidden', !inputContainer.classList.contains('hidden')); });
+        startInput.addEventListener('input', () => handleInputChange(startInput, clearStartBtn)); endInput.addEventListener('input', () => handleInputChange(endInput, clearEndBtn));
+        clearStartBtn.addEventListener('click', () => handleClearClick(startInput, clearStartBtn, 'start')); clearEndBtn.addEventListener('click', () => handleClearClick(endInput, clearEndBtn, 'end'));
+        pasteStartBtn.addEventListener('click', () => handlePasteButtonClick('start'));
+        pasteEndBtn.addEventListener('click', () => handlePasteButtonClick('end'));
+        startInput.addEventListener('paste', (e) => handleDirectPaste(e, 'start'));
+        endInput.addEventListener('paste', (e) => handleDirectPaste(e, 'end'));
+        useLocationStartBtn.addEventListener('click', () => handleUseCurrentLocationClick('start'));
+        useLocationEndBtn.addEventListener('click', () => handleUseCurrentLocationClick('end'));
+
+        if (map) {
+            map.addListener('click', handleMapClick);
+        }
+        mapTypeButtons.forEach(button => { button.addEventListener('click', handleMapTypeChange); });
+        // Language dropdown listeners are set up in setupLanguageDropdown()
+
+        filterToggleButton.addEventListener('click', toggleFilterPanel);
+        brandFilterModeButton.addEventListener('click', toggleBrandFilterMode);
+        closeFilterButton.addEventListener('click', toggleFilterPanel);
+        resetFiltersButton.addEventListener('click', resetAllFilters);
+        filterInputs.connectorType.forEach(input => input.addEventListener('change', handleFilterChange));
+        filterInputs.powerLevel.forEach(input => input.addEventListener('change', handleFilterChange));
+        filterInputs.serviceType.forEach(input => input.addEventListener('change', handleFilterChange));
+        brandListViewControls.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', handleBrandListViewChange);
+        });
+        ignoredStationsListContainer.addEventListener('click', (event) => {
+            const target = event.target.closest('button');
+            if (!target) return;
+            if (target.classList.contains('unignore-btn')) {
+                const stationIdToUnignore = target.dataset.stationId;
+                if (stationIdToUnignore) { handleUnignoreStationClick(stationIdToUnignore); }
+            } else if (target.classList.contains('map-btn')) {
+                const lat = target.dataset.lat; const lng = target.dataset.lng;
+                if (lat && lng) { window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank'); }
+                else { console.warn("Map button clicked for ignored station without lat/lng data."); }
+            }
+        });
+        offsetStartIncBtn.addEventListener('click', () => handleOffsetChange('start', OFFSET_INCREMENT_KM));
+        offsetStartDecBtn.addEventListener('click', () => handleOffsetChange('start', -OFFSET_INCREMENT_KM));
+        offsetDestIncBtn.addEventListener('click', () => handleOffsetChange('dest', OFFSET_INCREMENT_KM));
+        offsetDestDecBtn.addEventListener('click', () => handleOffsetChange('dest', -OFFSET_INCREMENT_KM));
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('click', handleDocumentClickForDropdown); // To close dropdown on outside click
+
+        window.addEventListener('resize', handleResize); handleResize();
+        updateOffsetControlsVisibility();
+        console.log("Map services and listeners setup finished.");
+    }
+
+    // --- Language Dropdown Logic ---
+    function setupLanguageDropdown() {
+        if (!languageDropdown || !languageSelectorButton) return;
+
+        languageDropdown.innerHTML = ''; // Clear previous options
+
+        Object.keys(translations).forEach(langCode => {
+            const langData = translations[langCode];
+            const button = document.createElement('button');
+            button.setAttribute('role', 'menuitem');
+            button.dataset.lang = langCode;
+            button.innerHTML = `
+                <span class="flag">${langData.langFlag || '🏳️'}</span>
+                <span>${langData.langName || langCode.toUpperCase()}</span>
+            `;
+            button.classList.toggle('active', langCode === currentLang);
+            button.addEventListener('click', () => {
+                setLanguage(langCode); // This will now reload the page
+                // No need to manually close dropdown as page reloads
+            });
+            languageDropdown.appendChild(button);
+        });
+
+        languageSelectorButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent document click handler from closing it immediately
+            const isExpanded = languageSelectorButton.getAttribute('aria-expanded') === 'true';
+            languageDropdown.classList.toggle('show', !isExpanded);
+            languageSelectorButton.setAttribute('aria-expanded', String(!isExpanded));
+        });
+    }
+
+    function updateLanguageDropdownUI() {
+        if (!languageFlagDisplay || !languageCodeDisplay || !languageDropdown) return;
+        // Update button display based on currentLang
+        languageFlagDisplay.textContent = translations[currentLang]?.langFlag || '🏳️';
+        languageCodeDisplay.textContent = currentLang.toUpperCase();
+        // Update active item in dropdown (useful for initial load)
+        languageDropdown.querySelectorAll('button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === currentLang);
+        });
+    }
+
+    function handleDocumentClickForDropdown(event) {
+        // Close dropdown if click is outside the language control area
+        if (!languageControlContainer?.contains(event.target) && languageDropdown?.classList.contains('show')) {
+            languageDropdown.classList.remove('show');
+            languageSelectorButton.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+
+    // --- Data Fetching ---
+    async function fetchInitialStations() {
+        console.log(`Fetching initial station list from ${STATIONS_JSON_PATH}...`);
+        // Loading overlay is shown in initMap before this is called
+
+        try {
+            const response = await fetch(STATIONS_JSON_PATH, { cache: 'reload' });
+            if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status} while fetching ${STATIONS_JSON_PATH}`); }
+            const stations = await response.json();
+            console.log(`Fetched ${stations.length} stations from JSON.`);
+
+            loadPois(stations); // Load POIs first
+
+            const brands = new Set();
+            stations.forEach(s => { if (s.brand && s.brand.trim()) { brands.add(s.brand.trim()); } });
+            allUniqueBrands = Array.from(brands).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+            console.log(`Found ${allUniqueBrands.length} unique brands.`);
+
+            // Populate lists AFTER loading POIs and extracting brands
+            populateBrandFilterList();
+            filterBrandListView('all'); // Apply default view filter
+            populateIgnoredStationsList();
+
+            showTemporaryMessage(translate('messageLoadedStations', {count: stations.length}), false);
+        } catch (error) {
+            console.error("Error fetching initial station list from JSON:", error);
+            showTemporaryMessage("Failed to load charging stations from local file.", true); // Keep this simple, non-translatable potentially
+            loadPois([]); // Load empty array to clear any previous markers
+        } finally {
+            // Hide loading overlay regardless of success or failure
+            if(loadingOverlay) loadingOverlay.classList.add('hidden');
+            console.log("Initial station fetch finished (success or fail).");
+        }
+    }
+
+    // --- POI/Station Handling ---
+    function loadPois(stations) {
+        console.log("loadPois called. Adding marker badges.");
+        allPoiMarkers.forEach(marker => marker.map = null); allPoiMarkers = []; visiblePoiMarkers = [];
+        if (!google.maps.marker || !google.maps.marker.AdvancedMarkerElement) { console.error("AdvancedMarkerElement not available."); showTemporaryMessage(translate('messageErrorGmapsLoad'), true); return; }
+        if (!map) { console.error("Map not available in loadPois."); return; }
+
+        stations.forEach((station) => {
+            if (typeof station.lat !== 'number' || typeof station.lng !== 'number' || !station.id) { console.warn("Skipping station due to invalid data:", station); return; }
+            try {
+                const brandName = station.brand?.trim() || null;
+                const stationIdString = String(station.id);
+
+                const container = document.createElement('div'); container.className = 'poi-marker-content-container';
+
+                const iconContainer = document.createElement('div'); iconContainer.className = 'poi-icon-container'; const iconContainerId = `poi-icon-container-${stationIdString}`; iconContainer.id = iconContainerId;
+                const googleFaviconUrl = getFaviconUrlFromReportUrl(station.reportUrl);
+                const altText = translate('markerLogoAlt', {name: brandName || station.title || stationIdString});
+                if (googleFaviconUrl) { const img = document.createElement('img'); img.src = googleFaviconUrl; img.alt = altText; img.className = 'poi-marker-img'; img.onerror = () => { console.warn(`Initial Favicon failed for ${googleFaviconUrl}, reverting to SVG.`); const currentContainer = document.getElementById(iconContainerId); if (currentContainer) { currentContainer.innerHTML = DEFAULT_EV_SVG_ICON; } }; iconContainer.innerHTML = ''; iconContainer.appendChild(img); } else { iconContainer.innerHTML = DEFAULT_EV_SVG_ICON; }
+                container.appendChild(iconContainer);
+
+                let hasAC = false; let hasDC = false; let maxPower = 0;
+                if (station.sockets && station.sockets.length > 0) {
+                    station.sockets.forEach(socket => {
+                        const type = socket.type?.toUpperCase() || '';
+                        const power = typeof socket.power === 'number' ? socket.power : 0;
+                        if (type.includes('AC') || type === 'TYPE_2') hasAC = true;
+                        if (type.includes('DC') || type === 'CCS' || type === 'CHADEMO') hasDC = true;
+                        if (power > maxPower) maxPower = power;
+                    });
+                }
+                let powerCategory = 0;
+                if (maxPower > 120) powerCategory = 3;
+                else if (maxPower >= 60) powerCategory = 2;
+                else if (maxPower > 0) powerCategory = 1;
+
+                const badgeContainer = document.createElement('div'); badgeContainer.className = 'marker-badges';
+                if (hasAC) { const acBadge = document.createElement('span'); acBadge.className = 'marker-badge badge-ac'; acBadge.textContent = 'AC'; badgeContainer.appendChild(acBadge); }
+                if (hasDC) { const dcBadge = document.createElement('span'); dcBadge.className = 'marker-badge badge-dc'; dcBadge.textContent = 'DC'; badgeContainer.appendChild(dcBadge); }
+                if (powerCategory > 0) { const powerBadge = document.createElement('span'); powerBadge.className = `marker-badge badge-power-${powerCategory}`; powerBadge.textContent = '⚡'.repeat(powerCategory); badgeContainer.appendChild(powerBadge); }
+                if (badgeContainer.hasChildNodes()) { container.appendChild(badgeContainer); }
+
+                const detourText = document.createElement('span'); detourText.className = 'poi-marker-detour-text'; detourText.id = `poi-marker-detour-${stationIdString}`; detourText.textContent = '';
+                container.appendChild(detourText);
+
+                const favBadge = document.createElement('span'); favBadge.className = 'marker-fav-badge'; favBadge.textContent = '⭐'; favBadge.id = `poi-marker-fav-${stationIdString}`;
+                container.appendChild(favBadge);
+
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                    position: { lat: station.lat, lng: station.lng }, map: null,
+                    title: brandName || station.title || `Station ${stationIdString}`,
+                    content: container, zIndex: DEFAULT_POI_ZINDEX
+                });
+
+                station.serviceType = station.serviceType || 'UNKNOWN';
+                station.brand = brandName; station.id = stationIdString;
+                marker.poiData = station; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; marker.stationId = stationIdString;
+
+                marker.addListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
+                container.addEventListener('mouseover', () => { if (marker !== selectedPoiMarker) { marker.zIndex = HOVER_POI_ZINDEX; } });
+                container.addEventListener('mouseout', () => { if (marker !== selectedPoiMarker) { marker.zIndex = DEFAULT_POI_ZINDEX; } });
+
+                allPoiMarkers.push(marker);
+            } catch (error) { console.error(`Error creating AdvancedMarkerElement for Station ${station.id}:`, error); }
+        });
+        console.log(`Finished loadPois. ${allPoiMarkers.length} station markers created.`);
+    }
+
+
+    function resetSelectedMarkerZIndex() {
+        if (selectedPoiMarker) {
+            selectedPoiMarker.zIndex = DEFAULT_POI_ZINDEX;
+            console.log(`Reset zIndex for ${selectedPoiMarker.stationId}`);
+        }
+        selectedPoiMarker = null;
+    }
+
+
+    function updateInfoWindowIfVisible(marker) {
+        if (!infoWindow || !marker || infoWindow.getAnchor() !== marker || !infoWindow.getMap()) {
+            if (marker) {
+                // Update cache even if not visible, in case it becomes visible later
+                const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
+                const detourHtml = getDetourHtmlFromData(marker.detourData);
+                marker.cachedInfoWindowContent = buildInfoWindowHtml(marker, marker.poiData, marker.liveSocketData, fetchStatus, detourHtml);
+            }
+            return;
+        }
+
+        console.log(`Updating visible IW for ${marker.stationId}`);
+        const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
+        const detourHtml = getDetourHtmlFromData(marker.detourData);
+        const finalContentString = buildInfoWindowHtml(marker, marker.poiData, marker.liveSocketData, fetchStatus, detourHtml);
+        marker.cachedInfoWindowContent = finalContentString; // Update cache
+        infoWindow.setContent(finalContentString);
+    }
+
+
+    function getDetourHtmlFromData(detourData) {
+        if (!isRouteActive) return '';
+        if (!detourData || detourData.status === 'Pending') {
+            return translate(DETOUR_LOADING_KEY); // Use translated loading message
+        }
+
+        switch (detourData.status) {
+            case 'OK':
+                const extraDistStr = detourData.extraDist > 0 ? `+${formatDistance(detourData.extraDist)}` : `${formatDistance(detourData.extraDist)}`;
+                const extraDurStr = detourData.extraTime >= 0 ? `+${formatDuration(detourData.extraTime)}` : `${formatDuration(detourData.extraTime)}`;
+                return Math.abs(detourData.extraDist) < 50 && Math.abs(detourData.extraTime) < 10
+                    ? translate('iwDetourNegligible')
+                    : translate('iwDetourInfo', { extraDistStr: extraDistStr, extraDurStr: extraDurStr });
+            case 'Error':
+                const anchorMarker = infoWindow.getAnchor();
+                const stationId = anchorMarker?.stationId;
+                // Use template literal for cleaner button HTML construction
+                const retryButtonHtml = stationId
+                    ? `<button onclick='retryDetourCalculation(${JSON.stringify(stationId)})' class='retry-button'>${translate('iwRetry')}</button>`
+                    : '';
+                return `<span class="text-red-600">${translate(DETOUR_ERROR_KEY)}</span> ${retryButtonHtml}`;
+            default:
+                return translate(DETOUR_LOADING_KEY);
+        }
+    }
+
+
+    async function fetchPoiDetails(marker, poiData, suppressInfoWindowOpen = false) {
+        if (!marker || !poiData || !poiData.id) return;
+        const stationId = poiData.id; // String ID
+        const poiLocation = marker.position;
+        if (!poiLocation) { console.error("Clicked marker has no position."); return; }
+        if (ignoredStationIds.has(stationId)) { console.log(`Station ${stationId} is ignored, not opening InfoWindow.`); return; }
+
+        if (!suppressInfoWindowOpen) {
+            marker.liveSocketData = null; // Force refetch/rebuild on direct click
+            marker.cachedInfoWindowContent = null;
+            // Reset detour only if it wasn't already pending (allow pending to continue)
+            if (!marker.detourData || marker.detourData.status !== 'Pending') { marker.detourData = null; }
+            resetSelectedMarkerZIndex(); marker.zIndex = SELECTED_POI_ZINDEX; selectedPoiMarker = marker;
+            console.log(`Set zIndex to ${SELECTED_POI_ZINDEX} for ${stationId}`);
+        } else {
+            // Pre-fetch: Update marker text if detour data is already available
+            if(marker.detourData) updateMarkerDetourText(marker, marker.detourData);
+        }
+        console.log(`Fetching details for Station ID: ${stationId}`, `Suppress InfoWindow: ${suppressInfoWindowOpen}`);
+
+        let triggerOnDemandCalc = false; let initialDetourHtml = '';
+        if (isRouteActive && originalRouteDistance !== null) {
+            if (!marker.detourData || marker.detourData.status === 'Pending') {
+                initialDetourHtml = translate(DETOUR_LOADING_KEY); // Show loading immediately
+                if (!suppressInfoWindowOpen) triggerOnDemandCalc = true; // Trigger calc only if opening IW
+                updateMarkerDetourText(marker, null); // Show loading/empty on marker
+            } else {
+                initialDetourHtml = getDetourHtmlFromData(marker.detourData);
+                updateMarkerDetourText(marker, marker.detourData); // Update marker with existing data
+                // Trigger recalc if opening IW and previous attempt failed
+                if (marker.detourData.status === 'Error' && !suppressInfoWindowOpen) { triggerOnDemandCalc = true; }
+            }
+        } else {
+            initialDetourHtml = ''; updateMarkerDetourText(marker, null); // No route, no detour
+        }
+
+        if (!suppressInfoWindowOpen && infoWindow) {
+            const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
+            infoWindow.setContent(initialContent);
+            infoWindow.open({ anchor: marker, map: map, shouldFocus: false });
+            console.log(`Displayed initial InfoWindow for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
+        } else if (suppressInfoWindowOpen) {
+            console.log(`fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`);
+        }
+
+        // Fetch sockets if not already loaded/loading or if forced by direct click
+        if (marker.liveSocketData === null || (suppressInfoWindowOpen && marker.liveSocketData === false)) {
+            const socketsUrl = STATION_SOCKETS_API_URL_TEMPLATE.replace('{id}', stationId);
+            let socketRetries = 0; console.log(`Starting socket fetch for ${stationId}...`);
+            marker.liveSocketData = null; // Explicitly set to loading for this attempt
+
+            (async () => {
+                while (socketRetries <= MAX_API_RETRIES) {
+                    try {
+                        const response = await fetch(socketsUrl, { method: 'GET', headers: API_HEADERS, cache: 'reload' });
+                        if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
+                        const liveSocketsStatus = await response.json();
+                        console.log(`Socket fetch SUCCESS for ${stationId} (Attempt ${socketRetries + 1})`);
+                        marker.liveSocketData = liveSocketsStatus; updateInfoWindowIfVisible(marker); return;
+                    } catch (error) {
+                        console.warn(`Socket fetch ERROR for ${stationId} (Attempt ${socketRetries + 1}/${MAX_API_RETRIES + 1}):`, error.message);
+                        socketRetries++;
+                        if (socketRetries > MAX_API_RETRIES) { console.error(`Final socket fetch attempt failed for ${stationId}.`); marker.liveSocketData = false; updateInfoWindowIfVisible(marker); return; }
+                        await new Promise(resolve => setTimeout(resolve, SOCKET_API_RETRY_DELAY));
+                    }
+                }
+            })();
+        } else {
+            console.log(`Skipping socket fetch for ${stationId} - data already exists or suppress=true.`);
+            if(!suppressInfoWindowOpen) updateInfoWindowIfVisible(marker); // Update IW if opened directly
+        }
+
+        if (triggerOnDemandCalc && !suppressInfoWindowOpen && isRouteActive) {
+            console.log(`Starting on-demand detour calculation for ${stationId}...`);
+            calculateAndDisplayDetourOnClick(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration);
+        }
+    }
+
+
+    function buildDetourSectionHtml(marker, detourHtml) {
+        if (!isRouteActive) return '';
+        // Always include the section, content changes based on detourHtml
+        const content = `<div class="detour-info">${detourHtml || translate(DETOUR_LOADING_KEY)}</div>`;
+        return `<div class="info-section">${content}</div>`;
+    }
+
+
+    function buildInfoWindowHtml(marker, poiData, liveSocketsData, fetchStatus, detourHtml = '') {
+        const poiLocation = marker.position;
+        const iconContainer = marker.content?.querySelector('.poi-icon-container');
+        let logoSrc = DEFAULT_EV_SVG_DATA_URI;
+        if (iconContainer?.firstElementChild?.tagName === 'IMG') { logoSrc = iconContainer.firstElementChild.src; }
+
+        let mainTitle = poiData.brand || poiData.title || `Station ${poiData.id}`;
+        const currentBrand = poiData.brand;
+        const stationId = poiData.id; // string ID
+        const isFav = currentBrand && favoriteBrands.has(currentBrand);
+        const isBlk = currentBrand && blacklistedBrands.has(currentBrand);
+        const isIgnored = ignoredStationIds.has(stationId);
+
+        let titlePrefix = '';
+        if (isFav) titlePrefix = '⭐ ';
+        else if (isBlk) titlePrefix = '🚫 ';
+        mainTitle = titlePrefix + mainTitle;
+
+        let subTitle = '';
+        if (poiData.brand && poiData.title && poiData.brand !== poiData.title) {
+            subTitle = `<p class="info-subtitle">${poiData.title}</p>`;
+        }
+
+        let infoActionsHtml = '';
+        if (!isIgnored) {
+            infoActionsHtml = `<span class="info-actions">`;
+            if (currentBrand) {
+                const escapedBrand = JSON.stringify(currentBrand);
+                infoActionsHtml += `<button class="brand-fav ${isFav ? 'active-fav' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "favorite")' title="${translate('brandFavoriteAction')}">⭐</button>`;
+                infoActionsHtml += `<button class="brand-blk ${isBlk ? 'active-blk' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "blacklist")' title="${translate('brandBlacklistAction')}">🚫</button>`;
+            }
+            const escapedStationId = JSON.stringify(stationId);
+            infoActionsHtml += `<button class="ignore-station" onclick='handleIgnoreStationClick(${escapedStationId})' title="${translate('ignoreStationAction')}">${IGNORE_ICON_SVG}</button>`;
+            infoActionsHtml += `</span>`;
+        } else {
+            infoActionsHtml = `<span class="text-xs text-gray-500 ml-2">${translate('iwIgnored')}</span>`;
+        }
+
+
+        const operatorTitle = poiData.operatorTitle || translate('iwNA');
+        const address = poiData.address || translate('iwNA');
+        const phoneRaw = poiData.phone;
+        const phoneHtml = phoneRaw ? `<a href="tel:${phoneRaw}">${phoneRaw}</a>` : translate('iwNA');
+        const websiteUrl = poiData.reportUrl;
+        const gmapsLink = `https://www.google.com/maps?q=${poiLocation.lat},${poiLocation.lng}`;
+
+        const detourSection = buildDetourSectionHtml(marker, detourHtml);
+
+        let socketsHtml = '';
+        const baseSockets = poiData.sockets;
+        if (!baseSockets || baseSockets.length === 0) {
+            socketsHtml = `<p class="text-sm text-gray-600">${translate('iwNoSockets')}</p>`;
+        } else {
+            socketsHtml = '<ul class="socket-list">';
+            baseSockets.forEach(baseSocket => {
+                const socketId = baseSocket.id;
+                const liveInfo = (fetchStatus === 'ok' && Array.isArray(liveSocketsData)) ? liveSocketsData.find(liveSock => liveSock.id === socketId) : null;
+
+                let statusClass = 'status-unknown';
+                let statusTextKey = 'iwUnknown'; // Default translation key
+                if (fetchStatus === 'loading') {
+                    statusClass = 'status-loading'; statusTextKey = 'iwLoading';
+                } else if (fetchStatus === 'error') {
+                    statusClass = 'status-unknown'; statusTextKey = 'iwUnknown';
+                } else if (fetchStatus === 'ok') {
+                    if (liveInfo && liveInfo.availability) {
+                        const availabilityStatus = liveInfo.availability.toUpperCase();
+                        // Generate key dynamically: e.g., 'FREE' -> 'iwFree', 'IN_USE' -> 'iwInuse'
+                        statusTextKey = `iw${availabilityStatus.replace('_','').charAt(0).toUpperCase() + availabilityStatus.slice(1).toLowerCase()}`;
+                        // Check if the dynamic key exists, otherwise fallback
+                        if (!translations[currentLang]?.[statusTextKey] && !translations.en?.[statusTextKey]) {
+                            console.warn(`Missing translation for dynamic status key: ${statusTextKey}`);
+                            statusTextKey = 'iwUnknown'; // Fallback if key is missing
+                        }
+
+                        if (availabilityStatus === 'FREE') statusClass = 'status-free';
+                        else if (availabilityStatus === 'IN_USE' || availabilityStatus === 'OCCUPIED' || availabilityStatus === 'CHARGING') statusClass = 'status-occupied';
+                        else { statusClass = 'status-unknown'; statusTextKey = 'iwUnknown'; } // Fallback for unexpected statuses
+                    } else {
+                        statusClass = 'status-unknown'; statusTextKey = 'iwUnknown';
+                    }
+                }
+                // Use the key to get the translated status, fallback if key doesn't exist
+                let statusText = translate(statusTextKey);
+
+                let priceDisplay = '';
+                if (fetchStatus === 'loading') priceDisplay = `<span class="status-loading">${translate('iwLoading')}</span>`;
+                else if (fetchStatus === 'ok' && liveInfo && typeof liveInfo.price === 'number') priceDisplay = `₺${liveInfo.price.toFixed(2)}`;
+                else priceDisplay = `<span class="status-unknown">${translate('iwNA')}</span>`;
+
+                const socketTypeDisplay = baseSocket.type ? baseSocket.type.toUpperCase() : '?';
+                let powerDisplay = ''; let powerEmoji = '';
+                if (typeof baseSocket.power === 'number') {
+                    powerDisplay = (Number.isInteger(baseSocket.power) ? baseSocket.power : baseSocket.power.toFixed(1)) + ' kW';
+                    if (baseSocket.power > 120) powerEmoji = '⚡⚡⚡'; else if (baseSocket.power >= 60) powerEmoji = '⚡⚡'; else powerEmoji = '⚡';
+                }
+
+                socketsHtml += `<li class="socket-item">
+                                    <div class="socket-details">
+                                        <div class="socket-type-power"><span class="socket-type">${socketTypeDisplay}</span><span class="socket-power">${powerDisplay}</span><span class="socket-power-emoji">${powerEmoji}</span></div>
+                                        <span class="socket-price">${priceDisplay}</span>
+                                    </div>
+                                    <span class="socket-status ${statusClass}">${statusText}</span>
+                                </li>`;
+            });
+            socketsHtml += '</ul>';
+        }
+
+        const disclaimerText = `<p class="status-disclaimer">${translate('iwDisclaimer')}</p>`;
+        const socketsSection = `
+            <div class="info-section">
+                <h4>${translate('iwSockets')}</h4>
+                ${socketsHtml}
+                ${fetchStatus === 'error' ? `<p class="text-xs text-red-500 mt-1">${translate('iwSocketStatusError')}</p>` : ''}
+                ${(baseSockets && baseSockets.length > 0) ? disclaimerText : ''}
+            </div>`;
+
+        const linksStaticInfoSection = `
+            <div class="info-section links-static-info-section">
+                 <a href="${gmapsLink}" target="_blank" class="map-link block mb-2">${translate('iwOpenMap')}</a>
+                 ${websiteUrl ? `<p class="mb-1"><a href="${websiteUrl}" target="_blank">${translate('iwVisitWebsite')}</a></p>` : ''}
+                 <p class="hidden md:block"><strong>${translate('iwOperator')}</strong> ${operatorTitle}</p>
+                 <p class="hidden md:block"><strong>${translate('iwAddress')}</strong> ${address}</p>
+                 <p class="hidden md:block"><strong>${translate('iwPhone')}</strong> ${phoneHtml}</p>
+            </div>`;
+
+        const escHintHtml = `<span class="esc-hint hidden sm:inline">${translate('iwEscHint')}</span>`;
+
+        return `
+            <div class="poi-info-window">
+                 <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', {name: poiData.brand || poiData.title || poiData.id})}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
+                 <div class="title-area">
+                     <h3>${mainTitle}</h3>
+                     ${infoActionsHtml}
+                 </div>
+                ${subTitle}
+                ${detourSection}
+                ${socketsSection}
+                ${linksStaticInfoSection}
+                ${escHintHtml}
+            </div>`;
+    }
+
+
+
+    // --- Map Interaction and Route Logic ---
+    function handleMapTypeChange(event) {
+        if (!map) return; const button = event.currentTarget; const newMapTypeId = button.dataset.maptypeid; const typeMapping = { 'roadmap': google.maps.MapTypeId.ROADMAP, 'hybrid': google.maps.MapTypeId.HYBRID, 'satellite': google.maps.MapTypeId.SATELLITE, 'terrain': google.maps.MapTypeId.TERRAIN }; if (newMapTypeId && typeMapping[newMapTypeId]) { const mapTypeIdConstant = typeMapping[newMapTypeId]; map.setMapTypeId(mapTypeIdConstant); console.log("Map type changed to:", newMapTypeId); updateMapTypeButtons(mapTypeIdConstant); saveSettings(); } else { console.error("Invalid map type id:", newMapTypeId); }
+    }
+
+    function updateMapTypeButtons(currentMapTypeId) {
+        const currentMapTypeIdString = Object.keys(google.maps.MapTypeId).find(key => google.maps.MapTypeId[key] === currentMapTypeId)?.toLowerCase() || currentMapTypeId.toString(); mapTypeButtons.forEach(button => { const buttonMapTypeId = button.dataset.maptypeid; button.classList.toggle('active', buttonMapTypeId === currentMapTypeIdString); });
+    }
+    function onPlaceChanged(type) {
+        return function() {
+            const autocomplete = (type === 'start' ? autocompleteStart : autocompleteEnd);
+            if (!autocomplete) return;
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry || !place.geometry.location) {
+                showTemporaryMessage(translate('messageInvalidLocation'), true);
+                return;
+            }
+            // Treat autocomplete result as a feature click for translation purposes
+            handleParsedLocationResult(type, [place], google.maps.GeocoderStatus.OK, "Feature Click");
+        }
+    }
+
+    // --- Paste Handling Logic ---
+
+    async function handlePasteButtonClick(type) {
+        const inputElement = type === 'start' ? startInput : endInput;
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+            showTemporaryMessage(translate('messageClipboardUnsupported'), true);
+            inputElement.focus(); return;
+        }
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text.trim()) { console.log(`Pasted via button (${type}):`, text.substring(0, 100)); processPastedLocation(text, type); }
+            else { showTemporaryMessage(translate('messageClipboardEmpty'), false); }
+        } catch (err) {
+            console.error('Failed to read clipboard contents: ', err);
+            showTemporaryMessage(translate('messageClipboardError'), true);
+            inputElement.focus();
+        }
+    }
+
+    function handleDirectPaste(event, type) {
+        event.preventDefault(); const pastedText = (event.clipboardData || window.clipboardData)?.getData('text');
+        if (pastedText && pastedText.trim()) { console.log(`Pasted directly (${type}):`, pastedText.substring(0, 100)); processPastedLocation(pastedText, type); }
+        else { console.log("Paste event detected, but no text data found."); }
+    }
+
+    // --- Use Current Location ---
+    function handleUseCurrentLocationClick(type) {
+        console.log(`Use current location clicked for: ${type}`);
+        if (!navigator.geolocation) { showTemporaryMessage(translate('messageGeoNotSupported'), true); return; }
+
+        showTemporaryMessage(translate('messageGettingLocation'), false);
+        const inputElement = type === 'start' ? startInput : endInput;
+        inputElement.classList.add('input-loading');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                inputElement.classList.remove('input-loading');
+                const lat = position.coords.latitude; const lng = position.coords.longitude;
+                const exactCoords = { lat, lng }; console.log("Geolocation success:", exactCoords);
+                geocodeAndSetLocation(type, { location: exactCoords }, 'Current Location', exactCoords); // Pass internal type 'Current Location'
+            },
+            (error) => {
+                inputElement.classList.remove('input-loading');
+                console.error("Geolocation error:", error);
+                let messageKey = 'messageCurrentLocationError'; // Default error message key
+                if (error.code === error.PERMISSION_DENIED) { messageKey = 'messageGeoPermissionDenied'; useLocationStartBtn.disabled = true; useLocationEndBtn.disabled = true; }
+                else if (error.code === error.POSITION_UNAVAILABLE) { messageKey = 'messageGeoUnavailable'; }
+                else if (error.code === error.TIMEOUT) { messageKey = 'messageGeoTimeout'; }
+                showTemporaryMessage(translate(messageKey), true);
+            },
+            { timeout: 10000, enableHighAccuracy: true }
+        );
+    }
+
+
+    // --- Location Parsing and Geocoding ---
+
+    function processPastedLocation(text, type, isResolved = false) {
+        if (!geocoder) { console.error("Geocoder not available for processing pasted location."); showTemporaryMessage(translate('messageErrorMapServices'), true); return; }
+        text = text.trim(); let geocodeRequest = null; let parsedType = "Unknown"; let exactLocation = null;
+        const coordRegex = /^(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)$/;
+        console.log(`Processing pasted text (isResolved=${isResolved}):`, text);
+
+        if (!isResolved) {
+            const gooGlRegex = /https?:\/\/goo\.gl\/maps\//i; const mapsAppRegex = /https?:\/\/maps\.app\.goo\.gl\//i;
+            if (gooGlRegex.test(text)) { console.log("Detected old goo.gl/maps/ URL:", text); showTemporaryMessage(translate('messageUseFullUrl'), true); return; }
+            if (mapsAppRegex.test(text)) { console.log("Detected maps.app.goo.gl URL:", text); showTemporaryMessage(translate('messageResolvingShortUrl'), false); resolveShortUrl(text, type); return; }
+        }
+
+        const coordMatch = text.match(coordRegex);
+        if (coordMatch) {
+            const lat = parseFloat(coordMatch[1]); const lng = parseFloat(coordMatch[2]);
+            if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) {
+                parsedType = "Coordinates"; exactLocation = { lat: lat, lng: lng }; geocodeRequest = { location: exactLocation };
+                console.log("Parsed as Raw Coordinates:", exactLocation); geocodeAndSetLocation(type, geocodeRequest, parsedType, exactLocation); return;
+            }
+        }
+
+        try {
+            if (text.includes('http:') || text.includes('https:')) {
+                console.log("Attempting to parse as URL..."); const url = new URL(text); const pathname = url.pathname; const searchParams = url.searchParams; console.log("URL Pathname:", pathname);
+                let queryParam = searchParams.get('q') || searchParams.get('query'); console.log("Checking query parameter 'q'/'query'. Value:", queryParam);
+                if (queryParam) {
+                    if (queryParam.startsWith('place_id:')) {
+                        const placeId = queryParam.substring(9); if (placeId.startsWith('ChIJ') || placeId.startsWith('GhIJ')) { parsedType = "Place ID"; geocodeRequest = { placeId: placeId }; console.log("Using Place ID from URL query:", geocodeRequest.placeId); geocodeAndSetLocation(type, geocodeRequest, parsedType); return; }
+                    } else {
+                        const qCoordMatch = queryParam.match(coordRegex); if (qCoordMatch) { const lat = parseFloat(qCoordMatch[1]); const lng = parseFloat(qCoordMatch[2]); if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) { parsedType = "Coordinates"; exactLocation = { lat: lat, lng: lng }; geocodeRequest = { location: exactLocation }; console.log("Parsed Coordinates from URL query:", exactLocation); geocodeAndSetLocation(type, geocodeRequest, parsedType, exactLocation); return; } }
+                        else { parsedType = "Search Term"; geocodeRequest = { address: queryParam, componentRestrictions: { country: 'TR' } }; console.log("Using Search Term from URL query:", geocodeRequest.address); geocodeAndSetLocation(type, geocodeRequest, parsedType); return; }
+                    }
+                }
+                const placePathRegex = /^\/maps\/place\/([^/@]+)/; const placePathMatch = pathname.match(placePathRegex); console.log("Checking for /maps/place/ pattern. Match:", placePathMatch);
+                if (placePathMatch && placePathMatch[1]) {
+                    let placeIdentifier = decodeURIComponent(placePathMatch[1].replace(/\+/g, ' ')); console.log("Potential place identifier from path:", placeIdentifier);
+                    if (placeIdentifier.startsWith('ChIJ') || placeIdentifier.startsWith('GhIJ')) { parsedType = "Place ID"; geocodeRequest = { placeId: placeIdentifier }; console.log("Using Place ID from URL path:", geocodeRequest.placeId); }
+                    else if (!placeIdentifier.includes("'") && !placeIdentifier.includes('"') && !placeIdentifier.includes('°')) { parsedType = "Address/Name"; geocodeRequest = { address: placeIdentifier, componentRestrictions: { country: 'TR' } }; console.log("Using Place Name from URL path:", geocodeRequest.address); }
+                    else { console.log("Skipping place name search due to DMS/special chars format in path."); geocodeRequest = null; }
+                    if (geocodeRequest) { geocodeAndSetLocation(type, geocodeRequest, parsedType); return; }
+                }
+                const searchPathRegex = /^\/maps\/search\/([^/]+)/; const searchPathMatch = pathname.match(searchPathRegex); console.log("Checking for /maps/search/ pattern. Match:", searchPathMatch);
+                if (searchPathMatch && searchPathMatch[1]) { let searchTerm = decodeURIComponent(searchPathMatch[1].replace(/\+/g, ' ')); parsedType = "Search Term"; geocodeRequest = { address: searchTerm, componentRestrictions: { country: 'TR' } }; console.log("Using Search Term from URL path:", geocodeRequest.address); geocodeAndSetLocation(type, geocodeRequest, parsedType); return; }
+                const dataRegex = /\/data=(?:[^!]*!)?3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/; const dataMatch = text.match(dataRegex); console.log("Checking for /data=...!3d...!4d pattern. Match:", dataMatch);
+                if (dataMatch && dataMatch.length >= 3) {
+                    const lat = parseFloat(dataMatch[1]); const lng = parseFloat(dataMatch[2]); console.log("Potential coords from /data parameter:", lat, lng);
+                    if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) { if (!geocodeRequest) { parsedType = "Coordinates"; exactLocation = { lat: lat, lng: lng }; geocodeRequest = { location: exactLocation }; console.log("Using Coordinates from URL data parameter:", exactLocation); geocodeAndSetLocation(type, geocodeRequest, parsedType, exactLocation); return; } else { console.log("Skipping /data coordinates as Place/Search/Query info already processed."); } } else { console.log("Invalid lat/lng values from /data pattern."); }
+                } else { console.log("No /data=...!3d...!4d pattern matched."); }
+                const coordsPathRegex = /@(-?\d{1,3}(?:\.\d+)?),(-?\d{1,3}(?:\.\d+)?)/; const coordsPathMatch = pathname.match(coordsPathRegex); console.log("Checking for @lat,lng pattern (fallback). Match:", coordsPathMatch);
+                if (!geocodeRequest && coordsPathMatch && coordsPathMatch.length >= 3) {
+                    const lat = parseFloat(coordsPathMatch[1]); const lng = parseFloat(coordsPathMatch[2]); console.log("Potential @lat,lng match found (fallback):", lat, lng);
+                    if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) { parsedType = "Coordinates"; exactLocation = { lat: lat, lng: lng }; geocodeRequest = { location: exactLocation }; console.log("Using Coordinates from URL path @ (fallback):", exactLocation); geocodeAndSetLocation(type, geocodeRequest, parsedType, exactLocation); return; } else { console.log("Invalid lat/lng values from @ pattern."); }
+                } else { console.log("No @lat,lng pattern matched or higher priority pattern used."); }
+                if (!geocodeRequest) { console.log("No standard URL patterns yielded a geocode request."); }
+            } else { console.log("Text does not appear to be a URL."); }
+        } catch (e) { console.log("Could not parse as URL or error during URL processing, continuing checks:", e.message); }
+
+        if (!geocodeRequest) { const placeIdRegex = /^(ChIJ|GhIJ)[A-Za-z0-9_-]+$/; if (placeIdRegex.test(text)) { parsedType = "Place ID"; geocodeRequest = { placeId: text }; console.log("Parsed as Standalone Place ID:", geocodeRequest.placeId); geocodeAndSetLocation(type, geocodeRequest, parsedType); return; } }
+        if (!geocodeRequest) { const plusCodeRegex = /^[A-Z0-9]{2,}\+[A-Z0-9]+(?:[,\s]+.*)?$/i; if (text.includes('+') && plusCodeRegex.test(text)) { parsedType = "Plus Code"; geocodeRequest = { address: text, componentRestrictions: { country: 'TR' } }; console.log("Parsed as Plus Code:", geocodeRequest.address); geocodeAndSetLocation(type, geocodeRequest, parsedType); return; } }
+        // Fallback: Treat as address/name
+        if (!geocodeRequest) { parsedType = "Address/Name"; geocodeRequest = { address: text, componentRestrictions: { country: 'TR' } }; console.log("Attempting parse as Address/Name (fallback):", geocodeRequest.address); geocodeAndSetLocation(type, geocodeRequest, parsedType); }
+        else if (!geocodeRequest && !exactLocation) {
+            // Only show error if NO pattern matched at all
+            console.warn("Pasted text did not match any known pattern.");
+            // Show error message using the *original* parsedType string ("Pasted") for translation lookup
+            showTemporaryMessage(translate('messagePastedError', { parsedType: 'Pasted' }), true);
+        }
+    }
+
+    async function resolveShortUrl(shortUrl, type) {
+        const proxyUrl = SHORT_URL_RESOLVER_PROXY_TEMPLATE.replace('{encoded_url}', encodeURIComponent(shortUrl));
+        const inputElement = type === 'start' ? startInput : endInput;
+        console.log(`Calling proxy to resolve short URL: ${proxyUrl}`);
+        inputElement.classList.add('input-loading'); inputElement.disabled = true;
+        try {
+            const response = await fetch(proxyUrl, { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) { throw new Error(`Proxy request failed with status ${response.status}`); }
+            const responseData = await response.json(); const resolvedUrl = responseData?.redirectedUrl;
+            if (resolvedUrl && resolvedUrl.trim() && resolvedUrl.startsWith('https://www.google.com/maps/')) {
+                console.log(`Proxy returned resolved URL: ${resolvedUrl}`); processPastedLocation(resolvedUrl, type, true);
+            } else { throw new Error(`Proxy returned invalid or empty response: ${JSON.stringify(responseData)}`); }
+        } catch (error) {
+            console.error("Error resolving short URL via proxy:", error);
+            let userMessageKey = 'messageResolveShortUrlError'; let params = {};
+            if (error instanceof SyntaxError) { userMessageKey = 'messageResolveProxyFormatError'; }
+            else if (error.message.includes("status 404")) { userMessageKey = 'messageResolveProxyNotFoundError'; }
+            else if (error.message.includes("status")) { userMessageKey = 'messageResolveProxyStatusError'; params.status = error.message.split(' ').pop(); }
+            else if (error.message.includes("invalid or empty response")) { userMessageKey = 'messageResolveProxyResponseError'; }
+            showTemporaryMessage(translate(userMessageKey, params), true);
+        } finally { inputElement.classList.remove('input-loading'); inputElement.disabled = false; }
+    }
+
+
+    function geocodeAndSetLocation(type, request, parsedType, exactLocation = null) {
+        console.log(`Geocoding request (${type}, parsed as ${parsedType}, exact: ${!!exactLocation}):`, request);
+        // Translate the parsedType *before* showing the message
+        showTemporaryMessage(translate('messageProcessingLocation', {parsedType: parsedType}), false); // Pass the original string identifier
+
+        geocoder.geocode(request, (results, status) => {
+            handleParsedLocationResult(type, results, status, parsedType, exactLocation);
+        });
+    }
+
+    function handleParsedLocationResult(type, results, status, parsedType = "Unknown", exactLocation = null) {
+        const inputElement = type === 'start' ? startInput : endInput;
+        const clearButton = type === 'start' ? clearStartBtn : clearEndBtn;
+        const okStatus = google.maps.GeocoderStatus?.OK || 'OK';
+
+        if (status === okStatus && results && results[0]) {
+            const place = results[0];
+            const geocodedLocation = place.geometry?.location;
+
+            let finalLocationLatLng = null;
+            if (exactLocation && geocodedLocation) {
+                finalLocationLatLng = new google.maps.LatLng(exactLocation.lat, exactLocation.lng);
+                console.log("Prioritizing exactLocation provided:", finalLocationLatLng.toString());
+            } else if (geocodedLocation) {
+                finalLocationLatLng = geocodedLocation;
+                console.log("Using geocodedLocation:", finalLocationLatLng.toString());
+            }
+
+            if (!finalLocationLatLng) {
+                console.error(`Could not determine a valid LatLng for ${type}.`);
+                showTemporaryMessage(translate('messagePastedError'), true); // Generic error if LatLng fails
+                return;
+            }
+
+            const placeForTurkeyCheck = { geometry: { location: finalLocationLatLng }, address_components: place.address_components };
+
+            if (isPlaceInTurkey(placeForTurkeyCheck)) {
+                let displayName; let markerTitle;
+
+                if (exactLocation && parsedType !== 'Current Location') { // Use exact coords display unless it's 'Current Location'
+                    displayName = `Lat: ${finalLocationLatLng.lat().toFixed(5)}, Lng: ${finalLocationLatLng.lng().toFixed(5)}`;
+                    markerTitle = place.formatted_address || place.name || translate(getParsedTypeTranslationKey(parsedType)); // Title can be geocoded name or translated type
+                } else if (parsedType === 'Current Location') {
+                    displayName = translate('locationTypeCurrentLocation'); // Display "Current Location"
+                    markerTitle = place.formatted_address || translate('locationTypeCurrentLocation');
+                } else {
+                    displayName = place.formatted_address || place.name || translate(getParsedTypeTranslationKey(parsedType)); // Fallback display name is translated type
+                    markerTitle = displayName; // Marker title matches display name
+                }
+
+                if (type === 'start') { startLocation = finalLocationLatLng; }
+                else { endLocation = finalLocationLatLng; }
+
+                inputElement.value = displayName;
+                handleInputChange(inputElement, clearButton);
+                updateMarker(type, finalLocationLatLng, markerTitle);
+                // Show success message using the *original* parsedType string for translation lookup
+                showTemporaryMessage(translate('messageSetLocation', {type: type, parsedType: parsedType}), false);
+
+                if (startLocation && endLocation) { calculateRoute(); }
+
+            } else {
+                console.warn(`Location for ${type} is not in Turkey:`, placeForTurkeyCheck);
+                // Show error message using the *original* parsedType string for translation lookup
+                showTemporaryMessage(translate('messageNotInTurkey', {parsedType: parsedType}), true);
+            }
+        } else {
+            console.error(`Geocoding failed for ${type} (${parsedType}). Status: ${status}`);
+            let errorMsgKey = 'messagePastedError'; // Default key
+            if (status === google.maps.GeocoderStatus.ZERO_RESULTS) { errorMsgKey = 'messagePastedNoResults'; }
+            // Show error message using the *original* parsedType string for translation lookup
+            showTemporaryMessage(translate(errorMsgKey, {parsedType: parsedType}), true);
+        }
+    }
+
+    // --- End of Paste Handling ---
+
+    function handleMapClick(event) {
+        if (infoWindow && infoWindow.getMap()) { console.log("Map click detected, closing InfoWindow and resetting zIndex."); infoWindow.close(); resetSelectedMarkerZIndex(); }
+        if (event.stop) event.stop(); else if (event.domEvent && event.domEvent.stopPropagation) event.domEvent.stopPropagation();
+
+        const clickedLatLng = event.latLng; const placeId = event.placeId;
+        if (startLocation && endLocation && !placeId) { console.log("Route already set. Base map click ignored."); return; }
+        const targetType = startLocation ? 'end' : 'start';
+
+        if (placeId) {
+            console.log("Clicked on Google feature:", placeId); if (!geocoder) { console.error("Geocoder needed."); return; }
+            geocodeAndSetLocation(targetType, { placeId: placeId }, "Feature Click");
+        } else if (clickedLatLng) {
+            console.log("Clicked on base map:", clickedLatLng.toString()); if (!geocoder) { showTemporaryMessage("Geocoder unavailable.", true); return; } // TODO: Translate
+            geocodeAndSetLocation(targetType, { location: clickedLatLng }, "Map Click", { lat: clickedLatLng.lat(), lng: clickedLatLng.lng() });
+        } else { console.log("Unhandled map click event:", event); }
+    }
+
+    function isPlaceInTurkey(place) {
+        if (place.address_components) { const isInTurkey = place.address_components.some(component => component.types.includes('country') && component.short_name === 'TR'); if (isInTurkey) return true; } if (place.geometry?.location) { let lat, lng; if (typeof place.geometry.location.lat === 'function') { lat = place.geometry.location.lat(); lng = place.geometry.location.lng(); } else if (typeof place.geometry.location.lat === 'number') { lat = place.geometry.location.lat; lng = place.geometry.location.lng; } else { return false; } return isLatLngInTurkeyBox(lat, lng); } console.warn("Cannot determine country for place, assuming not in Turkey:", place); return false;
+    }
+    function isLatLngInTurkeyBox(lat, lng) {
+        if (typeof lat !== 'number' || typeof lng !== 'number') { return false; } const isInBox = lat >= 35.5 && lat <= 42.5 && lng >= 25.5 && lng <= 45.0; return isInBox;
+    }
+    function calculateRoute() {
+        if (!directionsService || !startLocation || !endLocation) { console.log("Cannot calculate route: Missing service or locations."); return; }
+        console.log("Calculating route..."); showTemporaryMessage(translate('messageCalculatingRoute'), false);
+        const request = { origin: startLocation, destination: endLocation, travelMode: google.maps.TravelMode.DRIVING, provideRouteAlternatives: true };
+        directionsService.route(request, (result, status) => {
+            const okStatus = google.maps.DirectionsStatus?.OK || 'OK';
+            if (status == okStatus) { if (directionsRenderer) { directionsRenderer.setDirections(result); }
+            else { showTemporaryMessage(translate('messageRouteCalcFailedDisplay'), true); } }
+            else { showTemporaryMessage(translate('messageDirectionsFailed', {status: status}), true); console.error("Directions request failed due to " + status); clearRoute(); }
+        });
+    }
+    function handleDirectionsChanged() {
+        console.log("handleDirectionsChanged triggered");
+        if (!directionsRenderer) { console.warn("Directions renderer not available."); return; }
+        const directionsResult = directionsRenderer.getDirections();
+
+        if (!directionsResult || !directionsResult.routes || directionsResult.routes.length === 0) {
+            if (isRouteActive) { console.log("Directions result empty/invalid, was active. Calling clearRoute()."); clearRoute(); }
+            else { console.log("Directions result empty/invalid, route not active."); } return;
+        }
+        console.log("Processing new/changed valid route.");
+        if (!google.maps.geometry || !google.maps.geometry.spherical) { showTemporaryMessage(translate('messageGeomLibMissing'), true); originalRouteDistance = null; originalRouteDuration = null; isRouteActive = false; updateOffsetControlsVisibility(); return; }
+
+        const routeIndex = directionsRenderer.getRouteIndex();
+        const selectedRoute = directionsResult.routes[routeIndex];
+        if (!selectedRoute || !selectedRoute.overview_path) { console.error("Selected route or overview_path invalid."); clearRoute(); return; }
+
+        currentRoutePolylinePath = selectedRoute.overview_path; isRouteActive = true; originalRouteDistance = 0; originalRouteDuration = 0;
+        selectedRoute.legs.forEach(leg => { if (leg.distance?.value) { originalRouteDistance += leg.distance.value; } if (leg.duration?.value) { originalRouteDuration += leg.duration.value; } });
+        console.log(`New Route: ${formatDistance(originalRouteDistance)}, ${formatDuration(originalRouteDuration)}`);
+        resetOffsets();
+
+        allPoiMarkers.forEach(marker => {
+            marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null;
+            const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; }
+        }); console.log("Resetting POI state for new route.");
+
+        if (selectedRoute.legs?.length > 0) {
+            const firstLeg = selectedRoute.legs[0]; const lastLeg = selectedRoute.legs[selectedRoute.legs.length - 1];
+            const startMarkerLoc = startLocation || firstLeg.start_location; const endMarkerLoc = endLocation || lastLeg.end_location;
+            if (startMarkerLoc) {
+                const startInputVal = startInput.value;
+                const startTitle = startInputVal && !startInputVal.startsWith("Lat:") && startInputVal !== translate('locationTypeCurrentLocation') ? startInputVal : (firstLeg.start_address?.split(',')[0] || translate('markerTitleStartDefault'));
+                updateMarker('start', startMarkerLoc, startTitle);
+            }
+            if (endMarkerLoc) {
+                const endInputVal = endInput.value;
+                const endTitle = endInputVal && !endInputVal.startsWith("Lat:") && endInputVal !== translate('locationTypeCurrentLocation') ? endInputVal : (lastLeg.end_address?.split(',')[0] || translate('markerTitleEndDefault'));
+                updateMarker('end', endMarkerLoc, endTitle);
+            }
+        }
+        updateControlVisibility(); updateOffsetControlsVisibility();
+
+        const visibleCount = applyFilters();
+        let messageKey = 'messageNoStationsFound';
+        let messageParams = {};
+        if (visibleCount > 0) {
+            messageKey = 'messageRouteCalculated'; // This key handles pluralization via translate()
+            messageParams.count = visibleCount;
+        }
+        showTemporaryMessage(translate(messageKey, messageParams), false);
+
+        triggerDetourPrecalculation();
+    }
+    function updateMarker(type, location, title) {
+        const contentDiv = document.createElement('div'); contentDiv.classList.add('custom-marker-content');
+        if (type === 'start') { contentDiv.textContent = translate('markerStart'); contentDiv.classList.add('start-marker-content'); }
+        else { contentDiv.textContent = translate('markerDest'); contentDiv.classList.add('dest-marker-content'); }
+        const markerOptions = { position: location, map: map, title: title, content: contentDiv, zIndex: 100 };
+        try { if (type === 'start') { if (startMarker) startMarker.map = null; startMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions); }
+        else if (type === 'end') { if (endMarker) endMarker.map = null; endMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions); }
+        } catch (error) { console.error(`Error creating AdvancedMarkerElement for ${type}:`, error); showTemporaryMessage(`Failed to create ${type} marker.`, true); if (type === 'start') startMarker = null; else if (type === 'end') endMarker = null; } // TODO: Translate error
+    }
+    function handleDistanceChange(event) {
+        if(distanceValueDisplay) distanceValueDisplay.textContent = event.target.value;
+    }
+
+    // --- Filtering Logic ---
+
+    // --- Settings & Preferences Logic (Unified) ---
+
+    function saveSettings() {
+        try { const generalSettings = { filters: currentFilters, distance: distanceThresholdKm, mapTypeId: map?.getMapTypeId() || DEFAULT_MAP_TYPE_ID }; localStorage.setItem(GENERAL_SETTINGS_STORAGE_KEY, JSON.stringify(generalSettings)); if (brandFilterMode === 'favoritesOnly' && favoriteBrands.size === 0) { brandFilterMode = 'all'; updateBrandFilterModeButton(); } const brandPrefs = { favorites: Array.from(favoriteBrands), blacklisted: Array.from(blacklistedBrands), filterMode: brandFilterMode }; localStorage.setItem(BRAND_PREFS_STORAGE_KEY, JSON.stringify(brandPrefs)); localStorage.setItem(IGNORED_STATIONS_STORAGE_KEY, JSON.stringify(Array.from(ignoredStationIds))); console.log('Saved all settings to localStorage.'); } catch (error) { console.error('Error saving settings to localStorage:', error); }
+    }
+
+    function loadSettings() {
+        console.log("Loading settings from localStorage..."); try { const storedGeneral = localStorage.getItem(GENERAL_SETTINGS_STORAGE_KEY); if (storedGeneral) { const generalSettings = JSON.parse(storedGeneral); if (generalSettings.filters && typeof generalSettings.filters === 'object') { currentFilters.connectorType = generalSettings.filters.connectorType || defaultFilters.connectorType; currentFilters.powerLevels = Array.isArray(generalSettings.filters.powerLevels) ? generalSettings.filters.powerLevels : defaultFilters.powerLevels; currentFilters.serviceTypes = Array.isArray(generalSettings.filters.serviceTypes) ? generalSettings.filters.serviceTypes : defaultFilters.serviceTypes; } else { currentFilters = JSON.parse(JSON.stringify(defaultFilters)); } distanceThresholdKm = (typeof generalSettings.distance === 'number' && generalSettings.distance >= 1 && generalSettings.distance <= 20) ? generalSettings.distance : DEFAULT_DISTANCE_THRESHOLD; currentFilters.mapTypeId = generalSettings.mapTypeId || DEFAULT_MAP_TYPE_ID; console.log('Loaded General Settings:', { filters: currentFilters, distance: distanceThresholdKm, mapTypeId: currentFilters.mapTypeId }); } else { console.log('No general settings found, using defaults.'); currentFilters = JSON.parse(JSON.stringify(defaultFilters)); distanceThresholdKm = DEFAULT_DISTANCE_THRESHOLD; currentFilters.mapTypeId = DEFAULT_MAP_TYPE_ID; } const storedBrandPrefs = localStorage.getItem(BRAND_PREFS_STORAGE_KEY); if (storedBrandPrefs) { const prefs = JSON.parse(storedBrandPrefs); favoriteBrands = new Set(prefs.favorites || []); blacklistedBrands = new Set(prefs.blacklisted || []); brandFilterMode = (prefs.filterMode === 'favoritesOnly' && favoriteBrands.size > 0) ? 'favoritesOnly' : 'all'; console.log('Loaded Brand Preferences:', { favorites: Array.from(favoriteBrands), blacklisted: Array.from(blacklistedBrands), filterMode: brandFilterMode }); } else { favoriteBrands = new Set(); blacklistedBrands = new Set(); brandFilterMode = 'all'; console.log('No brand preferences found.'); } const storedIgnored = localStorage.getItem(IGNORED_STATIONS_STORAGE_KEY); if (storedIgnored) { const idsArray = JSON.parse(storedIgnored); ignoredStationIds = new Set(idsArray.map(String)); console.log(`Loaded ${ignoredStationIds.size} ignored station IDs (as strings).`); } else { ignoredStationIds = new Set(); console.log('No ignored station IDs found.'); } } catch (error) { console.error('Error loading settings from localStorage:', error); currentFilters = JSON.parse(JSON.stringify(defaultFilters)); distanceThresholdKm = DEFAULT_DISTANCE_THRESHOLD; currentFilters.mapTypeId = DEFAULT_MAP_TYPE_ID; favoriteBrands = new Set(); blacklistedBrands = new Set(); brandFilterMode = 'all'; ignoredStationIds = new Set(); }
+    }
+
+
+    // --- Filter UI Update Functions ---
+    function updateFilterControlsUI() {
+        filterInputs.connectorType.forEach(input => { input.checked = (input.value === currentFilters.connectorType); }); filterInputs.powerLevel.forEach(input => { input.checked = currentFilters.powerLevels.includes(input.value); }); filterInputs.serviceType.forEach(input => { input.checked = currentFilters.serviceTypes.includes(input.value); });
+    }
+
+    function updateDistanceSliderUI() {
+        if (distanceSlider && distanceValueDisplay) { distanceSlider.value = distanceThresholdKm; distanceValueDisplay.textContent = distanceThresholdKm; }
+    }
+
+
+    // --- Brand/Ignore List Population ---
+    function populateBrandFilterList() {
+        if (!brandListContainer || !allUniqueBrands) return;
+        brandListContainer.innerHTML = '';
+
+        if (allUniqueBrands.length === 0) {
+            brandListContainer.innerHTML = `<p class="filter-status-paragraph" data-i18n-key="filterStatusNoBrands">${translate('filterStatusNoBrands')}</p>`;
+            return;
+        }
+
+        allUniqueBrands.forEach(brand => {
+            const itemDiv = document.createElement('div'); itemDiv.className = 'brand-item'; itemDiv.dataset.brand = brand;
+            const nameSpan = document.createElement('span'); nameSpan.className = 'brand-name';
+            let namePrefix = ''; let itemStatus = 'neutral';
+            if (favoriteBrands.has(brand)) { namePrefix = '⭐ '; itemStatus = 'favorite'; }
+            else if (blacklistedBrands.has(brand)) { namePrefix = '🚫 '; itemStatus = 'blacklisted'; }
+            itemDiv.dataset.status = itemStatus; nameSpan.textContent = namePrefix + brand; nameSpan.title = brand; itemDiv.appendChild(nameSpan);
+            const controlsDiv = document.createElement('div'); controlsDiv.className = 'brand-controls';
+
+            const favButton = document.createElement('button'); favButton.className = 'brand-fav'; favButton.textContent = '⭐'; favButton.dataset.brand = brand;
+            favButton.dataset.tooltip = translate('tooltipFavorite'); favButton.classList.toggle('active', favoriteBrands.has(brand));
+            favButton.addEventListener('click', () => handleBrandPreferenceChange(brand, 'favorite')); controlsDiv.appendChild(favButton);
+
+            const blkButton = document.createElement('button'); blkButton.className = 'brand-blk'; blkButton.textContent = '🚫'; blkButton.dataset.brand = brand;
+            blkButton.dataset.tooltip = translate('tooltipBlacklist'); blkButton.classList.toggle('active', blacklistedBrands.has(brand));
+            blkButton.addEventListener('click', () => handleBrandPreferenceChange(brand, 'blacklist')); controlsDiv.appendChild(blkButton);
+
+            itemDiv.appendChild(controlsDiv); brandListContainer.appendChild(itemDiv);
+        });
+        console.log("Brand filter list populated.");
+    }
+
+    function populateIgnoredStationsList() {
+        if (!ignoredStationsListContainer) return;
+        ignoredStationsListContainer.innerHTML = '';
+
+        if (ignoredStationIds.size === 0) {
+            ignoredStationsListContainer.innerHTML = `<p class="filter-status-paragraph" data-i18n-key="filterStatusNoIgnored">${translate('filterStatusNoIgnored')}</p>`;
+            return;
+        }
+
+        ignoredStationIds.forEach(id => {
+            const marker = allPoiMarkers.find(m => m.stationId === id);
+            let displayName = `Station ID: ${id}`; let lat = null; let lng = null;
+            if (marker?.poiData) { displayName = `${marker.poiData.brand || marker.poiData.title || 'Station'} <span class="ignored-id">(ID: ${id})</span>`; }
+            if (marker?.position) {
+                if (typeof marker.position.lat === 'function' && typeof marker.position.lng === 'function') { lat = marker.position.lat(); lng = marker.position.lng(); }
+                else if (typeof marker.position.lat === 'number' && typeof marker.position.lng === 'number') { lat = marker.position.lat; lng = marker.position.lng; }
+            }
+
+            const itemDiv = document.createElement('div'); itemDiv.className = 'ignored-item';
+            const nameSpan = document.createElement('span'); nameSpan.className = 'ignored-name'; nameSpan.innerHTML = displayName; itemDiv.appendChild(nameSpan);
+            const controlsDiv = document.createElement('div'); controlsDiv.className = 'ignored-controls';
+
+            if (lat !== null && lng !== null) {
+                const mapButton = document.createElement('button'); mapButton.className = 'map-btn'; mapButton.title = translate('titleOpenMap'); mapButton.innerHTML = MAP_PIN_ICON_SVG; mapButton.dataset.lat = lat; mapButton.dataset.lng = lng; controlsDiv.appendChild(mapButton);
+            }
+
+            const unignoreButton = document.createElement('button'); unignoreButton.className = 'unignore-btn'; unignoreButton.textContent = translate('buttonUnignore'); unignoreButton.dataset.stationId = id; controlsDiv.appendChild(unignoreButton);
+
+            itemDiv.appendChild(controlsDiv); ignoredStationsListContainer.appendChild(itemDiv);
+        });
+    }
+
+    // --- Event Handlers ---
+    function handleBrandPreferenceChange(brandName, action) {
+        console.log(`Brand preference change: Brand='${brandName}', Action='${action}'`);
+        const itemDiv = brandListContainer.querySelector(`.brand-item[data-brand="${CSS.escape(brandName)}"]`);
+        const favButton = itemDiv?.querySelector(`.brand-fav`); const blkButton = itemDiv?.querySelector(`.brand-blk`); const nameSpan = itemDiv?.querySelector(`.brand-name`);
+        let needsRefilter = false; let namePrefix = '';
+
+        if (action === 'favorite') {
+            if (favoriteBrands.has(brandName)) { favoriteBrands.delete(brandName); if(favButton) favButton.classList.remove('active'); if(itemDiv) itemDiv.dataset.status = 'neutral'; namePrefix = ''; needsRefilter = true; }
+            else { favoriteBrands.add(brandName); blacklistedBrands.delete(brandName); if(favButton) favButton.classList.add('active'); if(blkButton) blkButton.classList.remove('active'); if(itemDiv) itemDiv.dataset.status = 'favorite'; namePrefix = '⭐ '; needsRefilter = true; }
+        } else if (action === 'blacklist') {
+            if (blacklistedBrands.has(brandName)) { blacklistedBrands.delete(brandName); if(blkButton) blkButton.classList.remove('active'); if(itemDiv) itemDiv.dataset.status = 'neutral'; namePrefix = ''; needsRefilter = true; }
+            else { blacklistedBrands.add(brandName); favoriteBrands.delete(brandName); if(blkButton) blkButton.classList.add('active'); if(favButton) favButton.classList.remove('active'); if(itemDiv) itemDiv.dataset.status = 'blacklisted'; namePrefix = '🚫 '; needsRefilter = true; }
+        }
+
+        if (nameSpan) { nameSpan.textContent = namePrefix + brandName; }
+        // Update tooltips after changing state
+        if (favButton) favButton.dataset.tooltip = translate('tooltipFavorite');
+        if (blkButton) blkButton.dataset.tooltip = translate('tooltipBlacklist');
+
+        saveSettings(); updateBrandFilterModeButton(); updateFilterIndicator();
+
+        if(needsRefilter) {
+            const count = applyFilters();
+            if (isRouteActive) { showTemporaryMessage(translate('messageStationsFound', {count: count}), false); }
+            triggerDetourPrecalculation();
+        }
+
+        const currentView = brandListViewControls.querySelector('button.active')?.dataset.view || 'all';
+        filterBrandListView(currentView); // Update list view immediately
+
+        if (infoWindow && infoWindow.getMap()) {
+            const anchor = infoWindow.getAnchor();
+            if (anchor && anchor.poiData && anchor.poiData.brand === brandName) { updateInfoWindowIfVisible(anchor); }
+        }
+    }
+
+
+    function handleInfoWindowBrandAction(brandName, action) {
+        console.log(`InfoWindow action: Brand='${brandName}', Action='${action}'`); handleBrandPreferenceChange(brandName, action);
+    }
+
+
+    function handleIgnoreStationClick(stationId) {
+        console.log(`Ignoring station ID: ${stationId}`);
+        if (stationId !== null && stationId !== undefined) {
+            const stationIdString = String(stationId);
+            ignoredStationIds.add(stationIdString);
+            populateIgnoredStationsList(); saveSettings(); updateFilterIndicator();
+
+            if (infoWindow && infoWindow.getMap() && infoWindow.getAnchor()?.stationId === stationIdString) { infoWindow.close(); resetSelectedMarkerZIndex(); }
+            applyFilters();
+            showTemporaryMessage(translate('messageStationIgnored', {id: stationIdString}), false);
+            triggerDetourPrecalculation();
+        }
+    }
+
+
+    function handleUnignoreStationClick(stationIdToUnignore) {
+        console.log(`Un-ignoring station ID: ${stationIdToUnignore}`);
+        if (stationIdToUnignore && ignoredStationIds.has(stationIdToUnignore)) {
+            ignoredStationIds.delete(stationIdToUnignore);
+            populateIgnoredStationsList(); saveSettings(); updateFilterIndicator();
+            applyFilters();
+            showTemporaryMessage(translate('messageStationUnignored', {id: stationIdToUnignore}), false);
+            triggerDetourPrecalculation();
+        } else { console.warn(`Attempted to un-ignore ID ${stationIdToUnignore}, but it wasn't found in the ignored set.`); }
+    }
+
+
+    function toggleBrandFilterMode() {
+        let messageKey = '';
+        if (brandFilterMode === 'all') {
+            if (favoriteBrands.size > 0) { brandFilterMode = 'favoritesOnly'; messageKey = 'messageShowOnlyFavs'; }
+            else { showTemporaryMessage(translate('messageNeedFavs'), false); return; }
+        } else {
+            brandFilterMode = 'all'; messageKey = 'messageShowAllBrands';
+        }
+        console.log(`Brand filter mode toggled to: ${brandFilterMode}`);
+
+        showTemporaryMessage(translate(messageKey), false);
+        updateBrandFilterModeButton(); saveSettings(); updateFilterIndicator();
+        applyFilters(); triggerDetourPrecalculation();
+    }
+
+
+    function updateBrandFilterModeButton() {
+        if (!brandFilterModeButton) return;
+        const isDisabled = favoriteBrands.size === 0;
+        let titleKey = '';
+
+        if (brandFilterMode === 'favoritesOnly') {
+            brandFilterModeButton.innerHTML = STAR_ICON_HTML;
+            titleKey = 'titleBrandModeFavOnly';
+            brandFilterModeButton.disabled = false;
+        } else {
+            brandFilterModeButton.innerHTML = EYE_ICON_SVG;
+            brandFilterModeButton.disabled = isDisabled;
+            titleKey = isDisabled ? 'titleBrandModeDisabled' : 'titleBrandModeAll';
+        }
+        brandFilterModeButton.title = translate(titleKey);
+    }
+
+
+    function handleBrandListViewChange(event) {
+        const button = event.target.closest('button'); if (!button || !button.dataset.view) return; const viewType = button.dataset.view; filterBrandListView(viewType);
+    }
+
+
+    function filterBrandListView(viewType) {
+        console.log(`Filtering brand list view to: ${viewType}`);
+        if (!brandListContainer || !brandListViewControls) return;
+
+        brandListViewControls.querySelectorAll('button').forEach(btn => { btn.classList.toggle('active', btn.dataset.view === viewType); });
+
+        const brandItems = brandListContainer.querySelectorAll('.brand-item');
+        let visibleCountInList = 0;
+        brandItems.forEach(item => {
+            const itemStatus = item.dataset.status || 'neutral'; let show = false;
+            if (viewType === 'all') { show = true; }
+            else if (viewType === 'fav' && itemStatus === 'favorite') { show = true; }
+            else if (viewType === 'blk' && itemStatus === 'blacklisted') { show = true; }
+            item.classList.toggle('hidden-by-view', !show); if(show) visibleCountInList++;
+        });
+
+        const noResultsMessage = brandListContainer.querySelector('.no-results-message');
+        if (visibleCountInList === 0 && brandItems.length > 0) {
+            if (!noResultsMessage) {
+                const p = document.createElement('p'); p.className = 'filter-status-paragraph no-results-message'; // Add class for identification
+                p.dataset.i18nKey = 'filterStatusNoBrandsView'; // Add key for translation
+                p.textContent = translate('filterStatusNoBrandsView'); // Set initial text
+                brandListContainer.appendChild(p);
+            } else {
+                // Ensure existing message is translated if language changed
+                noResultsMessage.textContent = translate('filterStatusNoBrandsView');
+            }
+        } else { if (noResultsMessage) { noResultsMessage.remove(); } }
+    }
+
+
+    // --- End Brand Preferences & Ignored Stations Logic ---
+
+    function updateFilterState() {
+        currentFilters.connectorType = document.querySelector('#filter-connector-type input[name="connectorType"]:checked')?.value || defaultFilters.connectorType; currentFilters.powerLevels = Array.from(document.querySelectorAll('#filter-power input[name="powerLevel"]:checked')).map(cb => cb.value); currentFilters.serviceTypes = Array.from(document.querySelectorAll('#filter-service-type input[name="serviceType"]:checked')).map(cb => cb.value); console.log('Updated Basic Filters:', JSON.parse(JSON.stringify(currentFilters))); updateFilterIndicator(); saveSettings();
+    }
+
+    function handleFilterChange() {
+        updateFilterState();
+        const count = applyFilters();
+        if(isRouteActive) {
+            showTemporaryMessage(translate('messageStationsFound', {count: count}), false);
+        }
+        triggerDetourPrecalculation();
+    }
+    function poiMatchesFilters(marker) {
+        const poiData = marker.poiData; if (!poiData || !marker.stationId) return false;
+        const stationIdString = String(marker.stationId); if (ignoredStationIds.has(stationIdString)) { return false; }
+        const brand = poiData.brand; if (brand && blacklistedBrands.has(brand)) { return false; }
+        if (brandFilterMode === 'favoritesOnly') { if (!brand || !favoriteBrands.has(brand)) { return false; } }
+
+        if (currentFilters.serviceTypes.length > 0) { const serviceTypeUpper = poiData.serviceType?.toUpperCase(); if (!serviceTypeUpper || !currentFilters.serviceTypes.includes(serviceTypeUpper)) { return false; } } else { return false; }
+        const connectorFilter = currentFilters.connectorType;
+        if (connectorFilter !== 'ALL') {
+            if (!poiData.sockets || poiData.sockets.length === 0) { return false; }
+            const hasMatchingSocketType = poiData.sockets.some(socket => { const type = socket.type?.toUpperCase() || ''; const isAC = type.includes('AC') || type === 'TYPE_2'; const isDC = type.includes('DC') || type === 'CCS' || type === 'CHADEMO'; return (connectorFilter === 'AC' && isAC) || (connectorFilter === 'DC' && isDC); });
+            if (!hasMatchingSocketType) { return false; }
+        }
+        if (currentFilters.powerLevels.length === 0) { return false; }
+        if (currentFilters.powerLevels.length < 3) {
+            if (!poiData.sockets || poiData.sockets.length === 0) { return false; }
+            const hasMatchingPower = poiData.sockets.some(socket => { const power = typeof socket.power === 'number' ? socket.power : -1; if (power < 0) return false; const matchesLow = currentFilters.powerLevels.includes('low') && power < 60; const matchesMedium = currentFilters.powerLevels.includes('medium') && power >= 60 && power <= 120; const matchesHigh = currentFilters.powerLevels.includes('high') && power > 120; return matchesLow || matchesMedium || matchesHigh; });
+            if (!hasMatchingPower) { return false; }
+        }
+        return true; // Passed all filters
+    }
+
+    function applyFilters() {
+        if (!google.maps.geometry || !google.maps.geometry.spherical) { console.warn("Geometry library missing."); return 0; }
+        visiblePoiMarkers = []; let visibleCount = 0; const distanceThresholdMeters = distanceThresholdKm * 1000;
+        updateEffectiveRoutePath();
+
+        allPoiMarkers.forEach(marker => {
+            let isVisible = false; const markerPos = marker.position; const poiBrand = marker.poiData?.brand;
+            if (poiMatchesFilters(marker)) {
+                if (isRouteActive && markerPos && typeof markerPos.lat === 'number' && typeof markerPos.lng === 'number') {
+                    const pathToCheck = (startOffsetKm > 0 || endOffsetKm > 0) && effectiveRoutePath ? effectiveRoutePath : currentRoutePolylinePath;
+                    if (pathToCheck && pathToCheck.length > 0) {
+                        let minDistance = Infinity; const currentMarkerLatLng = new google.maps.LatLng(markerPos.lat, markerPos.lng);
+                        try { for (const pathPoint of pathToCheck) { const distance = google.maps.geometry.spherical.computeDistanceBetween(currentMarkerLatLng, pathPoint); minDistance = Math.min(minDistance, distance); if (minDistance <= distanceThresholdMeters) break; } }
+                        catch (error) { console.error(`Error computing distance for POI ${marker.stationId}:`, error); minDistance = Infinity; }
+                        if (minDistance <= distanceThresholdMeters) { isVisible = true; }
+                    } else if (isRouteActive && (!pathToCheck || pathToCheck.length === 0)) { isVisible = false; }
+                } else if (!isRouteActive) { isVisible = false; }
+            }
+            const isCurrentlyVisible = marker.map != null;
+            if (isCurrentlyVisible !== isVisible) {
+                marker.map = isVisible ? map : null;
+                if (!isVisible) {
+                    marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null;
+                    const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; }
+                    if (marker === selectedPoiMarker) { resetSelectedMarkerZIndex(); }
+                }
+            }
+            const favBadge = marker.content?.querySelector('.marker-fav-badge'); if (favBadge) { favBadge.style.display = (isVisible && poiBrand && favoriteBrands.has(poiBrand)) ? 'block' : 'none'; }
+            if (isVisible) { visiblePoiMarkers.push(marker); visibleCount++; }
+        });
+        console.log(`${visibleCount} POIs visible matching all criteria (Mode: ${brandFilterMode}, Ignored: ${ignoredStationIds.size}, Dist: ${distanceThresholdKm}km, Offsets: S=${startOffsetKm}km/E=${endOffsetKm}km, Filters).`);
+        if (infoWindow?.getMap() && visiblePoiMarkers.indexOf(infoWindow.getAnchor()) === -1) { infoWindow.close(); resetSelectedMarkerZIndex(); }
+        return visibleCount;
+    }
+
+    // --- Route Offset Logic ---
+    function resetOffsets() {
+        startOffsetKm = 0; endOffsetKm = 0; updateEffectiveRoutePath(); updateOffsetDisplay(); updateOffsetButtonStates();
+    }
+
+    function handleOffsetChange(type, changeKm) {
+        if (!isRouteActive || !originalRouteDistance) { console.warn("Cannot change offset: Route not active or distance unknown."); return; }
+        const originalRouteKm = originalRouteDistance / 1000; let newStartOffset = startOffsetKm; let newEndOffset = endOffsetKm;
+        if (type === 'start') { newStartOffset = Math.max(0, startOffsetKm + changeKm); }
+        else if (type === 'dest') { newEndOffset = Math.max(0, endOffsetKm + changeKm); }
+        if (newStartOffset + newEndOffset >= originalRouteKm) { console.warn(`Offset change rejected: Start (${newStartOffset}km) + End (${newEndOffset}km) >= Route (${originalRouteKm.toFixed(1)}km)`); showTemporaryMessage(translate('messageOffsetsOverlap'), true); return; }
+        startOffsetKm = newStartOffset; endOffsetKm = newEndOffset; console.log(`Offset changed: Start = ${startOffsetKm}km, End = ${endOffsetKm}km`);
+        updateOffsetDisplay(); updateOffsetButtonStates(); updateEffectiveRoutePath();
+        const count = applyFilters(); showTemporaryMessage(translate('messageStationsFound', {count: count}), false); triggerDetourPrecalculation();
+    }
+
+    function updateOffsetDisplay() {
+        const unit = translate('unitKm');
+        if (startOffsetDisplay) startOffsetDisplay.textContent = `${startOffsetKm} ${unit}`;
+        if (destOffsetDisplay) destOffsetDisplay.textContent = `${endOffsetKm} ${unit}`;
+    }
+
+    function updateOffsetButtonStates() {
+        if (!isRouteActive || !originalRouteDistance) { offsetStartIncBtn.disabled = true; offsetStartDecBtn.disabled = true; offsetDestIncBtn.disabled = true; offsetDestDecBtn.disabled = true; return; } const originalRouteKm = originalRouteDistance / 1000; offsetStartDecBtn.disabled = startOffsetKm <= 0; offsetDestDecBtn.disabled = endOffsetKm <= 0; offsetStartIncBtn.disabled = (startOffsetKm + OFFSET_INCREMENT_KM + endOffsetKm) >= originalRouteKm; offsetDestIncBtn.disabled = (startOffsetKm + endOffsetKm + OFFSET_INCREMENT_KM) >= originalRouteKm;
+    }
+
+
+    function updateEffectiveRoutePath() {
+        if (!isRouteActive || !currentRoutePolylinePath || currentRoutePolylinePath.length < 2 || !originalRouteDistance || !google.maps.geometry || !google.maps.geometry.spherical) { effectiveRoutePath = null; return; } const startOffsetMeters = startOffsetKm * 1000; const endOffsetMeters = endOffsetKm * 1000; if (startOffsetMeters === 0 && endOffsetMeters === 0) { effectiveRoutePath = currentRoutePolylinePath; return; } if (startOffsetMeters + endOffsetMeters >= originalRouteDistance) { console.warn(`Offsets (${startOffsetKm}km + ${endOffsetKm}km) exceed or meet route distance (${(originalRouteDistance/1000).toFixed(1)}km). Effective path is empty.`); effectiveRoutePath = []; return; } let accumulatedDistance = 0; let startIndex = 0; let endIndex = currentRoutePolylinePath.length - 1; for (let i = 1; i < currentRoutePolylinePath.length; i++) { const segmentDistance = google.maps.geometry.spherical.computeDistanceBetween(currentRoutePolylinePath[i - 1], currentRoutePolylinePath[i]); if (accumulatedDistance + segmentDistance >= startOffsetMeters) { startIndex = i; break; } accumulatedDistance += segmentDistance; } const targetEndDistance = originalRouteDistance - endOffsetMeters; accumulatedDistance = 0; endIndex = currentRoutePolylinePath.length - 1; for (let i = 1; i < currentRoutePolylinePath.length; i++) { const segmentDistance = google.maps.geometry.spherical.computeDistanceBetween(currentRoutePolylinePath[i - 1], currentRoutePolylinePath[i]); if (accumulatedDistance + segmentDistance >= targetEndDistance) { endIndex = i - 1; break; } accumulatedDistance += segmentDistance; } if (startIndex > endIndex) { console.warn(`startIndex (${startIndex}) > endIndex (${endIndex}) after offset calculation. Effective path set to empty.`); effectiveRoutePath = []; } else { effectiveRoutePath = currentRoutePolylinePath.slice(startIndex, endIndex + 1); } if (effectiveRoutePath.length < 2 && !(startOffsetMeters === 0 && endOffsetMeters === 0) ) { console.warn(`Effective path has less than 2 points (length: ${effectiveRoutePath.length}). POI filtering might not work as expected.`); }
+    }
+
+    function updateOffsetControlsVisibility() {
+        if (offsetControlsContainer) { offsetControlsContainer.style.display = isRouteActive ? 'flex' : 'none'; if (isRouteActive) { updateOffsetButtonStates(); } }
+    }
+
+
+    // --- End of Route Offset Logic ---
+
+
+    function triggerDetourPrecalculation() {
+        if (!isRouteActive || !startLocation || !endLocation || originalRouteDistance == null) { console.log("Skipping pre-calc/pre-fetch: Route not active or missing data."); return; } const visibleCount = visiblePoiMarkers.length; const markersWithinLimit = visibleCount <= MAX_PRECALCULATE_DETOURS; console.log(`Pre-processing check. Visible & Filtered POIs: ${visibleCount}. Limit: ${MAX_PRECALCULATE_DETOURS}. Enabled: ${markersWithinLimit}`); if (markersWithinLimit) { let detoursToCalcCount = 0; let socketsToFetchCount = 0; visiblePoiMarkers.forEach(marker => { if (!marker.liveSocketData && !marker.cachedInfoWindowContent) { socketsToFetchCount++; fetchPoiDetails(marker, marker.poiData, true); } if (!marker.detourData) { detoursToCalcCount++; marker.detourData = { status: 'Pending' }; updateMarkerDetourText(marker, null); calculateDetourForPoi(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration) .then(result => { if(marker.map && marker.detourData?.status === 'Pending') { marker.detourData = result; updateMarkerDetourText(marker, result); } else { console.log(`Skipping update for pre-calc detour result for ${marker.stationId} (marker hidden or status changed)`); } }) .catch(error => { console.error(`Error in detour pre-calc for POI ${marker.stationId}:`, error); if(marker.map && marker.detourData?.status === 'Pending') { marker.detourData = { status: 'Error' }; updateMarkerDetourText(marker, marker.detourData); } }); } else { if (marker.detourData.status === 'Pending') { updateMarkerDetourText(marker, null); } else { updateMarkerDetourText(marker, marker.detourData); } } }); console.log(`Initiated socket pre-fetch for ${socketsToFetchCount}, detour pre-calc for ${detoursToCalcCount} POIs.`); } else { console.log(`More than ${MAX_PRECALCULATE_DETOURS} nearby & filtered POIs (${visibleCount}). Skipping pre-fetch/pre-calc.`); visiblePoiMarkers.forEach(marker => { if (marker.detourData?.status === 'Pending') { marker.detourData = null; updateMarkerDetourText(marker, null); } }); }
+    }
+    function hideAllPois() {
+        console.log("Hiding all POIs and resetting live data/detour/cache."); allPoiMarkers.forEach(marker => { marker.map = null; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; } }); visiblePoiMarkers = []; if (infoWindow) infoWindow.close(); resetSelectedMarkerZIndex();
+    }
+
+    function calculateDetourForPoi(marker, poiLocation, startLoc, endLoc, originalDist, originalDur) {
+        return new Promise(async (resolve) => { if (!directionsService || !poiLocation || !startLoc || !endLoc || originalDist === null || originalDur === null) { console.warn(`Missing data for detour pre-calc for POI: ${marker.stationId}`); resolve({ status: 'Error' }); return; } const okStatus = google.maps.DirectionsStatus?.OK || 'OK'; const poiLatLng = new google.maps.LatLng(poiLocation.lat, poiLocation.lng); const requestAtoP = { origin: startLoc, destination: poiLatLng, travelMode: google.maps.TravelMode.DRIVING }; const requestPtoB = { origin: poiLatLng, destination: endLoc, travelMode: google.maps.TravelMode.DRIVING }; let retries = 0; const maxDetourRetries = 2; while (retries <= maxDetourRetries) { try { const routePromise = (req) => new Promise((res, rej) => { directionsService.route(req, (result, status) => { res({ result, status }); }); }); const [resAtoP, resPtoB] = await Promise.all([ routePromise(requestAtoP), routePromise(requestPtoB) ]); if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraTime = detourDur - originalDur; resolve({ status: 'OK', extraDist: extraDist, extraTime: extraTime }); return; } else { throw new Error(`Detour pre-calc failed attempt ${retries + 1}. Statuses: A->P: ${resAtoP.status}, P->B: ${resPtoB.status}`); } } catch (error) { console.warn(error.message || `Error during detour pre-calc attempt ${retries + 1} for POI ${marker.stationId}`); retries++; if (retries > maxDetourRetries) { console.error(`Final detour pre-calc attempt failed for POI ${marker.stationId}.`); resolve({ status: 'Error' }); return; } await new Promise(resolve => setTimeout(resolve, DIRECTIONS_API_RETRY_DELAY)); } } });
+    }
+    async function calculateAndDisplayDetourOnClick(marker, poiLocation, startLoc, endLoc, originalDist, originalDur) {
+        const stationId = marker.stationId; console.log(`Calculating on-demand detour for POI ${stationId}`);
+        if (!directionsService || !marker || !poiLocation || !startLoc || !endLoc || originalDist === null || originalDur === null) { console.warn(`Cannot calculate detour on click for ${stationId}: Missing data.`); marker.detourData = { status: 'Error' }; updateMarkerDetourText(marker, marker.detourData); updateInfoWindowIfVisible(marker); return; }
+        if (!marker.detourData || marker.detourData.status !== 'Pending') { marker.detourData = { status: 'Pending' }; updateMarkerDetourText(marker, null); updateInfoWindowIfVisible(marker); }
+
+        const okStatus = google.maps.DirectionsStatus?.OK || 'OK'; const poiLatLng = new google.maps.LatLng(poiLocation.lat, poiLocation.lng); const requestAtoP = { origin: startLoc, destination: poiLatLng, travelMode: google.maps.TravelMode.DRIVING }; const requestPtoB = { origin: poiLatLng, destination: endLoc, travelMode: google.maps.TravelMode.DRIVING };
+        let detourResultData = { status: 'Error' }; let retries = 0; const maxDetourRetries = 2;
+        while(retries <= maxDetourRetries) {
+            try { console.log(`Attempting on-demand detour calc ${retries + 1} for ${stationId}`); const routePromise = (req) => new Promise((res) => { directionsService.route(req, (result, status) => { res({ result, status }); }); }); const [resAtoP, resPtoB] = await Promise.all([ routePromise(requestAtoP), routePromise(requestPtoB) ]);
+                if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraDur = detourDur - originalDur; detourResultData = { status: 'OK', extraDist: extraDist, extraTime: extraDur }; console.log(`On-demand detour success for ${stationId} (Attempt ${retries + 1})`); break; }
+                else { throw new Error(`On-demand detour failed attempt ${retries + 1}. Statuses: A->P: ${resAtoP.status}, P->B: ${resPtoB.status}`); }
+            } catch (error) { console.warn(error.message || `Error calculating on-demand detour attempt ${retries + 1} for POI ${stationId}`); retries++; if (retries > maxDetourRetries) { console.error(`Final on-demand detour attempt failed for POI ${stationId}.`); detourResultData = { status: 'Error' }; break; } await new Promise(resolve => setTimeout(resolve, DIRECTIONS_API_RETRY_DELAY)); }
+        }
+        marker.detourData = detourResultData; updateMarkerDetourText(marker, detourResultData); updateInfoWindowIfVisible(marker);
+    }
+    function updateMarkerDetourText(marker, detourData) {
+        if (!marker || !marker.content) return; const detourEl = marker.content.querySelector('.poi-marker-detour-text'); if (!detourEl) { return; }
+        let text = '';
+        if (detourData && detourData.status === 'OK') {
+            const distKm = detourData.extraDist / 1000; const timeMin = Math.round(detourData.extraTime / 60);
+            if (Math.abs(distKm) >= 0.1 || Math.abs(timeMin) >= 1) { text = `${distKm >= 0 ? '+' : ''}${distKm.toFixed(1)}${translate('unitKm')}`; } else { text = ''; }
+        } else if (detourData && detourData.status === 'Error') { text = translate('markerDetourError'); }
+        else { text = ''; } // Pending or null
+        detourEl.textContent = text;
+    }
+
+
+    function retryDetourCalculation(stationId) {
+        console.log(`Retry detour calculation triggered for Station ID: ${stationId}`);
+        const marker = allPoiMarkers.find(m => m.stationId === stationId);
+        if (!marker) { console.error(`Marker not found for retryDetourCalculation with ID: ${stationId}`); return; }
+        if (!isRouteActive || !startLocation || !endLocation || originalRouteDistance === null || originalRouteDuration === null) { console.warn(`Cannot retry detour calculation: Route not active or missing data for Station ID: ${stationId}`); marker.detourData = { status: 'Error' }; updateInfoWindowIfVisible(marker); return; }
+
+        marker.detourData = { status: 'Pending' }; updateMarkerDetourText(marker, null); updateInfoWindowIfVisible(marker); // Show loading
+        setTimeout(() => { console.log(`Starting detour calculation after retry for ${stationId}`); calculateAndDisplayDetourOnClick(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration); }, 50);
+    }
+
+
+    // --- UI and Helper Functions ---
+    function updateControlVisibility() {
+        if (!controlPanel || !inputContainer || !hamburgerButton || !distanceContainer) { console.error("Cannot update control visibility: UI elements missing."); return; } const isMobile = window.innerWidth < 768; if (isMobile) { hamburgerButton.classList.remove('hidden'); controlPanel.classList.add('pr-16'); if (isRouteActive) { inputContainer.classList.add('hidden'); distanceContainer.classList.remove('hidden'); } else { inputContainer.classList.remove('hidden'); distanceContainer.classList.remove('hidden'); } } else { inputContainer.classList.remove('hidden'); distanceContainer.classList.remove('hidden'); hamburgerButton.classList.add('hidden'); controlPanel.classList.remove('pr-16'); }
+    }
+    function handleResize() { updateControlVisibility(); }
+    function clearRouteDisplay() {
+        console.log("Clearing route display (polyline only)."); if (directionsRenderer) { directionsRenderer.setDirections({ routes: [] }); }
+    }
+    function clearRouteDisplayAndState() {
+        console.log("Clearing route display and state (not markers)."); isRouteActive = false; currentRoutePolylinePath = null; effectiveRoutePath = null; originalRouteDistance = null; originalRouteDuration = null; resetOffsets(); clearRouteDisplay(); hideAllPois(); if (infoWindow) infoWindow.close(); updateControlVisibility(); updateOffsetControlsVisibility(); resetSelectedMarkerZIndex();
+    }
+    function clearRoute() {
+        console.log("Clearing route display, state, offsets, and start/end markers."); isRouteActive = false; currentRoutePolylinePath = null; effectiveRoutePath = null; originalRouteDistance = null; originalRouteDuration = null; resetOffsets(); clearRouteDisplay(); if (startMarker) { startMarker.map = null; startMarker = null; } if (endMarker) { endMarker.map = null; endMarker = null; } hideAllPois(); if (infoWindow) infoWindow.close(); updateControlVisibility(); updateOffsetControlsVisibility(); resetSelectedMarkerZIndex();
+    }
+
+    function clearAllInputsAndRoute() {
+        console.log("Clearing all inputs and route via shortcut.");
+        if (startInput) startInput.value = ''; if (endInput) endInput.value = '';
+        if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
+        if (endInput && clearEndBtn) handleInputChange(endInput, clearEndBtn);
+        startLocation = null; endLocation = null;
+        if (startMarker) { startMarker.map = null; startMarker = null; }
+        if (endMarker) { endMarker.map = null; endMarker = null; }
+        clearRouteDisplayAndState();
+        showTemporaryMessage(translate('messageClearedAll'), false);
+    }
+    function handleInputChange(inputElement, clearButtonElement) {
+        if (!clearButtonElement || !inputElement) return; clearButtonElement.classList.toggle('hidden', inputElement.value.trim().length === 0);
+    }
+    function handleClearClick(inputElement, clearButtonElement, locationType) {
+        if (!inputElement || !clearButtonElement) return; inputElement.value = ''; clearButtonElement.classList.add('hidden'); console.log(`Clearing ${locationType} location and marker.`); if (locationType === 'start') { startLocation = null; if (startMarker) { startMarker.map = null; startMarker = null; } } else { endLocation = null; if (endMarker) { endMarker.map = null; endMarker = null; } } if (isRouteActive && (!startLocation || !endLocation)) { console.log(`Clearing ${locationType} broke the active route. Clearing full route state.`); clearRouteDisplayAndState(); } inputElement.focus();
+    }
+    function showTemporaryMessage(text, isError = false) {
+        if (!messageBox) return; messageBox.style.pointerEvents = 'auto'; messageBox.textContent = text; messageBox.style.backgroundColor = isError ? 'rgba(239, 68, 68, 0.9)' : 'rgba(59, 130, 246, 0.9)'; messageBox.style.display = 'block'; setTimeout(() => { if (messageBox.textContent === text) { messageBox.style.display = 'none'; messageBox.style.pointerEvents = 'none'; } }, isError ? 5000 : 3000);
+    }
+
+    // --- Keyboard Shortcut Handler ---
+    function handleKeyDown(event) {
+        const activeEl = document.activeElement; const isInputFocused = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+        if (event.key === 'Escape') {
+            let closedSomething = false;
+            if (languageDropdown?.classList.contains('show')) {
+                languageDropdown.classList.remove('show');
+                languageSelectorButton.setAttribute('aria-expanded', 'false');
+                closedSomething = true;
+            }
+            if (infoWindow && infoWindow.getMap()) {
+                console.log("Escape key pressed, closing InfoWindow.");
+                infoWindow.close();
+                resetSelectedMarkerZIndex();
+                closedSomething = true;
+            }
+            if (filterPanel && filterPanel.classList.contains('open')) {
+                console.log("Escape key pressed, closing Filter Panel.");
+                toggleFilterPanel();
+                closedSomething = true;
+            }
+            // If Escape was pressed and we closed something, prevent further action
+            if(closedSomething) event.preventDefault();
+        }
+        if (!isInputFocused && (event.key === 'x' || event.key === 'X')) {
+            event.preventDefault();
+            clearAllInputsAndRoute();
+        }
+    }
+
+    // --- Filter Panel Toggle ---
+    function toggleFilterPanel() {
+        if (!filterPanel) return;
+        const isOpen = filterPanel.classList.toggle('open');
+        console.log("Filter panel toggled:", isOpen);
+        if(isOpen) {
+            // Refresh lists when panel opens
+            populateBrandFilterList();
+            populateIgnoredStationsList();
+            filterBrandListView(brandListViewControls?.querySelector('button.active')?.dataset.view || 'all'); // Re-apply current view filter
+        }
+    }
+
+    // --- Filter Reset Logic ---
+    function resetAllFilters() {
+        console.log("Resetting all filters to defaults.");
+        currentFilters = JSON.parse(JSON.stringify(defaultFilters));
+        distanceThresholdKm = DEFAULT_DISTANCE_THRESHOLD;
+        const defaultMapType = google.maps.MapTypeId[DEFAULT_MAP_TYPE_ID.toUpperCase()] || google.maps.MapTypeId.ROADMAP;
+        if (map) { map.setMapTypeId(defaultMapType); } else { currentFilters.mapTypeId = DEFAULT_MAP_TYPE_ID; }
+
+        updateFilterControlsUI(); updateDistanceSliderUI(); updateMapTypeButtons(defaultMapType);
+        favoriteBrands.clear(); blacklistedBrands.clear(); ignoredStationIds.clear(); brandFilterMode = 'all';
+
+        populateBrandFilterList(); populateIgnoredStationsList(); filterBrandListView('all'); updateBrandFilterModeButton();
+
+        saveSettings(); updateFilterIndicator();
+        const count = applyFilters();
+        showTemporaryMessage(translate('messageFiltersReset'), false);
+        if (isRouteActive) { triggerDetourPrecalculation(); }
+    }
+
+
+    // --- Active Filter Indicator Logic ---
+    function updateFilterIndicator() {
+        if (!filterToggleButton) return; let filtersAreActive = false; if (currentFilters.connectorType !== defaultFilters.connectorType) filtersAreActive = true; if (JSON.stringify(currentFilters.powerLevels.sort()) !== JSON.stringify(defaultFilters.powerLevels.sort())) filtersAreActive = true; if (JSON.stringify(currentFilters.serviceTypes.sort()) !== JSON.stringify(defaultFilters.serviceTypes.sort())) filtersAreActive = true; if (distanceThresholdKm !== DEFAULT_DISTANCE_THRESHOLD) filtersAreActive = true; if (brandFilterMode === 'favoritesOnly') filtersAreActive = true; if (blacklistedBrands.size > 0) filtersAreActive = true; if (ignoredStationIds.size > 0) filtersAreActive = true; filterToggleButton.classList.toggle('filters-active', filtersAreActive);
+    }
+
+
+    // --- Formatting and Helper Functions ---
+    function formatDistance(meters) {
+        if (meters === null || typeof meters === 'undefined') return translate('iwNA');
+        const unit = translate('unitKm');
+        if (meters >= 1000) {
+            return (meters / 1000).toFixed(1) + ' ' + unit;
+        } else {
+            return Math.round(meters) + ' m';
+        }
+    }
+    function formatDuration(seconds) {
+        if (seconds === null || typeof seconds === 'undefined') return translate('iwNA');
+        const totalMinutes = Math.round(seconds / 60);
+        const minUnit = translate('unitMinuteShort');
+        const hrUnit = translate('unitHourShort');
+
+        if (totalMinutes < 1) return `< 1 ${minUnit}`; // Use translated unit
+        if (totalMinutes < 60) { return `${totalMinutes} ${minUnit}`; } // Use translated unit
+        else {
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            if (minutes === 0) {
+                return `${hours} ${hrUnit}`; // Use translated unit
+            } else {
+                return `${hours} ${hrUnit} ${minutes} ${minUnit}`; // Use translated units
+            }
+        }
+    }
+    function getCurrentDateTimeString() {
+        const now = new Date(); const year = now.getFullYear(); const month = (now.getMonth() + 1).toString().padStart(2, '0'); const day = now.getDate().toString().padStart(2, '0'); const hours = now.getHours().toString().padStart(2, '0'); const minutes = now.getMinutes().toString().padStart(2, '0'); const seconds = now.getSeconds().toString().padStart(2, '0'); return `${year}-${month}-${day}%20${hours}:${minutes}:${seconds}`;
+    }
+    function getFaviconUrlFromReportUrl(reportUrl) {
+        if (!reportUrl) { return null; } try { let fullUrl = reportUrl; if (!/^https?:\/\//i.test(reportUrl)) { fullUrl = 'http://' + reportUrl; } const url = new URL(fullUrl); if ((url.protocol !== "http:" && url.protocol !== "https:") || !url.hostname) { console.warn(`Invalid reportUrl: ${reportUrl}`); return null; } return `https://www.google.com/s2/favicons?sz=256&domain_url=${encodeURIComponent(url.hostname)}`; } catch (e) { console.warn(`Could not parse reportUrl: ${reportUrl}`, e); return null; }
+    }
+
+    // Google Maps API script callback calls initMap
+
+</script>
+
+</body>
+</html>
