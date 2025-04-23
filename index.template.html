@@ -2,14 +2,14 @@
 <html lang="en"> <!-- Default lang attribute, updated by JS -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- Added user-scalable=no -->
     <title data-i18n-key="title">EV Stations Along Route</title> <!-- Updated Title, translation applied by JS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; overflow: hidden; /* Prevent body scroll */ }
         #map-container { position: relative; flex-grow: 1; overflow: hidden; min-height: 300px; /* Ensure container has min height */ }
-        #map { height: 100%; min-height: 300px; }
+        #map { height: 100%; min-height: 300px; touch-action: none; /* Prevent default touch actions like page scroll/zoom on the map element */}
         /* Loading Overlay */
         #loading-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -1402,6 +1402,7 @@
                 zoom: zoom,
                 mapTypeId: loadedMapTypeId, // Use loaded or default map type
                 mapTypeControl: false, streetViewControl: false, fullscreenControl: false,
+                gestureHandling: 'greedy', // Enable one-finger zoom/pan
                 mapId: 'DEMO_MAP_ID' // Use your actual Map ID if needed
             });
             console.log("Map object successfully initialized in initializeMapAndServices with type:", map.getMapTypeId());

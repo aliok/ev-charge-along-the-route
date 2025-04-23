@@ -753,9 +753,12 @@ What is needed to speed up loading stations.json? It takes quite long time (it i
 --------------
 There's an etag and stuff on the file set by the server. Doesn't that help?
 --------------
-
-TODO:
-- Can we add a progress bar on the page for the initial loading?
 - On mobile, I see I have to use 2 fingers to zoom in/out. Can we make it 1 finger?
 - On mobile, can we hide the address bar and stuff? To have a better UX? Also, when I want to move the map to bottom, the page is scrolling.
+--------------
+
+TODO:
+- I want users to add the app to their home screen.
+- Can we add a progress bar on the page for the initial loading?
+- Hide the TR/EN text in language dropdown and just show the flags.
 -
