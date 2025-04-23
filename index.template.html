@@ -701,7 +701,7 @@
 <div id="message-box"></div>
 
 <!-- MAKE SURE to replace __GOOGLE_MAPS_API_KEY__ below -->
-<script src="https://maps.googleapis.com/maps/api/js?key=__GOOGLE_MAPS_API_KEY__&callback=initMap&libraries=places,geometry,geocoding,marker" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=__GOOGLE_MAPS_API_KEY__&loading=async&callback=initMap&libraries=places,geometry,geocoding,marker" async></script>
 
 <script>
     // --- API Configuration ---
@@ -1397,6 +1397,9 @@
         // Setup language dropdown (will be populated after map init potentially)
         setupLanguageDropdown();
     }
+    // Make initMap globally accessible for the Google Maps API callback
+    window.initMap = initMap;
+
     function geolocationSuccess(position) {
         const userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
         console.log("Geolocation successful:", userLocation);

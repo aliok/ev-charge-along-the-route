@@ -759,7 +759,17 @@ There's an etag and stuff on the file set by the server. Doesn't that help?
 - Can we add a progress bar on the page for the initial loading?
 - Hide the TR/EN text in language dropdown and just show the flags.
 --------------
+I sometimes get this `Uncaught (in promise) InvalidValueError: initMap is not a function` when I reload the page. Fix that.
+I see this warning, could it be related?
+```
+Google Maps JavaScript API has been loaded directly without loading=async. This can result in suboptimal performance. For best-practice loading patterns please see https://goo.gle/js-api-loading
+oga @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initMap&libraries=places,geometry,geocoding,marker:2347
+google.maps.Load @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initMap&libraries=places,geometry,geocoding,marker:14
+(anonymous) @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initMap&libraries=places,geometry,geocoding,marker:2580
+(anonymous) @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initMap&libraries=places,geometry,geocoding,marker:2580
+```
+--------------
 
 TODO:
 - I want users to add the app to their home screen.
-- I sometimes get this `Uncaught (in promise) InvalidValueError: initMap is not a function` when I reload the page. Fix that.
+
