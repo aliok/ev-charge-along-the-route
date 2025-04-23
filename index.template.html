@@ -10,38 +10,44 @@
         html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; overflow: hidden; /* Prevent body scroll */ }
         #map-container { position: relative; flex-grow: 1; overflow: hidden; min-height: 300px; /* Ensure container has min height */ }
         #map { height: 100%; min-height: 300px; touch-action: none; /* Prevent default touch actions like page scroll/zoom on the map element */}
+
         /* Loading Overlay */
         #loading-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: 1500; /* Above map, below messages? */
-            display: flex; flex-direction: column; /* Allow stacking text and progress bar */
+            background-color: rgba(255, 255, 255, 0.85); /* Slightly less transparent */
+            z-index: 1500;
+            display: flex; flex-direction: column;
             justify-content: center; align-items: center;
             font-size: 1.1rem; font-weight: 500; color: #374151;
             text-align: center; padding: 20px;
-            pointer-events: none; /* Allow interactions with underlying map if needed, though usually hidden */
+            pointer-events: none;
         }
         #loading-overlay.hidden { display: none; }
-        /* Progress Bar Styles */
+        #loading-details {
+            font-size: 0.9rem; /* text-sm */
+            color: #4b5563; /* gray-600 */
+            margin-top: 0.25rem; /* mt-1 */
+            min-height: 1.2em; /* Prevent layout shift */
+        }
+
+        /* Progress Bar Container */
         #loading-progress-bar {
             width: 60%; max-width: 250px; height: 8px;
             background-color: #e5e7eb; /* gray-200 */
             border-radius: 4px; overflow: hidden;
-            margin-top: 1rem; /* Space between text and bar */
+            margin-top: 0.5rem; /* Reduced space */
             position: relative;
         }
-        #loading-progress-bar::after {
-            content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+
+        /* Inner Progress Bar Fill - Updated */
+        #loading-progress-inner {
+            height: 100%;
+            width: 0%; /* Start at 0%, updated by JS */
             background-color: #3b82f6; /* blue-500 */
             border-radius: 4px;
-            width: 50%; /* Initial width for animation */
-            animation: loading-progress-animation 2s linear infinite;
+            transition: width 0.1s linear; /* Smooth transition for updates */
         }
-        @keyframes loading-progress-animation {
-            0% { transform: translateX(-100%); width: 50%; }
-            50% { transform: translateX(0%); width: 50%; }
-            100% { transform: translateX(200%); width: 50%; }
-        }
+        /* REMOVED ::after pseudo-element and animation */
 
 
         /* InfoWindow Styling */
@@ -577,8 +583,11 @@
     <div id="map"></div>
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="hidden">
-        <span data-i18n-key="messageLoadingStations">Loading charging stations...</span>
-        <div id="loading-progress-bar"></div>
+        <span id="loading-text" data-i18n-key="messageLoadingStations">Loading charging stations...</span>
+        <span id="loading-details"></span> <!-- Details: count / total (percentage) -->
+        <div id="loading-progress-bar">
+            <div id="loading-progress-inner"></div>
+        </div>
     </div>
     <!-- Top Right Controls Container -->
     <div id="top-right-controls">
@@ -805,6 +814,7 @@
             locationTypeUnknown: "Unknown Type",
             // Messages
             messageLoadingStations: "Loading charging stations...",
+            messageLoadingDetails: "Processing {processed}/{total} stations ({percent}%)", // New key for progress
             messageLoadedStations: "Loaded {count} station(s). They will appear when a route is set.", // Plural handled in translate()
             messageGeoNotSupported: "Geolocation not supported. Showing default map.",
             messageGeoError: "Could not get your location. Showing default map.",
@@ -971,6 +981,7 @@
             locationTypeUnknown: "Bilinmeyen Tür",
             // Messages
             messageLoadingStations: "Şarj istasyonları yükleniyor...",
+            messageLoadingDetails: "{processed}/{total} istasyon işleniyor ({percent}%)", // New key for progress (TR)
             messageLoadedStations: "{count} istasyon yüklendi. Rota belirlendiğinde görünecekler.", // Plural handled in translate()
             messageGeoNotSupported: "Konum belirleme desteklenmiyor. Varsayılan harita gösteriliyor.",
             messageGeoError: "Konumunuz alınamadı. Varsayılan harita gösteriliyor.",
@@ -1122,7 +1133,7 @@
             text = key;
         }
 
-        // Replace placeholders like {count}, {status}, {type}, {parsedType}, {id}
+        // Replace placeholders like {count}, {status}, {type}, {parsedType}, {id}, {processed}, {total}, {percent}
         Object.keys(params).forEach(paramKey => {
             let replacement = params[paramKey];
             // Special handling for 'parsedType' to translate it first
@@ -1170,17 +1181,11 @@
                 try {
                     if (attr === 'textContent') {
                         // Simplified: Set textContent directly for most elements
-                        // Use innerHTML only if translation itself contains HTML (like hints or loading overlay)
-                        if (element.classList.contains('shortcut-hint-x') || element.classList.contains('esc-hint') || element.id === 'loading-overlay') {
-                            // Check specifically for the loading overlay text span
-                            const loadingTextSpan = element.querySelector('span[data-i18n-key]');
-                            if (loadingTextSpan && key === 'messageLoadingStations') {
-                                loadingTextSpan.innerHTML = translatedText; // Set text only for the span
-                            } else if (element.id !== 'loading-overlay') {
-                                // For other hints, set innerHTML as before
-                                element.innerHTML = translatedText;
-                            }
-                            // Do not modify the entire loading overlay's innerHTML here
+                        // Use innerHTML only if translation itself contains HTML (like hints)
+                        if (element.classList.contains('shortcut-hint-x') || element.classList.contains('esc-hint')) {
+                            element.innerHTML = translatedText;
+                        } else if (element.id === 'loading-text') { // Target specific loading text span
+                            element.textContent = translatedText;
                         } else {
                             element.textContent = translatedText;
                         }
@@ -1222,6 +1227,9 @@
 
         // 5. Distance/Offset Units (Set by applyTranslations and updateOffsetDisplay)
         updateOffsetDisplay();
+
+        // 6. Loading Progress Details (handled by updateLoadingProgress)
+        // updateLoadingProgress();
 
         console.log("Minimal dynamic UI updates applied (most handled by refresh).");
     }
@@ -1290,7 +1298,8 @@
     let mapTypeControlContainer, mapTypeButtons = [];
     // Language UI elements
     let languageControlContainer, languageSelectorButton, languageDropdown, languageFlagDisplay;
-    let loadingOverlay; // Added loading overlay element
+    // Loading UI elements
+    let loadingOverlay, loadingText, loadingDetails, loadingProgressBarInner;
 
     let filterToggleButton, filterPanel, closeFilterButton, resetFiltersButton; // Filter UI elements
     let brandFilterModeButton; // New button for brand filter mode
@@ -1342,7 +1351,11 @@
         languageSelectorButton = document.getElementById('language-selector-btn');
         languageDropdown = document.getElementById('language-dropdown');
         languageFlagDisplay = document.getElementById('language-flag');
-        loadingOverlay = document.getElementById('loading-overlay'); // Get loading overlay
+        // Loading UI elements
+        loadingOverlay = document.getElementById('loading-overlay');
+        loadingText = document.getElementById('loading-text');
+        loadingDetails = document.getElementById('loading-details');
+        loadingProgressBarInner = document.getElementById('loading-progress-inner');
 
         // Filter UI elements
         filterToggleButton = document.getElementById('filter-toggle-btn');
@@ -1367,7 +1380,7 @@
         offsetDestDecBtn = document.getElementById('offset-dest-dec');
 
         // --- Check Core Elements ---
-        if (!loadingOverlay || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
+        if (!loadingOverlay || !loadingText || !loadingDetails || !loadingProgressBarInner || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
             console.error("Required UI elements not found!"); alert("Initialization Error: Missing UI elements."); return;
         }
         if (typeof google === 'undefined' || typeof google.maps === 'undefined' || !google.maps.marker) {
@@ -1375,8 +1388,9 @@
         }
 
         // --- Show Loading Indicator ---
-        loadingOverlay.classList.remove('hidden');
         applyTranslations(); // Apply translations early to show loading message correctly
+        loadingOverlay.classList.remove('hidden');
+        updateLoadingProgress(0, 0); // Show initial state (0/0, 0%)
 
         // --- Load Settings and Determine Initial Map Center ---
         loadSettings(); // Settings load happens before language load
@@ -1437,7 +1451,7 @@
                 mapId: 'DEMO_MAP_ID' // Use your actual Map ID if needed
             });
             console.log("Map object successfully initialized in initializeMapAndServices with type:", map.getMapTypeId());
-        } catch (error) { console.error("Error initializing map object:", error); showTemporaryMessage(translate('messageErrorMapCreate'), true); return; }
+        } catch (error) { console.error("Error initializing map object:", error); showTemporaryMessage(translate('messageErrorMapCreate'), true); loadingOverlay.classList.add('hidden'); return; } // Hide overlay on map create error
 
         // Update UI elements based on loaded settings *after* map is created
         updateFilterControlsUI();
@@ -1584,18 +1598,42 @@
     }
 
 
-    // --- Data Fetching ---
+    // --- Data Fetching & Loading Progress ---
+    function updateLoadingProgress(processedCount, totalCount) {
+        if (!loadingDetails || !loadingProgressBarInner) return;
+
+        let percentage = 0;
+        if (totalCount > 0) {
+            percentage = Math.min(100, Math.round((processedCount / totalCount) * 100));
+        }
+
+        // Update text: "Processing 50 / 100 stations (50%)"
+        loadingDetails.textContent = translate('messageLoadingDetails', {
+            processed: processedCount,
+            total: totalCount,
+            percent: percentage
+        });
+
+        // Update progress bar width
+        loadingProgressBarInner.style.width = `${percentage}%`;
+    }
+
     async function fetchInitialStations() {
         console.log(`Fetching initial station list from ${STATIONS_JSON_PATH}...`);
         // Loading overlay is shown in initMap before this is called
+        // updateLoadingProgress(0, 0) is also called in initMap
 
+        let stations = [];
+        let totalStations = 0;
         try {
             const response = await fetch(STATIONS_JSON_PATH, { cache: 'reload' });
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status} while fetching ${STATIONS_JSON_PATH}`); }
-            const stations = await response.json();
-            console.log(`Fetched ${stations.length} stations from JSON.`);
+            stations = await response.json();
+            totalStations = stations.length;
+            console.log(`Fetched ${totalStations} stations from JSON.`);
+            updateLoadingProgress(0, totalStations); // Update with total count now known
 
-            loadPois(stations); // Load POIs first
+            loadPois(stations, totalStations); // Load POIs first, passing total count
 
             const brands = new Set();
             stations.forEach(s => { if (s.brand && s.brand.trim()) { brands.add(s.brand.trim()); } });
@@ -1607,24 +1645,35 @@
             filterBrandListView('all'); // Apply default view filter
             populateIgnoredStationsList();
 
-            showTemporaryMessage(translate('messageLoadedStations', {count: stations.length}), false);
+            // Message shown after loading is complete, not here
+            // showTemporaryMessage(translate('messageLoadedStations', {count: totalStations}), false);
         } catch (error) {
             console.error("Error fetching initial station list from JSON:", error);
             showTemporaryMessage("Failed to load charging stations from local file.", true); // Keep this simple, non-translatable potentially
-            loadPois([]); // Load empty array to clear any previous markers
+            loadPois([], 0); // Load empty array to clear any previous markers, pass 0 total
         } finally {
-            // Hide loading overlay regardless of success or failure
-            if(loadingOverlay) loadingOverlay.classList.add('hidden');
-            console.log("Initial station fetch finished (success or fail).");
+            // Ensure progress shows 100% before hiding
+            updateLoadingProgress(totalStations, totalStations);
+            // Hide loading overlay after a short delay to show 100%
+            setTimeout(() => {
+                if (loadingOverlay) loadingOverlay.classList.add('hidden');
+                console.log("Initial station fetch/load process finished (success or fail).");
+                // Show the "Loaded X stations" message *after* hiding the overlay
+                if(stations.length > 0) {
+                    showTemporaryMessage(translate('messageLoadedStations', {count: stations.length}), false);
+                }
+            }, 250); // 250ms delay
         }
     }
 
     // --- POI/Station Handling ---
-    function loadPois(stations) {
+    function loadPois(stations, totalStations) { // Accept totalStations
         console.log("loadPois called. Adding marker badges.");
         allPoiMarkers.forEach(marker => marker.map = null); allPoiMarkers = []; visiblePoiMarkers = [];
         if (!google.maps.marker || !google.maps.marker.AdvancedMarkerElement) { console.error("AdvancedMarkerElement not available."); showTemporaryMessage(translate('messageErrorGmapsLoad'), true); return; }
         if (!map) { console.error("Map not available in loadPois."); return; }
+
+        let processedCount = 0;
 
         stations.forEach((station) => {
             if (typeof station.lat !== 'number' || typeof station.lng !== 'number' || !station.id) { console.warn("Skipping station due to invalid data:", station); return; }
@@ -1683,7 +1732,14 @@
 
                 allPoiMarkers.push(marker);
             } catch (error) { console.error(`Error creating AdvancedMarkerElement for Station ${station.id}:`, error); }
+
+            // Update progress after processing each station
+            processedCount++;
+            updateLoadingProgress(processedCount, totalStations);
         });
+
+        // Ensure final update (in case stations array was empty or loop finished)
+        updateLoadingProgress(processedCount, totalStations);
         console.log(`Finished loadPois. ${allPoiMarkers.length} station markers created.`);
     }
 

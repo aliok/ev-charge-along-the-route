@@ -769,6 +769,9 @@ google.maps.Load @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initM
 (anonymous) @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initMap&libraries=places,geometry,geocoding,marker:2580
 ```
 --------------
+The progress bar on the start should show some kind of percent or numbers (ideally both).
+For downloading the station data and creating the markers and other stuff.
+--------------
 
 TODO:
 - I want users to add the app to their home screen.
