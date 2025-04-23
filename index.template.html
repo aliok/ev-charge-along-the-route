@@ -15,12 +15,34 @@
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background-color: rgba(255, 255, 255, 0.8);
             z-index: 1500; /* Above map, below messages? */
-            display: flex; justify-content: center; align-items: center;
+            display: flex; flex-direction: column; /* Allow stacking text and progress bar */
+            justify-content: center; align-items: center;
             font-size: 1.1rem; font-weight: 500; color: #374151;
             text-align: center; padding: 20px;
             pointer-events: none; /* Allow interactions with underlying map if needed, though usually hidden */
         }
         #loading-overlay.hidden { display: none; }
+        /* Progress Bar Styles */
+        #loading-progress-bar {
+            width: 60%; max-width: 250px; height: 8px;
+            background-color: #e5e7eb; /* gray-200 */
+            border-radius: 4px; overflow: hidden;
+            margin-top: 1rem; /* Space between text and bar */
+            position: relative;
+        }
+        #loading-progress-bar::after {
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+            background-color: #3b82f6; /* blue-500 */
+            border-radius: 4px;
+            width: 50%; /* Initial width for animation */
+            animation: loading-progress-animation 2s linear infinite;
+        }
+        @keyframes loading-progress-animation {
+            0% { transform: translateX(-100%); width: 50%; }
+            50% { transform: translateX(0%); width: 50%; }
+            100% { transform: translateX(200%); width: 50%; }
+        }
+
 
         /* InfoWindow Styling */
         .poi-info-window { font-family: 'Inter', sans-serif; padding: 0.5rem; max-width: 320px; }
@@ -155,18 +177,17 @@
         }
         #language-selector-btn:hover { background-color: #f3f4f6; }
         #language-flag { font-size: 1rem; line-height: 1; } /* Adjust flag size */
-        #language-code { line-height: 1; }
         #language-dropdown {
             display: none; /* Hidden by default */
             position: absolute; top: 100%; right: 0; margin-top: 4px;
             background-color: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 6; overflow: hidden; min-width: 100px;
+            z-index: 6; overflow: hidden; min-width: 50px; /* Adjusted min-width */
         }
         #language-dropdown.show { display: block; }
         #language-dropdown button {
             display: block; width: 100%; padding: 8px 12px;
-            background: none; border: none; cursor: pointer; text-align: left;
-            font-size: 0.85rem; color: #374151; display: flex; align-items: center; gap: 6px;
+            background: none; border: none; cursor: pointer; text-align: center; /* Center flag */
+            font-size: 0.85rem; color: #374151; display: flex; align-items: center; justify-content: center; /* Center flag horizontally */ gap: 6px;
         }
         #language-dropdown button:hover { background-color: #f3f4f6; }
         #language-dropdown button .flag { font-size: 1rem; }
@@ -557,6 +578,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="hidden">
         <span data-i18n-key="messageLoadingStations">Loading charging stations...</span>
+        <div id="loading-progress-bar"></div>
     </div>
     <!-- Top Right Controls Container -->
     <div id="top-right-controls">
@@ -570,7 +592,6 @@
         <div id="language-control">
             <button id="language-selector-btn" type="button" aria-haspopup="true" aria-expanded="false" data-i18n-key="[aria-label]ariaSelectLanguage" aria-label="Select Language">
                 <span id="language-flag">🇬🇧</span>
-                <span id="language-code">EN</span>
             </button>
             <div id="language-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="language-selector-btn">
                 <!-- Options populated by JS -->
@@ -1149,9 +1170,17 @@
                 try {
                     if (attr === 'textContent') {
                         // Simplified: Set textContent directly for most elements
-                        // Use innerHTML only if translation itself contains HTML (like the hint)
+                        // Use innerHTML only if translation itself contains HTML (like hints or loading overlay)
                         if (element.classList.contains('shortcut-hint-x') || element.classList.contains('esc-hint') || element.id === 'loading-overlay') {
-                            element.innerHTML = translatedText;
+                            // Check specifically for the loading overlay text span
+                            const loadingTextSpan = element.querySelector('span[data-i18n-key]');
+                            if (loadingTextSpan && key === 'messageLoadingStations') {
+                                loadingTextSpan.innerHTML = translatedText; // Set text only for the span
+                            } else if (element.id !== 'loading-overlay') {
+                                // For other hints, set innerHTML as before
+                                element.innerHTML = translatedText;
+                            }
+                            // Do not modify the entire loading overlay's innerHTML here
                         } else {
                             element.textContent = translatedText;
                         }
@@ -1260,7 +1289,7 @@
     let distanceContainer, distanceSlider, distanceValueDisplay;
     let mapTypeControlContainer, mapTypeButtons = [];
     // Language UI elements
-    let languageControlContainer, languageSelectorButton, languageDropdown, languageFlagDisplay, languageCodeDisplay;
+    let languageControlContainer, languageSelectorButton, languageDropdown, languageFlagDisplay;
     let loadingOverlay; // Added loading overlay element
 
     let filterToggleButton, filterPanel, closeFilterButton, resetFiltersButton; // Filter UI elements
@@ -1313,7 +1342,6 @@
         languageSelectorButton = document.getElementById('language-selector-btn');
         languageDropdown = document.getElementById('language-dropdown');
         languageFlagDisplay = document.getElementById('language-flag');
-        languageCodeDisplay = document.getElementById('language-code');
         loadingOverlay = document.getElementById('loading-overlay'); // Get loading overlay
 
         // Filter UI elements
@@ -1339,7 +1367,7 @@
         offsetDestDecBtn = document.getElementById('offset-dest-dec');
 
         // --- Check Core Elements ---
-        if (!loadingOverlay || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !languageCodeDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
+        if (!loadingOverlay || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
             console.error("Required UI elements not found!"); alert("Initialization Error: Missing UI elements."); return;
         }
         if (typeof google === 'undefined' || typeof google.maps === 'undefined' || !google.maps.marker) {
@@ -1514,9 +1542,9 @@
             const button = document.createElement('button');
             button.setAttribute('role', 'menuitem');
             button.dataset.lang = langCode;
+            // Only include the flag span
             button.innerHTML = `
                 <span class="flag">${langData.langFlag || '🏳️'}</span>
-                <span>${langData.langName || langCode.toUpperCase()}</span>
             `;
             button.classList.toggle('active', langCode === currentLang);
             button.addEventListener('click', () => {
@@ -1535,10 +1563,9 @@
     }
 
     function updateLanguageDropdownUI() {
-        if (!languageFlagDisplay || !languageCodeDisplay || !languageDropdown) return;
+        if (!languageFlagDisplay || !languageDropdown) return;
         // Update button display based on currentLang
         languageFlagDisplay.textContent = translations[currentLang]?.langFlag || '🏳️';
-        languageCodeDisplay.textContent = currentLang.toUpperCase();
         // Update active item in dropdown (useful for initial load)
         languageDropdown.querySelectorAll('button').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.lang === currentLang);
