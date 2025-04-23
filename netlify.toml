@@ -23,3 +23,22 @@ status = 200
 from = "/api/maps/redirect"
 to = "/.netlify/functions/maps-redirect"
 status = 200
+
+# --- Add Custom Headers for caching stations.json ---
+[[headers]]
+    # Apply this rule specifically to the stations.json file at the root
+    # of your deployed site (within the 'dist' directory)
+    for = "/data/stations.json"
+
+    [headers.values]
+        # Control caching directives:
+        # public: Allows caching by intermediate caches (like Netlify's CDN)
+        # max-age=<seconds>: Max time browsers should cache without re-validating (e.g., 3600 = 1 hour)
+        # s-maxage=<seconds>: Max time shared caches (CDN) should cache (often same as max-age)
+        # must-revalidate: Tells cache it MUST revalidate with the origin server once stale
+        #                  (prevents serving stale content after max-age expires)
+        #
+        # Cache for 5 days
+        Cache-Control = "public, max-age=432000, s-maxage=432000, must-revalidate"
+
+# --- End Custom Headers section ---

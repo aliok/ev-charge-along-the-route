@@ -1,0 +1,761 @@
+SYSTEM PROMPT
+
+You are a helpful coding assistant. Your task is to generate or modify the contents of a single HTML file based on the user's instructions. Follow these rules strictly:
+- Explain your changes. Ask questions if needed.
+- Always return the complete and valid HTML file, including the <!DOCTYPE html> declaration and all required elements like <html>, <head>, and <body>.
+- Do not add any explanatory comments, such as "this is the changed part" or "here's the updated code". The output must be code-only.
+- Do not make changes unrelated to the user's request. Preserve existing formatting, content, and structure unless explicitly instructed otherwise.
+- Follow best practices in modern HTML and CSS.
+- When adding styles or scripts, embed them directly in the HTML file using <style> and <script> tags, unless told otherwise.
+- Be concise and avoid unnecessary boilerplate.
+- Your output should reflect the updated state of the file with the requested changes fully applied.
+
+------------------
+
+
+I want to have a system that would show the POI along a route.
+
+The POIs are in my JSON file, with their long/lat information.
+
+The web client will first show a map with markers for my POI on opening.
+
+I want to be able to select a starting point and a destination (no need for multiple places).
+
+The start/destination selection should be done 2 ways:
+- An input box with autocomplete
+- Clicking on the map
+
+When the user selects both, the routes should be shown (with alternatives).
+If there's only 1 alternative available or when the user selects a preferred route, other routes should be hidden and the UI should focus on the route.
+Then I want to be able to only show the POI markers that are 5 km away (should be configurable) from the route.
+The POIs have detail information like names and logos, however, they're not in the JSON file. They are to be fetched (only ones that are along the route) using a service.
+When I click on a marker, more details should be shown, on top of the name and the logo. The service returns things like phone numbers, etc.
+Use Google Map APIs.
+
+Here's my API key
+XXXXXXXXXXXXXXXXXX
+
+
+- ok, go back to using directions service and not the routes API
+- Don't do dynamic library importing.
+- Autocomplete works now.
+- However, POI filtering by distance doesn't work
+
+Works nice. But there's an error in filtering. I see sometimes the closer markers are removed first, when I lower the distance slider.
+
+- On mobile, hide the inputs when the source and the destination is selected. Show the slider though. Use a hamburger icon.
+
+Remove the text that says
+"Selected Route: 34.1 km, 25 mins. (3 total routes found) Found 1 POIs nearby."
+Also, hide the inputs automatically on mobile, when the src and dst are selected
+
+On mobile,
+
+- "Max distance from Route" label should be on the left of the slider
+
+- Remove the info text
+- On mobile, the slider is overlapping with the hamburger icon
+
+ok, now I see this behaviour.
+- I select src and dst, route shows with markers filtered
+- I clear src and select something, the route is not updated until I clear dst and select something
+
+now the "X" clear button for dst is gone, when I clear src but not clear dst. Also vice versa
+
+Do not allow src / dst if it is not in Turkey.
+
+- Use my API key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+- Make the default map view to show user's vicinity. If the location permission is not given, show Turkey as a whole
+
+let's go one step back. When you were limiting the src/dst to Turkey, you broke the marker filtering.
+
+I don't to show users details about places when they click on them. I only want that when they click on my markers.
+When I click to a city name, like Ankara, I see the popup.
+I want the city names and other administrative things to be shown but be not clickable. Also, what are the things I can show? I would want to be able to show restaurants, landmarks etc as well.
+
+> Clicks on other Google features (like the restaurants/landmarks we allow) will not be stopped, allowing their default popups.
+No, nothing other than my POI markers should be clickable.
+However, if src/dst is blank, clicking on a place / administrative thing should make it the src/dst
+
+What are the style options? Showing landmarks/restaurants , what else can be shown/hidden on the map?
+
+Can you add a settings view to allow user to show/hide things and change styles?
+What else I can have the setting to hide/show?
+
+Ok, add them too!
+And make sure when I unselect everything, I see the most simple map.
+
+I want the user to be able to change the map layers (like satellite, terrain, etc).
+
+Ok, but when I click on Satellite, I don't see any attractions, parks, roads, etc.
+
+Map settings button is shown poorly on mobile. It should be in the hamburger menu.
+
+Ok, but on mobile, I don't see the slider anymore at the top. I see some portion of the Settings button.
+
+No, keep the margin right. That's for the hamburger menu button, when the menu is collapsed.
+Move the settings button to the bottom.
+
+On mobile, we were hiding the everything except the slider and the hamburger button when the source and the destination is selected.
+Can you fix the changes that broke this behavior?
+
+On mobile, the slider is overlapping with the hamburger icon.
+
+On mobile, the slider is still overlapping with the hamburger button. Make the slider have some right margin.
+
+
+The hamburger button doesn't work anymore.
+
+
+I found this in the API docs. Can you add enhance the settings?
+
+```
+The following features are available:
+
+all (default) selects all features.
+administrative selects all administrative areas. Styling affects only the labels of administrative areas, not the geographical borders or fill.
+administrative.country selects countries.
+administrative.land_parcel selects land parcels.
+administrative.locality selects localities.
+administrative.neighborhood selects neighborhoods.
+administrative.province selects provinces.
+landscape selects all landscapes.
+landscape.man_made selects man-made features, such as buildings and other structures.
+landscape.natural selects natural features, such as mountains, rivers, deserts, and glaciers.
+landscape.natural.landcover selects land cover features, the physical material that covers the earth's surface, such as forests, grasslands, wetlands, and bare ground.
+landscape.natural.terrain selects terrain features of a land surface, such as elevation, slope, and orientation.
+poi selects all points of interest.
+poi.attraction selects tourist attractions.
+poi.business selects businesses.
+poi.government selects government buildings.
+poi.medical selects emergency services, including hospitals, pharmacies, police, doctors, and others.
+poi.park selects parks.
+poi.place_of_worship selects places of worship, including churches, temples, mosques, and others.
+poi.school selects schools.
+poi.sports_complex selects sports complexes.
+road selects all roads.
+road.arterial selects arterial roads.
+road.highway selects highways.
+road.highway.controlled_access selects highways with controlled access.
+road.local selects local roads.
+transit selects all transit stations and lines.
+transit.line selects transit lines.
+transit.station selects all transit stations.
+transit.station.airport selects airports.
+transit.station.bus selects bus stops.
+transit.station.rail selects rail stations.
+water selects bodies of water.
+```
+
+Would it be possible to do not bird-eye distance filtering but actual direction distance?
+NOPE
+
+Would you have a strategy to note down the POI that would take way more than x2 km to get there? E.g. a POI on the other side of the high way?
+EXPENSIVE
+
+Ok, how about this?
+When I click on the POI that looks like along the route, we might calculate the additional time + km to go there and then continue with the route. What would this look like in terms of computation and performance?
+
+Do not recalculate the detour thing again and again for the same POI, if the route is not changed.
+
+Ok, but you broke the dynamic showing/hiding of the POIs when I move the slider. They were shown/hidden even when I didn't do mouse up on the slider.
+
+Don't show "Found your location" when the location is found. If not found, keep showing the message about it though.
+
+Make these changes:
+- Show the neighborhoods by default as well, similar to country, etc.
+- Add more POIs in Ankara and Bolu
+
+- I want to migrate to new marker API (AdvancedMarkerElement). Can you do that? I want to show the markers with logos, detour km/time, etc.
+
+- Show the POI logo on the marker. For now, use https://zes.net/favicon.ico and https://www.trugo.com.tr/favicon.png randomly for the POIs. No need to show the name.
+- Show the start marker as "Start" and the destination pin as "Dest". Use Google's default pin icons, but make the text larger and bolder.
+
+- Show the POI markers in a way that they are clearly visible, when there are many things on the map. Perhaps a bold blue border around the markers and shadow?
+
+- Show the detour info in the markers, if that information is available (fetched/computed for the POI).
+
+
+- Use DEMO_MAP_ID
+- The detour information is just too small, make it at least 2x larger.
+- Also the marker should be 1.5x larger.
+- Plus, for some reason, the markers have white overflowing around them. I don't want that. Should be just circle with the logo in the middle. Any overflow should be hidden.
+
+- In the dist slider, add some kind of emoji to the label that would indicate that this slider is for the bird-eye distance.
+- In mobile view, the top margin of the slider is too much. Make it smaller so that it uses less space.
+- Make the markers a bit smaller, %80 of their current size.
+
+- The detour info on the marker has a transparent background. I want it to be white. The text should be black.
+- I changed my mind about the marker border color. It should be green to represent electric vehicle charging stations.
+
+- Remember we talked about fetching the detour information of the POIs for max 10? When I click on a marker, we fetch the detour information for that POI, which is great. But, it is not shown on the map below the marker.
+
+- My POIs are actually electric vehicle charging stations in Turkey.
+
+Here's how I fetch the list of stations:
+```
+curl --location 'http://localhost:8080/sarjet/api/stations' \
+  --header 'User-Agent: Dart/3.1 (dart:io)' \
+  --header 'Accept-Encoding: gzip'
+```
+
+I think the headers are important (user agent etc).
+
+It returns an array like this:
+```
+[
+  {
+    "id": 14551709,
+    "lat": 39.535522,
+    "lng": 31.662464,
+    "green": "EVET",
+    "sockets": [
+      {
+        "id": 352530
+      },
+      {
+        "id": 352531
+      }
+    ],
+    "available": true
+  },
+  ...
+]
+```
+
+Notice here that there's not much information about the station. Just the location.
+
+Then for the details about the station, there's another API:
+
+```
+curl --location http://localhost:8080/sarjet/api/stations/id/14551821/2025-04-15%2000:00:00 \
+--header 'User-Agent: Dart/3.1 (dart:io)' \
+--header 'Accept-Encoding: gzip' \
+--header 'Host: sarjtr.epdk.gov.tr'
+```
+
+which returns this:
+
+```
+{
+  "id": 14551821,
+  "title": "Ramada by Wyndham Soma",
+  "address": "KOZANLI BERGAMA  SOMA/MANİSA",
+  "lat": 39.184314,
+  "lng": 27.548794,
+  "phone": "08503399937",
+  "reportUrl": "https://zes.net/bize-ulasin",
+  "reservationUrl": null,
+  "operatorid": "919287",
+  "operatortitle": "ZES DİJİTAL TİCARET ANONİM ŞİRKETİ",
+  "licenceActive": true,
+  "licenceStatus": 1,
+  "stationActive": true,
+  "serviceType": "HALKA_ACIK",
+  "green": "EVET",
+  "brand": "zes",
+  "cityid": "45",
+  "districtid": "628",
+  "sockets": [
+    {
+      "id": 352754,
+      "type": "AC",
+      "subType": "AC_TYPE2",
+      "socketNumber": "SKT/2990",
+      "price": 8.99,
+      "power": 22.0,
+      "prices": [
+        {
+          "active": 1,
+          "price": 8.99,
+          "startTime": "2025-01-04T00:00:00",
+          "endTime": null
+        }
+      ],
+      "availability": [
+        {
+          "id": 0,
+          "active": 1,
+          "status": "FREE",
+          "startTime": "2025-04-15T00:00:00",
+          "endTime": "2025-04-15T23:59:59.999999999",
+          "reservationid": 0
+        }
+      ]
+    },
+    {
+      "id": 352755,
+      "type": "AC",
+      "subType": "AC_TYPE2",
+      "socketNumber": "SKT/2991",
+      "price": 8.99,
+      "power": 22.0,
+      "prices": [
+        {
+          "active": 1,
+          "price": 8.99,
+          "startTime": "2025-01-04T00:00:00",
+          "endTime": null
+        }
+      ],
+      "availability": [
+        {
+          "id": 0,
+          "active": 1,
+          "status": "FREE",
+          "startTime": "2025-04-15T00:00:00",
+          "endTime": "2025-04-15T23:59:59.999999999",
+          "reservationid": 0
+        }
+      ]
+    }
+  ],
+  "paymentTypes": [
+    {
+      "name": "MOBILODEME"
+    }
+  ]
+}
+```
+
+Now, change the code to go and actually fetch data.
+
+Ok, I am going to have a simple proxy that will simply forward requests to the original service. It will run at localhost:8080.
+Would that work?
+
+// NOPE:- There are too many markers on the map and this makes everything slow. Can you add a clustering feature to the markers? So that when I zoom out, I see less markers and when I zoom in, I see more
+ markers.
+
+- Do not show all markers initially as there are too many. Only show markers that are along the route, when a route is there.
+
+- The logos to show on the markers are currently random. Change them to the favicon of the support url website. If there's none, use the Google Maps' default charging station logo.
+
+- This is good, but not every icon is at favicon.ico...
+Can we inspect the HTML of the report url and understand what the favicon is, by checking the HTML metadata?
+
+- Ok, show the logo in the marker, similar to showing the detour info if there are less than 10 markers. BTW, increase that 10 to 20.
+
+-
+```
+// --- REVISED LOGIC ---
+                    // We actually *can't* preload the favicons effectively here because the
+                    // `reportUrl` needed to generate the Google Favicon URL is only available
+                    // *after* fetching the station details (`fetchPoiDetails`).
+                    // Pre-fetching details for potentially 20 markers is likely too slow.
+                    // The current logic in `fetchPoiDetails` (setting icon on click) is the
+                    // most efficient client-side approach.
+                    // We will leave this function structure but comment out the core logic.
+```
+
+This is good. Ok, lower the number to 10 again. Calling the station detail endpoint for 10 stations should be good.
+
+https://maps.google.com/mapfiles/ms/icons/electriccharge.png
+this returns 404. Are you sure there's such image? Convert this to SVG and use that instead.
+
+Ok, but also show the logo of the station in the marker, whenever possible, like before. E.g. when the reportUrl is fetched.
+Whenever you're fetching the details for a POI, set the logo on the marker.
+Similarly, whenever you're fetching the detour information for a POI, fetch the POI details and thus set the logo on the marker.
+
+- Do not delete the src marker when I clear the dst input. And vice versa.
+Show the brand name in the marker popup, instead of the operator name. And show it at the top as a title.
+The brand name is the "brand" field returned in the details API.
+
+> Do not delete the src marker when I clear the dst input. And vice versa.
+You did this, but there's a stack overflow when I press the clear button. Can you fix that?
+
+---------
+
+I now have a file with stations and sockets information. It is served on the same server at /stations.json path.
+
+Example
+
+```
+[
+  {
+    "id": 14524420,
+    "lat": 36.924391,
+    "lng": 30.633267,
+    "title": "Tr-07-004 Günallar",
+    "address": "Şafak 5036 191  Kepez/Antalya",
+    "phone": "+905421238123",
+    "reportUrl": "https://chargers.sarj.com.tr/tr/kontakty",
+    "reservationUrl": "https://chargers.sarj.com.tr",
+    "operatorId": "1037283",
+    "operatorTitle": "Şarjplus Elektrikli Araç Şarj Sistemleri Limited Şirketi",
+    "serviceType": "public",
+    "brand": "ŞARJPLUS",
+    "cityId": "7",
+    "districtId": "94",
+    "sockets": [
+      {
+        "id": 289472,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/7904",
+        "power": 11
+      },
+      {
+        "id": 289473,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/8156",
+        "power": 11
+      }
+    ]
+  },
+  ...
+]
+```
+
+Change the code to use this file instead of the API. We will call the API later on too, for getting the availability information about sockets. Don't do that now.
+
+--------
+
+We can now show the logos without fetching the details, right?
+
+--------
+
+Don't update the station details, except the ones we fetch later using the API, when you make the API call to get station details.
+For example, the address field in the stations.json file is normalized. But when I click on a marker, I see the address is not normalized.
+So, my point is, use the data from the stations.json file, and only update the fields that are not in the stations.json file.
+
+--------
+
+These are shown in the popup.
+
+```
+dc (dcCcs)
+ac (acType2)
+```
+
+Show them like
+```
+DC
+AC
+```
+
+Ignore the subtype and make the DC/AC uppercase.
+
+Also `180.0 kW` --> `180 kW`.
+
+Another thing, show the phone number as a clickable phone link.
+
+Also, show a link/button to the long/lat of the station, so that I can open it in Google Maps. Make it open in a new tab and make the whole popup beautiful.
+
+-------------
+
+Now it is time to show socket availability information, with the price and the status. The API returns a result like this:
+
+```
+{
+    "id": 14624519,
+    "title": "ASTORŞARJ TAYMEK ESKİŞEHİR YOLU",
+    "address": "YAPRACIK DUMLUPINAR 30  ETİMESGUT/ANKARA",
+    "lat": 39.854855,
+    "lng": 32.60622,
+    "phone": "0850 400 00 00",
+    "reportUrl": "https://www.astorsarj.com.tr",
+    "reservationUrl": "https://www.astorsarj.com.tr",
+    "operatorid": "919121",
+    "operatortitle": "ASTOR ENERJİ ANONİM ŞİRKETİ",
+    "licenceActive": true,
+    "licenceStatus": 1,
+    "stationActive": true,
+    "serviceType": "HALKA_ACIK",
+    "green": "HAYIR",
+    "brand": "ASTOR",
+    "cityid": "6",
+    "districtid": "64",
+    "sockets": [
+        {
+            "id": 446179,
+            "type": "DC",
+            "subType": "DC_CCS",
+            "socketNumber": "SKT/28088",
+            "price": 8.99,
+            "power": 300,
+            "prices": [
+                {
+                    "active": 1,
+                    "price": 8.99,
+                    "startTime": "2024-06-10T00:00:00",
+                    "endTime": null
+                }
+            ],
+            "availability": [
+                {
+                    "id": 0,
+                    "active": 1,
+                    "status": "FREE",
+                    "startTime": "2025-04-19T00:00:00",
+                    "endTime": "2025-04-19T23:59:59.999999999",
+                    "reservationid": 0
+                }
+            ]
+        },
+        {
+            "id": 446180,
+            "type": "DC",
+            "subType": "DC_CCS",
+            "socketNumber": "SKT/28089",
+            "price": 8.99,
+            "power": 300,
+            "prices": [
+                {
+                    "active": 1,
+                    "price": 8.99,
+                    "startTime": "2024-06-10T00:00:00",
+                    "endTime": null
+                }
+            ],
+            "availability": [
+                {
+                    "id": 0,
+                    "active": 1,
+                    "status": "FREE",
+                    "startTime": "2025-04-19T00:00:00",
+                    "endTime": "2025-04-19T23:59:59.999999999",
+                    "reservationid": 0
+                }
+            ]
+        }
+    ],
+    "paymentTypes": [
+        {
+            "name": "MOBILODEME"
+        }
+    ]
+}
+```
+
+Again, do not update the station details, except the ones we fetch later using the API, when you make the API call to get station details.
+
+-------------
+
+The details API is changed.
+
+The address is now like this: `/api/station/:id/sockets`
+
+And it returns the list of sockets and with their availability and price.
+
+```
+[{"id":448560,"price":8.39,"availability":"FREE"},{"id":448561,"price":8.39,"availability":"FREE"}]
+```
+
+---------------
+In the popup:
+- If socket is in use (e.g. availability is "IN_USE"), show it as red. Continue showing as green if it's free.
+Otherwise, show it as dark grey.
+- Hide the operator name, phone and address on mobile.
+- Show the detour information above the sockets.
+
+--------------
+
+- Move the operator name, phone and address to the bottom of the popup.
+- Show ⚡ emojis in front of the type of the socket. For high power sockets, show ⚡⚡ or ⚡⚡⚡. Below 60kW, show ⚡. Between 60 and 120 show ⚡⚡. Above 120, show ⚡⚡⚡.
+--------------
+
+In the popup:
+- Do something to separate sockets visually from each other.
+- Also, the ⚡ emojis look ugly in front of the type. Move them to the right of the kW value, with some space.
+- Move the "Open in Google Maps" link to above of the operator name, phone and address. Add a separator line between the sockets and "Open in Google Maps" link.
+- Can you make the emojis look better? In terms of color, or style, etc.
+- Make the detour information in the popup bold.
+
+--------------
+
+- When the socket details API call fails, retry for 3 times with a delay of 1 second between each retry.
+- The blue backgrounded information message shown at the top prevents me from changing the slider on mobile. Move it to the bottom of the page.
+
+--------------
+
+- Sometimes the detour calculation fails. Try to fix it.
+
+--------------
+
+Remove the settings view, button and the logic. I cannot change the map style (except Roadmap/Hybrid/Terrain) anymore.
+
+--------------
+No caching of data for API calls. Not sure if the code does that or not.
+--------------
+
+- Show a filter button on the maps top left. When pressed, a panel should be opened with the filtering options.
+- Possibility to filter out AC/DC stations (default: all), power (⚡, ⚡⚡, ⚡⚡⚡), serviceType (default open to public) , etc. What else is possible?
+
+--------------
+
+- The "Min Power" filter options are shown side by side. Show them in separate lines.
+- Have you considered the case that a station can have multiple sockets with different power levels? For example, a station can have 1 socket with 22kW and another with 50kW. In this case, the station should be shown in the list if any of its sockets match the filter criteria.
+- Similarly, a station can have multiple sockets with different types (AC/DC). In this case, the station should be shown in the list if any of its sockets match the filter criteria.
+
+--------------
+- Add a notice to the popup that the socket status may not be accurate and they should check the app of the provider (with a better language)
+- Show the station's `title` field as a subtitle to the brand name in the popup.
+--------------
+- The live status notice should be more visible
+- Show the sockets in the popup first and then show their price and availability. Otherwise, the sockets are not shown for long time.
+--------------
+- Somehow show AC/DC and the power level in the marker.
+--------------
+- The AC/DC and power level in the marker is very small. Almost impossible to read. Make it bigger.
+--------------
+- I sometimes click on the map and it says "Please click in Turkey". But I am in Turkey. Fix that.
+--------------
+- Show the number of stations found in the blue info message, when a route is set.
+- Make the popup a bit larger on mobile. Currently it is too narrow, making the text fall off.
+--------------
+You removed some of the existing messages in the blue info message. Can you add them back?
+--------------
+- I see the map is not visible on opening while the data is being fetched. I don't like that.
+- If the detour calculation fails, you already show a message that it fails in the popup. Add a button to retry.
+--------------
+- When the popup is open, I see "Click to calculate detour", although it is being calculated at that time.
+--------------
+- Do not block detour calculation, waiting for the socket details API call to finish. Neither should block each other.
+--------------
+- When th popup is open, I want it to be closed when I click on the map.
+- I see the map is not visible on initial page opening. I don't like that.
+--------------
+- I want keyboard shortcuts to clear src+dst. Pressing on Esc should close the marker popups.
+--------------
+Show info about shortcut keys in the UI.
+The popup close shortcut info should be shown in the popup.
+--------------
+- Shortcut info should not be shown on mobile
+- "Press X to clear route" uses too much space on top. Can you somehow fit it somewhere nicely?
+--------------
+- Only show "Tip: Press 'X' to clear route." when the screen height is full hd or more.
+- When I click on a marker, it should be shown in front of the other markers. Otherwise the detour information in the marker is not visible.
+--------------
+- The mouse cursor is not a "hand" when hovering over the markers. Is that the general thing?
+--------------
+- Show visually that mouse is over the marker, before clicking. Also move the marker in front of the other markers when hovering.
+--------------
+- Show the markers on the map by default, instead of waiting until there's a route selected.
+- Show them clustered though. However, do not convert the markers to legacy markers. Keep them as advanced markers.
+- Use @googlemaps/markerclusterer and not the deprecated @googlemaps/markerclustererplus.
+--------------
+- Even with clustering, there are too many markers, which makes the map slow. Can you change the clustering behavior/params?
+--------------
+- Remove all the clustering related bits. It is not configurable enough (can't create very large clusters, which would help with performance).
+--------------
+When I select my src and the dest, the first few stations are not usable to me. My car will already have a good amount of charge
+
+I want to have buttons on the bottom left.
+- Move the source along the route, 1km, 10km
+- Same for destination
+
+Think about the mobile friendliness and make the buttons as compact as possible.
+--------------
+- The blue info message is now shown on top of the buttons on the bottom left. Move it to the center of the map.
+- The offset control buttons (buttons on the bottom left) are too small. Can't click them on mobile. Make them larger.
+--------------
+- The blue info message is still shown on top of the buttons on the bottom left. Move it to the middle of the map.
+--------------
+- I want to use Spiderfying when displaying the markers.
+Revert it since it won't work with advanced markers.
+--------------
+- I want to have favorite brands and black listed brands. How can we do this? In terms of UX? Don't write code.
+--------------
+"If favorites (⭐) are set, only those brands will be shown."
+
+This should be done with a button. A button on the top left, next to the filter button with actions:
+- Show all brands
+- Show only favorites
+
+Also, in "Brand Preferences", there should be a way to quickly show the favorites and blacklisted brands, and all.
+--------------
+This is great. I just want to make the new button smaller. Can we use icons instead of text?
+--------------
+Show a message in the blue info message thing, when user switches between favorites and all brands.
+--------------
+- Move brand preferences to the bottom of the filter panel.
+- Add a way to ignore a station (not a brand)
+--------------
+- Clicking on the ignored station in the ignored stations list should open it on Google maps in new window. Add a button for that.
+--------------
+- Un-ignore button is not doing anything.
+--------------
+- The star icon next to the favorite brand station markers are too far away from the marker. Put the star to the buttom, even below the DC/AC type and power level text.
+- The brands that are fav'ed or blacklisted are hard to see in the brand preferences list. The very light red border is hard to see.
+- There's no visual cue in the marker popup that the brand is blacklisted or fav'ed.
+--------------
+- Somehow make it visible that some filters are applied.
+- Add a reset button to the filter panel.
+--------------
+- Save settings to local storage
+--------------
+Can we have shareable urls? Do not write code yet.
+
+How about this? A readonly view or something like that. The url could have these information
+- Source
+- Destination
+- Stations
+
+Then, when user wants to edit, we would ignore the stations given and just work as before for the given source and destination.
+--------------
+Revert the route sharing for now. I will later on add things like selecting stations.
+--------------
+Say I found a location on Google maps and I want to use that as an input (src or dest) in my app. What do you think?
+Do not write code yet.
+--------------
+Input Methods: Allow users to set Start/Destination locations by:
+- Typing a place name (using existing Autocomplete/Geocoding).
+- Pasting directly into the input field.
+- Clicking a dedicated "Paste" button next to the input field (using the Clipboard API).
+
+Supported Paste Formats: The application should attempt to parse and handle the following pasted formats:
+- Google Maps URLs: Full URLs containing coordinates (/maps/@lat,lng,zoom...) or place names/IDs (/maps/place/...). (Note: Shortened URLs like goo.gl/maps or maps.app.goo.gl might be difficult/unreliable to resolve directly and may require users to copy the full URL after opening the short link).
+- Coordinates: Decimal latitude and longitude pairs (e.g., 39.9255, 32.8663).
+- Google Place IDs: Strings like ChIJ....
+- Plus Codes (Open Location Codes): Codes like 8GFJQR6H+88 or QR6H+88 Ankara.
+
+Processing:
+- If coordinates are identified, use them directly and attempt reverse geocoding for a display name.
+- If a Place ID, Place Name (from URL), or Plus Code is identified, use the Geocoding API to find the location and name.
+- Update the corresponding input field with a user-friendly name after successful processing.
+- Set the internal location variable (startLocation or endLocation) and update the map marker.
+- Trigger route calculation if both Start and Destination are set.
+- User Feedback: Inform the user if the pasted content was successfully parsed and used, or if it failed.
+--------------
+I paste this URL and it doesn't work
+
+https://www.google.com/maps/place/39%C2%B045'29.9%22N+32%C2%B020'55.7%22E/@39.7814486,32.344262,12.44z/data=!4m4!3m3!8m2!3d39.758316!4d32.348793?coh=245187&entry=tts&g_ep=EgoyMDI1MDQxNi4xIPu8ASoJLDEwMjExNDUzSAFQAw%3D%3D&skid=1aebb83a-0cf8-4571-8ccc-1109f83e3cb4
+
+Also, the paste and clear buttons should be grouped within the input field.
+--------------
+Add less space between paste and clear buttons.
+This URL still cannot be pasted: https://www.google.com/maps/place/39%C2%B045'29.9%22N+32%C2%B020'55.7%22E/@39.7814486,32.344262,12.44z/data=!4m4!3m3!8m2!3d39.758316!4d32.348793?coh=245187&entry=tts&g_ep=EgoyMDI1MDQxNi4xIPu8ASoJLDEwMjExNDUzSAFQAw%3D%3D&skid=1aebb83a-0cf8-4571-8ccc-1109f83e3cb4
+--------------
+Other url formats:
+- https://www.google.com/maps?q=39.886999,32.664352
+- https://maps.app.goo.gl/oBBA2mANUTiVkk96A (short url, need to follow the redirect)
+--------------
+Make a visual clue about processing a short url.
+--------------
+I want the user to be able to pass its own location
+--------------
+I want to have 2 languages supported:
+- English and Turkish
+--------------
+I see there are some small issues:
+- Some translations are not good, check them again
+- Power level filtering options started to look bad (option lines break)
+- TR/EN buttons are big and causing issues on mobile view. Can we make it a dropdown with flags?
+- Are we selecting the language based on the browser language? If not, do that.
+- I see these in Turkish translation: IN_USE, "start konumu feature click kaynağından ayarlandı."
+--------------
+- On language change, refresh the page. It is ok to discard the src/dest.
+- Show a visual cue that data is loading, when we're waiting for stations.json data
+- "Toggle inputs" button can be simple hamburger button, behaving the same
+--------------
+What is needed to speed up loading stations.json? It takes quite long time (it is a 20MB file).
+--------------
+There's an etag and stuff on the file set by the server. Doesn't that help?
+--------------
+
+TODO:
+- Can we add a progress bar on the page for the initial loading?
+- On mobile, I see I have to use 2 fingers to zoom in/out. Can we make it 1 finger?
+- On mobile, can we hide the address bar and stuff? To have a better UX? Also, when I want to move the map to bottom, the page is scrolling.
+-
