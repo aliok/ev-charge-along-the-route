@@ -1,0 +1,98 @@
+name: Sync stations.json Data
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC (adjust as needed for your "morning")
+    # Use https://crontab.guru/ to help define the schedule
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allows manual triggering from the Actions tab
+
+jobs:
+  sync-file:
+    runs-on: ubuntu-latest
+    permissions:
+      # Need write permissions to commit code back to the repository
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch the full history to correctly detect changes
+          fetch-depth: 0
+
+      - name: Setup Git User
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        shell: bash
+
+      - name: Define Source and Target
+        id: paths
+        run: |
+          echo "SOURCE_URL=https://raw.githubusercontent.com/aliok/ev-charge-station-data/main/stations.json" >> $GITHUB_ENV
+          echo "TARGET_FILE=data/stations.json" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Print Source and Target Info
+        run: |
+          echo "Source URL: ${{ env.SOURCE_URL }}"
+          echo "Target File Path: ${{ env.TARGET_FILE }}"
+        shell: bash
+
+      - name: Create target directory if it doesn't exist
+        run: mkdir -p $(dirname "${{ env.TARGET_FILE }}")
+        shell: bash
+
+      - name: Download the latest stations.json
+        run: |
+          echo "Attempting to download file from ${{ env.SOURCE_URL }}..."
+          curl -s -L -f -o "${{ env.TARGET_FILE }}" "${{ env.SOURCE_URL }}"
+          if [ $? -ne 0 ]; then
+            echo "::error::Failed to download file from ${{ env.SOURCE_URL }}"
+            exit 1
+          fi
+          echo "Successfully downloaded file to ${{ env.TARGET_FILE }}"
+          echo "File size: $(wc -c < "${{ env.TARGET_FILE }}") bytes"
+        shell: bash
+        # -s: Silent mode
+        # -L: Follow redirects
+        # -f: Fail silently (no output) on server errors (we check exit code instead)
+        # -o: Output file
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          echo "Checking for differences in ${{ env.TARGET_FILE }}..."
+          # Use git status --porcelain to see if the file is modified or untracked
+          if [[ -n "$(git status --porcelain ${{ env.TARGET_FILE }})" ]]; then
+            echo "Changes detected."
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "No changes detected."
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          echo "Adding changes to git..."
+          git add "${{ env.TARGET_FILE }}"
+
+          echo "Committing changes..."
+          # Extract commit hash from source repo for reference (optional but nice)
+          # This requires cloning the source repo - might be overkill, let's keep it simple first.
+          # For now, just use a standard commit message.
+          git commit -m "Update ${{ env.TARGET_FILE }} from aliok/ev-charge-station-data" -m "Source: ${{ env.SOURCE_URL }}"
+
+          echo "Pushing changes to branch ${{ github.ref_name }}..."
+          # Use GITHUB_TOKEN for authentication
+          git push origin HEAD:${{ github.ref_name }}
+          echo "Changes pushed successfully."
+        shell: bash
+
+      - name: Report no changes
+        if: steps.git-check.outputs.changed == 'false'
+        run: echo "No changes were found in ${{ env.TARGET_FILE }}. Nothing to commit."
+        shell: bash
