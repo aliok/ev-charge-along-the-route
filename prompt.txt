@@ -9,6 +9,7 @@ You are a helpful coding assistant. Your task is to generate or modify the conte
 - When adding styles or scripts, embed them directly in the HTML file using <style> and <script> tags, unless told otherwise.
 - Be concise and avoid unnecessary boilerplate.
 - Your output should reflect the updated state of the file with the requested changes fully applied.
+- If there are any explanations you write, write them after the code.
 
 ------------------
 
@@ -774,5 +775,7 @@ For downloading the station data and creating the markers and other stuff.
 --------------
 
 TODO:
-- I want users to add the app to their home screen.
+- Before selecting the first route available, can we offer the user to select a route?
+  But like Google Maps. Show the route options on the map, and let the user select one.
+- Multi hops
 
