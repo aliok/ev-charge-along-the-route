@@ -1785,7 +1785,7 @@
                 marker.poiData = station; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; marker.stationId = stationIdString;
 
                 // We use the container for listeners as it's the visual part
-                container.addEventListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
+                marker.addListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
                 container.addEventListener('mouseover', () => { if (marker !== selectedPoiMarker) { marker.zIndex = HOVER_POI_ZINDEX; } });
                 container.addEventListener('mouseout', () => { if (marker !== selectedPoiMarker) { marker.zIndex = DEFAULT_POI_ZINDEX; } });
 
