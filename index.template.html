@@ -208,12 +208,43 @@
         #language-dropdown button .flag { font-size: 1rem; }
         #language-dropdown button.active { font-weight: 600; background-color: #e5e7eb; }
 
-        /* Styles for POI Marker Container and Icon */
-        .poi-marker-content-container {
-            display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; /* Add hand cursor on hover */
+        /* Styles for POI Marker Pin */
+        .marker-pin-wrapper {
+            /* This is the element that gets centered by Google Maps. It has no visual style. */
+            /* The content inside is what we style and shift. */
         }
-        /* Favorite Badge on Marker - Moved Below */
+        .poi-marker-content-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative; /* For the pin tail */
+            padding-bottom: 12px; /* Space for the pin tail */
+            transform: translateY(-50%); /* Shift the entire visual marker up */
+            transition: transform 0.15s ease-in-out;
+        }
+        .poi-marker-content-container:hover {
+            transform: translateY(-50%) scale(1.1);
+            transform-origin: bottom center; /* Scale from the pin tip */
+        }
+        /* The pin tail */
+        .poi-marker-content-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #16A34A; /* Green to match default border */
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4));
+            transition: border-top-color 0.15s ease-in-out;
+        }
+        .poi-marker-content-container:hover::after {
+            border-top-color: #F97316; /* Orange on hover */
+        }
         .marker-fav-badge {
             font-size: 11px;
             line-height: 1;
@@ -225,10 +256,9 @@
             width: 36px; height: 36px; border-radius: 50%; border: 2px solid #16A34A;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); background-color: #eee; box-sizing: border-box;
             display: flex; justify-content: center; align-items: center; overflow: hidden;
-            transition: transform 0.15s ease-in-out, border-color 0.15s ease-in-out;
+            transition: border-color 0.15s ease-in-out;
         }
         .poi-marker-content-container:hover .poi-icon-container {
-            transform: scale(1.1);
             border-color: #F97316;
         }
         .poi-icon-container svg { width: 70%; height: 70%; display: block; }
@@ -1694,6 +1724,9 @@
                 const brandName = station.brand?.trim() || null;
                 const stationIdString = String(station.id);
 
+                const markerWrapper = document.createElement('div');
+                markerWrapper.className = 'marker-pin-wrapper';
+
                 const container = document.createElement('div'); container.className = 'poi-marker-content-container';
 
                 const iconContainer = document.createElement('div'); iconContainer.className = 'poi-icon-container'; const iconContainerId = `poi-icon-container-${stationIdString}`; iconContainer.id = iconContainerId;
@@ -1729,17 +1762,20 @@
                 const favBadge = document.createElement('span'); favBadge.className = 'marker-fav-badge'; favBadge.textContent = '⭐'; favBadge.id = `poi-marker-fav-${stationIdString}`;
                 container.appendChild(favBadge);
 
+                markerWrapper.appendChild(container);
+
                 const marker = new google.maps.marker.AdvancedMarkerElement({
                     position: { lat: station.lat, lng: station.lng }, map: null,
                     title: brandName || station.title || `Station ${stationIdString}`,
-                    content: container, zIndex: DEFAULT_POI_ZINDEX
+                    content: markerWrapper, zIndex: DEFAULT_POI_ZINDEX
                 });
 
                 station.serviceType = station.serviceType || 'UNKNOWN';
                 station.brand = brandName; station.id = stationIdString;
                 marker.poiData = station; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; marker.stationId = stationIdString;
 
-                marker.addListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
+                // We use the container for listeners as it's the visual part
+                container.addEventListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
                 container.addEventListener('mouseover', () => { if (marker !== selectedPoiMarker) { marker.zIndex = HOVER_POI_ZINDEX; } });
                 container.addEventListener('mouseout', () => { if (marker !== selectedPoiMarker) { marker.zIndex = DEFAULT_POI_ZINDEX; } });
 
@@ -2372,7 +2408,8 @@
 
         allPoiMarkers.forEach(marker => {
             marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null;
-            const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; }
+            const container = marker.content?.querySelector('.poi-marker-content-container');
+            if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; }
         }); console.log("Resetting POI state for new route.");
 
         if (selectedRoute.legs?.length > 0) {
@@ -2701,11 +2738,13 @@
                 marker.map = isVisible ? map : null;
                 if (!isVisible) {
                     marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null;
-                    const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; }
+                    const container = marker.content?.querySelector('.poi-marker-content-container');
+                    if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; }
                     if (marker === selectedPoiMarker) { resetSelectedMarkerZIndex(); }
                 }
             }
-            const favBadge = marker.content?.querySelector('.marker-fav-badge'); if (favBadge) { favBadge.style.display = (isVisible && poiBrand && favoriteBrands.has(poiBrand)) ? 'block' : 'none'; }
+            const favBadge = marker.content?.querySelector('.marker-fav-badge');
+            if (favBadge) { favBadge.style.display = (isVisible && poiBrand && favoriteBrands.has(poiBrand)) ? 'block' : 'none'; }
             if (isVisible) { visiblePoiMarkers.push(marker); visibleCount++; }
         });
         console.log(`${visibleCount} POIs visible matching all criteria (Mode: ${brandFilterMode}, Ignored: ${ignoredStationIds.size}, Dist: ${distanceThresholdKm}km, Offsets: S=${startOffsetKm}km/E=${endOffsetKm}km, Filters).`);
@@ -2756,7 +2795,9 @@
         if (!isRouteActive || !startLocation || !endLocation || originalRouteDistance == null) { console.log("Skipping pre-calc/pre-fetch: Route not active or missing data."); return; } const visibleCount = visiblePoiMarkers.length; const markersWithinLimit = visibleCount <= MAX_PRECALCULATE_DETOURS; console.log(`Pre-processing check. Visible & Filtered POIs: ${visibleCount}. Limit: ${MAX_PRECALCULATE_DETOURS}. Enabled: ${markersWithinLimit}`); if (markersWithinLimit) { let detoursToCalcCount = 0; let socketsToFetchCount = 0; visiblePoiMarkers.forEach(marker => { if (!marker.liveSocketData && !marker.cachedInfoWindowContent) { socketsToFetchCount++; fetchPoiDetails(marker, marker.poiData, true); } if (!marker.detourData) { detoursToCalcCount++; marker.detourData = { status: 'Pending' }; updateMarkerDetourText(marker, null); calculateDetourForPoi(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration) .then(result => { if(marker.map && marker.detourData?.status === 'Pending') { marker.detourData = result; updateMarkerDetourText(marker, result); } else { console.log(`Skipping update for pre-calc detour result for ${marker.stationId} (marker hidden or status changed)`); } }) .catch(error => { console.error(`Error in detour pre-calc for POI ${marker.stationId}:`, error); if(marker.map && marker.detourData?.status === 'Pending') { marker.detourData = { status: 'Error' }; updateMarkerDetourText(marker, marker.detourData); } }); } else { if (marker.detourData.status === 'Pending') { updateMarkerDetourText(marker, null); } else { updateMarkerDetourText(marker, marker.detourData); } } }); console.log(`Initiated socket pre-fetch for ${socketsToFetchCount}, detour pre-calc for ${detoursToCalcCount} POIs.`); } else { console.log(`More than ${MAX_PRECALCULATE_DETOURS} nearby & filtered POIs (${visibleCount}). Skipping pre-fetch/pre-calc.`); visiblePoiMarkers.forEach(marker => { if (marker.detourData?.status === 'Pending') { marker.detourData = null; updateMarkerDetourText(marker, null); } }); }
     }
     function hideAllPois() {
-        console.log("Hiding all POIs and resetting live data/detour/cache."); allPoiMarkers.forEach(marker => { marker.map = null; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; const container = marker.content; if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; } }); visiblePoiMarkers = []; if (infoWindow) infoWindow.close(); resetSelectedMarkerZIndex();
+        console.log("Hiding all POIs and resetting live data/detour/cache."); allPoiMarkers.forEach(marker => { marker.map = null; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null;
+            const container = marker.content?.querySelector('.poi-marker-content-container');
+            if (container) { const detourEl = container.querySelector('.poi-marker-detour-text'); if (detourEl) detourEl.textContent = ''; const favBadge = container.querySelector('.marker-fav-badge'); if (favBadge) favBadge.style.display = 'none'; } }); visiblePoiMarkers = []; if (infoWindow) infoWindow.close(); resetSelectedMarkerZIndex();
     }
 
     function calculateDetourForPoi(marker, poiLocation, startLoc, endLoc, originalDist, originalDur) {
@@ -2778,7 +2819,9 @@
         marker.detourData = detourResultData; updateMarkerDetourText(marker, detourResultData); updateInfoWindowIfVisible(marker);
     }
     function updateMarkerDetourText(marker, detourData) {
-        if (!marker || !marker.content) return; const detourEl = marker.content.querySelector('.poi-marker-detour-text'); if (!detourEl) { return; }
+        if (!marker || !marker.content) return;
+        const detourEl = marker.content.querySelector('.poi-marker-detour-text');
+        if (!detourEl) { return; }
         let text = '';
         if (detourData && detourData.status === 'OK') {
             const distKm = detourData.extraDist / 1000; const timeMin = Math.round(detourData.extraTime / 60);
