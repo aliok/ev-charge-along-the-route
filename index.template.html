@@ -70,7 +70,16 @@
         .poi-info-window .info-section { margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid #eee; }
         .poi-info-window .info-section:first-of-type { margin-top: 0.3rem; padding-top: 0.3rem; border-top: none; }
         .poi-info-window .info-section h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; color: #4b5563; }
-        .poi-info-window .detour-info { font-size: 0.85rem; color: #555; font-weight: 600; display: inline; /* Make text and button inline */ }
+        .poi-info-window .detour-info { font-size: 0.85rem; color: #555; font-weight: 600; display: block; /* Changed from inline for breakdown info */ }
+        .poi-info-window .detour-breakdown {
+            font-size: 0.8rem;
+            color: #4b5563; /* gray-600 */
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .poi-info-window .detour-breakdown span {
+            font-weight: 500;
+        }
         /* Detour Retry Button Style */
         .poi-info-window .detour-info button.retry-button {
             font-size: 0.75rem; /* text-xs */
@@ -881,6 +890,8 @@
             iwRetry: "Retry",
             iwDetourNegligible: "Negligible detour.",
             iwDetourInfo: "Detour: {extraDistStr}, {extraDurStr}",
+            iwFromStart: "From Start:",
+            iwToDest: "To Destination:",
             iwIgnored: "(Ignored)",
             iwEscHint: "(<span class=\"font-mono\">Esc</span> to close)",
             markerLogoAlt: "Logo for {name}",
@@ -1048,6 +1059,8 @@
             iwRetry: "Tekrar Dene",
             iwDetourNegligible: "Önemsiz sapma.",
             iwDetourInfo: "Ekstra: {extraDistStr}, {extraDurStr}", // Changed wording slightly
+            iwFromStart: "Başlangıçtan:",
+            iwToDest: "Varışa:",
             iwIgnored: "(Yok Sayıldı)",
             iwEscHint: "(Kapatmak için <span class=\"font-mono\">Esc</span>)",
             markerLogoAlt: "{name} için logo",
@@ -1783,9 +1796,29 @@
             case 'OK':
                 const extraDistStr = detourData.extraDist > 0 ? `+${formatDistance(detourData.extraDist)}` : `${formatDistance(detourData.extraDist)}`;
                 const extraDurStr = detourData.extraTime >= 0 ? `+${formatDuration(detourData.extraTime)}` : `${formatDuration(detourData.extraTime)}`;
-                return Math.abs(detourData.extraDist) < 50 && Math.abs(detourData.extraTime) < 10
-                    ? translate('iwDetourNegligible')
-                    : translate('iwDetourInfo', { extraDistStr: extraDistStr, extraDurStr: extraDurStr });
+                const isNegligible = Math.abs(detourData.extraDist) < 50 && Math.abs(detourData.extraTime) < 10;
+
+                let detourSummaryHtml = isNegligible
+                    ? `<span>${translate('iwDetourNegligible')}</span>`
+                    : `<span>${translate('iwDetourInfo', { extraDistStr: extraDistStr, extraDurStr: extraDurStr })}</span>`;
+
+                let detailHtml = '';
+                if (detourData.distFromStart !== undefined && detourData.timeFromStart !== undefined && detourData.distToEnd !== undefined && detourData.timeToEnd !== undefined) {
+                    const distFromStartStr = formatDistance(detourData.distFromStart);
+                    const timeFromStartStr = formatDuration(detourData.timeFromStart);
+                    const distToEndStr = formatDistance(detourData.distToEnd);
+                    const timeToEndStr = formatDuration(detourData.timeToEnd);
+
+                    detailHtml = `
+                        <div class="detour-breakdown">
+                            <span>${translate('iwFromStart')}</span> ${distFromStartStr}, ${timeFromStartStr}<br>
+                            <span>${translate('iwToDest')}</span> ${distToEndStr}, ${timeToEndStr}
+                        </div>
+                    `;
+                }
+
+                return `${detourSummaryHtml}${detailHtml}`;
+
             case 'Error':
                 const anchorMarker = infoWindow.getAnchor();
                 const stationId = anchorMarker?.stationId;
@@ -2727,7 +2760,7 @@
     }
 
     function calculateDetourForPoi(marker, poiLocation, startLoc, endLoc, originalDist, originalDur) {
-        return new Promise(async (resolve) => { if (!directionsService || !poiLocation || !startLoc || !endLoc || originalDist === null || originalDur === null) { console.warn(`Missing data for detour pre-calc for POI: ${marker.stationId}`); resolve({ status: 'Error' }); return; } const okStatus = google.maps.DirectionsStatus?.OK || 'OK'; const poiLatLng = new google.maps.LatLng(poiLocation.lat, poiLocation.lng); const requestAtoP = { origin: startLoc, destination: poiLatLng, travelMode: google.maps.TravelMode.DRIVING }; const requestPtoB = { origin: poiLatLng, destination: endLoc, travelMode: google.maps.TravelMode.DRIVING }; let retries = 0; const maxDetourRetries = 2; while (retries <= maxDetourRetries) { try { const routePromise = (req) => new Promise((res, rej) => { directionsService.route(req, (result, status) => { res({ result, status }); }); }); const [resAtoP, resPtoB] = await Promise.all([ routePromise(requestAtoP), routePromise(requestPtoB) ]); if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraTime = detourDur - originalDur; resolve({ status: 'OK', extraDist: extraDist, extraTime: extraTime }); return; } else { throw new Error(`Detour pre-calc failed attempt ${retries + 1}. Statuses: A->P: ${resAtoP.status}, P->B: ${resPtoB.status}`); } } catch (error) { console.warn(error.message || `Error during detour pre-calc attempt ${retries + 1} for POI ${marker.stationId}`); retries++; if (retries > maxDetourRetries) { console.error(`Final detour pre-calc attempt failed for POI ${marker.stationId}.`); resolve({ status: 'Error' }); return; } await new Promise(resolve => setTimeout(resolve, DIRECTIONS_API_RETRY_DELAY)); } } });
+        return new Promise(async (resolve) => { if (!directionsService || !poiLocation || !startLoc || !endLoc || originalDist === null || originalDur === null) { console.warn(`Missing data for detour pre-calc for POI: ${marker.stationId}`); resolve({ status: 'Error' }); return; } const okStatus = google.maps.DirectionsStatus?.OK || 'OK'; const poiLatLng = new google.maps.LatLng(poiLocation.lat, poiLocation.lng); const requestAtoP = { origin: startLoc, destination: poiLatLng, travelMode: google.maps.TravelMode.DRIVING }; const requestPtoB = { origin: poiLatLng, destination: endLoc, travelMode: google.maps.TravelMode.DRIVING }; let retries = 0; const maxDetourRetries = 2; while (retries <= maxDetourRetries) { try { const routePromise = (req) => new Promise((res, rej) => { directionsService.route(req, (result, status) => { res({ result, status }); }); }); const [resAtoP, resPtoB] = await Promise.all([ routePromise(requestAtoP), routePromise(requestPtoB) ]); if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraTime = detourDur - originalDur; resolve({ status: 'OK', extraDist: extraDist, extraTime: extraTime, distFromStart: legAtoP.distance?.value, timeFromStart: legAtoP.duration?.value, distToEnd: legPtoB.distance?.value, timeToEnd: legPtoB.duration?.value }); return; } else { throw new Error(`Detour pre-calc failed attempt ${retries + 1}. Statuses: A->P: ${resAtoP.status}, P->B: ${resPtoB.status}`); } } catch (error) { console.warn(error.message || `Error during detour pre-calc attempt ${retries + 1} for POI ${marker.stationId}`); retries++; if (retries > maxDetourRetries) { console.error(`Final detour pre-calc attempt failed for POI ${marker.stationId}.`); resolve({ status: 'Error' }); return; } await new Promise(resolve => setTimeout(resolve, DIRECTIONS_API_RETRY_DELAY)); } } });
     }
     async function calculateAndDisplayDetourOnClick(marker, poiLocation, startLoc, endLoc, originalDist, originalDur) {
         const stationId = marker.stationId; console.log(`Calculating on-demand detour for POI ${stationId}`);
@@ -2738,7 +2771,7 @@
         let detourResultData = { status: 'Error' }; let retries = 0; const maxDetourRetries = 2;
         while(retries <= maxDetourRetries) {
             try { console.log(`Attempting on-demand detour calc ${retries + 1} for ${stationId}`); const routePromise = (req) => new Promise((res) => { directionsService.route(req, (result, status) => { res({ result, status }); }); }); const [resAtoP, resPtoB] = await Promise.all([ routePromise(requestAtoP), routePromise(requestPtoB) ]);
-                if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraDur = detourDur - originalDur; detourResultData = { status: 'OK', extraDist: extraDist, extraTime: extraDur }; console.log(`On-demand detour success for ${stationId} (Attempt ${retries + 1})`); break; }
+                if (resAtoP.status === okStatus && resPtoB.status === okStatus && resAtoP.result?.routes?.[0]?.legs?.[0] && resPtoB.result?.routes?.[0]?.legs?.[0]) { const legAtoP = resAtoP.result.routes[0].legs[0]; const legPtoB = resPtoB.result.routes[0].legs[0]; const detourDist = (legAtoP.distance?.value || 0) + (legPtoB.distance?.value || 0); const detourDur = (legAtoP.duration?.value || 0) + (legPtoB.duration?.value || 0); const extraDist = detourDist - originalDist; const extraDur = detourDur - originalDur; detourResultData = { status: 'OK', extraDist: extraDist, extraTime: extraDur, distFromStart: legAtoP.distance?.value, timeFromStart: legAtoP.duration?.value, distToEnd: legPtoB.distance?.value, timeToEnd: legPtoB.duration?.value }; console.log(`On-demand detour success for ${stationId} (Attempt ${retries + 1})`); break; }
                 else { throw new Error(`On-demand detour failed attempt ${retries + 1}. Statuses: A->P: ${resAtoP.status}, P->B: ${resPtoB.status}`); }
             } catch (error) { console.warn(error.message || `Error calculating on-demand detour attempt ${retries + 1} for POI ${stationId}`); retries++; if (retries > maxDetourRetries) { console.error(`Final on-demand detour attempt failed for POI ${stationId}.`); detourResultData = { status: 'Error' }; break; } await new Promise(resolve => setTimeout(resolve, DIRECTIONS_API_RETRY_DELAY)); }
         }

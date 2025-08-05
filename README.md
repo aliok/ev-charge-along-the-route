@@ -89,7 +89,7 @@ The frontend and functions are served from the same domain, eliminating the need
     # .env - LOCAL DEVELOPMENT ONLY! Add to .gitignore!
 
     # Required by build script for Google Maps in index.html
-    VITE_GOOGLE_MAPS_API_KEY="YOUR_GOOGLE_MAPS_API_KEY_FOR_LOCALHOST"
+    GOOGLE_MAPS_API_KEY="YOUR_GOOGLE_MAPS_API_KEY_FOR_LOCALHOST"
 
     # Optional: Set to 0 ONLY if the EPDK API has TLS issues (read by utils/config.js)
     # NODE_TLS_REJECT_UNAUTHORIZED=0

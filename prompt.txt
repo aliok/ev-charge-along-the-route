@@ -773,9 +773,34 @@ google.maps.Load @ js?key=AIzaSyDe_Gd_NqbYj4YjctIfLuACk0DCSRpUmlg&callback=initM
 The progress bar on the start should show some kind of percent or numbers (ideally both).
 For downloading the station data and creating the markers and other stuff.
 --------------
+Now, let's show the distance (km) and time from / to the origin/destination when I click on a station.
+--------------
+
+We have this code that we worked on together:
 
 TODO:
 - Before selecting the first route available, can we offer the user to select a route?
   But like Google Maps. Show the route options on the map, and let the user select one.
-- Multi hops
 
+--------------
+The markers are shown way above the actual location on the map. Can we have an arrow or a pin or something that points to the actual location of the marker?
+This is especially important when I want to understand if the station is on the other side of the road or not.
+
+--------------
+We already have a good search and visualization.
+Now, I want to be able to build a selection of stations along the route.
+Like, I want to select the stations that I want to stop at. I want to be able to see the distances between them and the detour km/time.
+Think about the mobile though (limited UI space).
+Do not write code yet. Walk me through how we can do that.
+--------------
+Let's do it.
+--------------
+- See this in the logs: `Updating visible IW for 14622463` for 3000 times followed by a `Maximum call stack size exceeded` error. Fix that.
+- The markers for the stations that are on the trip should be easily visible on the map
+- The trip plan should show the detour, and the distance and time to the next station.
+- The trip plan should start with the source and destination, and then the stations in between.
+--------------
+- Do not store the trip plan in local storage. It should be in memory only.
+- "Calculating leg..." --> doesn't finish
+- There should be a way to change the order of the stations in the trip plan.
+--------------
