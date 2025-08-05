@@ -210,21 +210,31 @@
 
         /* Styles for POI Marker Pin */
         .marker-pin-wrapper {
-            /* This is the element that gets centered by Google Maps. It has no visual style. */
-            /* The content inside is what we style and shift. */
+            /* This element is centered by Google Maps. Give it zero size and a positioning context. */
+            position: relative;
+            width: 0;
+            height: 0;
         }
         .poi-marker-content-container {
+            /* This is the visual marker, positioned absolutely relative to the wrapper */
+            position: absolute;
+            bottom: 0; /* Anchor the bottom of the marker to the map coordinate */
+            left: 50%;
+            transform: translateX(-50%); /* Center the marker horizontally */
+
+            /* Original visual styles below */
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            position: relative; /* For the pin tail */
-            padding-bottom: 12px; /* Space for the pin tail */
-            transform: translateY(-50%); /* Shift the entire visual marker up */
+
+            padding-bottom: 12px; /* Space for the pin tail, which is part of this container */
             transition: transform 0.15s ease-in-out;
+            /* The ::after pseudo-element for the pin will be positioned relative to this container */
         }
         .poi-marker-content-container:hover {
-            transform: translateY(-50%) scale(1.1);
+            /* On hover, maintain horizontal centering and scale up from the bottom */
+            transform: translateX(-50%) scale(1.1);
             transform-origin: bottom center; /* Scale from the pin tip */
         }
         /* The pin tail */

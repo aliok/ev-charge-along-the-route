@@ -778,7 +778,8 @@ Now, let's show the distance (km) and time from / to the origin/destination when
 The markers are shown way above the actual location on the map. Can we have an arrow or a pin or something that points to the actual location of the marker?
 This is especially important when I want to understand if the station is on the other side of the road or not.
 --------------
-
+The markers are shown still way above the actual location on the map, when zoomed out.
+Something is wrong with the marker positioning.
 --------------
 
 We have this code that we worked on together:
@@ -788,8 +789,7 @@ TODO:
   But like Google Maps. Show the route options on the map, and let the user select one.
 
 --------------
-Ok, but the markers are shown still way above the actual location on the map, when zoomed out.
-Something is wrong with the marker positioning.
+
 --------------
 We already have a good search and visualization.
 Now, I want to be able to build a selection of stations along the route.
