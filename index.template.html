@@ -763,7 +763,8 @@
 
 <script>
     // --- API Configuration ---
-    const STATIONS_JSON_PATH = '/data/stations.json';
+    const APP_VERSION = '__APP_VERSION__';
+    const STATIONS_JSON_PATH = '/data/stations.json?v=__APP_VERSION__';
     const STATION_SOCKETS_API_URL_TEMPLATE = '/api/station/{id}/sockets';
     const SHORT_URL_RESOLVER_PROXY_TEMPLATE = '/api/maps/redirect?url={encoded_url}';
     const API_HEADERS = {
@@ -1537,6 +1538,14 @@
         console.log("Map initialized, now calling fetchInitialStations...");
         fetchInitialStations(); // This will also populate the brand filter list and ignored list, and hide loading overlay
 
+        if (filterPanel && typeof APP_VERSION !== 'undefined' && !APP_VERSION.includes('__')) {
+            const versionDiv = document.createElement('div');
+            // 'mt-auto' is a Tailwind class that pushes this element to the bottom of a flex container
+            versionDiv.className = 'mt-auto pt-4 text-center text-xs text-gray-400';
+            versionDiv.textContent = `Version: ${APP_VERSION}`;
+            filterPanel.appendChild(versionDiv);
+        }
+
         // --- Event Listeners ---
         if (directionsRenderer) directionsRenderer.addListener('directions_changed', handleDirectionsChanged);
         // Distance slider listeners
@@ -1679,7 +1688,7 @@
         let stations = [];
         let totalStations = 0;
         try {
-            const response = await fetch(STATIONS_JSON_PATH, { cache: 'reload' });
+            const response = await fetch(STATIONS_JSON_PATH);
             if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status} while fetching ${STATIONS_JSON_PATH}`); }
             stations = await response.json();
             totalStations = stations.length;

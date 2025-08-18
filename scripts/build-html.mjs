@@ -2,7 +2,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import dotenv from 'dotenv'; // <-- Import dotenv
+import dotenv from 'dotenv';
+import { execSync } from 'node:child_process';
 
 // --- Load .env file into process.env ---
 // This is for LOCAL builds (`npm run build`).
@@ -23,6 +24,7 @@ const ASSETS_TO_COPY = ['css', 'js', 'images', 'data'];
 const API_KEY_ENV_VAR = 'GOOGLE_MAPS_API_KEY';
 // Placeholder string used in the template HTML
 const API_KEY_PLACEHOLDER = '__GOOGLE_MAPS_API_KEY__';
+const VERSION_PLACEHOLDER = '__APP_VERSION__';
 // --------------------
 
 
@@ -34,6 +36,25 @@ const templatePath = path.join(projectRoot, SOURCE_HTML);
 const outputDir = path.join(projectRoot, OUTPUT_DIR);
 const outputPath = path.join(outputDir, OUTPUT_HTML);
 
+
+// NEW: Function to generate the version string
+function getVersionString() {
+    let commitHash = 'nogit';
+    try {
+        // Execute 'git rev-parse --short HEAD' to get the short commit hash
+        commitHash = execSync('git rev-parse --short HEAD').toString().trim();
+    } catch (error) {
+        console.warn('Could not get git commit hash. Falling back to "nogit". This is normal if not in a git repo.');
+    }
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const dateString = `${year}${month}${day}`;
+
+    return `${commitHash}-${dateString}`;
+}
 
 async function copyAssets() {
     console.log('Copying static assets...');
@@ -76,6 +97,10 @@ async function buildHtml() {
         console.log(`Found environment variable "${API_KEY_ENV_VAR}".`);
     }
 
+    // generate the version string for cache busting
+    const versionString = getVersionString();
+    console.log(`Generated version string for cache busting: "${versionString}"`);
+
     // --- Read Template ---
     let templateContent;
     try {
@@ -86,19 +111,20 @@ async function buildHtml() {
         process.exit(1);
     }
 
-    // --- Substitute Placeholder ---
-    console.log(`Substituting placeholder "${API_KEY_PLACEHOLDER}"...`);
-    const outputContent = templateContent.replace(
-        new RegExp(API_KEY_PLACEHOLDER, 'g'), // Use RegExp for global replace
-        apiKey // Inject the actual key value
-    );
-    // Verification step
+    // --- Substitute Placeholders ---
+    console.log(`Substituting placeholders...`);
+    const outputContent = templateContent
+        .replace(new RegExp(API_KEY_PLACEHOLDER, 'g'), apiKey) // Replace API key
+        .replace(new RegExp(VERSION_PLACEHOLDER, 'g'), versionString); // NEW: Replace version string
+
+    // Verification steps
     if (outputContent.includes(API_KEY_PLACEHOLDER)) {
-        console.warn(`WARN: Placeholder "${API_KEY_PLACEHOLDER}" might still be present after substitution. Check template/script.`);
-    } else if (outputContent === templateContent) {
-        console.warn(`WARN: Placeholder "${API_KEY_PLACEHOLDER}" not found in template file. API key was not injected.`);
+        console.warn(`WARN: Placeholder "${API_KEY_PLACEHOLDER}" might still be present.`);
+    }
+    if (outputContent.includes(VERSION_PLACEHOLDER)) { // NEW: Verification for version
+        console.warn(`WARN: Placeholder "${VERSION_PLACEHOLDER}" might still be present.`);
     } else {
-        console.log(`Placeholder substituted successfully.`);
+        console.log(`Placeholders substituted successfully.`);
     }
 
     // --- Write Output File ---
