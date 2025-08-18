@@ -22,9 +22,10 @@ const OUTPUT_HTML = 'index.html'; // Output file name
 const ASSETS_TO_COPY = ['css', 'js', 'images', 'data'];
 // Environment variable name expected (from .env locally or Netlify UI deployed)
 const API_KEY_ENV_VAR = 'GOOGLE_MAPS_API_KEY';
-// Placeholder string used in the template HTML
+// Placeholder strings used in the template HTML
 const API_KEY_PLACEHOLDER = '__GOOGLE_MAPS_API_KEY__';
 const VERSION_PLACEHOLDER = '__APP_VERSION__';
+const TRANSLATIONS_PLACEHOLDER = '__TRANSLATIONS_JSON__';
 // --------------------
 
 
@@ -101,6 +102,20 @@ async function buildHtml() {
     const versionString = getVersionString();
     console.log(`Generated version string for cache busting: "${versionString}"`);
 
+    // --- Load Translations from external file ---
+    let translations;
+    const translationsPath = path.join(projectRoot, 'translations.js');
+    try {
+        console.log(`Loading translations from: ${translationsPath}`);
+        const translationsModule = await import(translationsPath);
+        translations = translationsModule.default; // Assuming a default export
+    } catch (err) {
+        console.error(`Failed to load translations file: ${translationsPath}`, err);
+        process.exit(1);
+    }
+    const translationsJsonString = JSON.stringify(translations);
+    console.log(`Translations loaded and stringified successfully.`);
+
     // --- Read Template ---
     let templateContent;
     try {
@@ -114,15 +129,19 @@ async function buildHtml() {
     // --- Substitute Placeholders ---
     console.log(`Substituting placeholders...`);
     const outputContent = templateContent
-        .replace(new RegExp(API_KEY_PLACEHOLDER, 'g'), apiKey) // Replace API key
-        .replace(new RegExp(VERSION_PLACEHOLDER, 'g'), versionString); // NEW: Replace version string
+        .replace(new RegExp(API_KEY_PLACEHOLDER, 'g'), apiKey)
+        .replace(new RegExp(VERSION_PLACEHOLDER, 'g'), versionString)
+        .replace(TRANSLATIONS_PLACEHOLDER, translationsJsonString);
 
     // Verification steps
     if (outputContent.includes(API_KEY_PLACEHOLDER)) {
         console.warn(`WARN: Placeholder "${API_KEY_PLACEHOLDER}" might still be present.`);
     }
-    if (outputContent.includes(VERSION_PLACEHOLDER)) { // NEW: Verification for version
+    if (outputContent.includes(VERSION_PLACEHOLDER)) {
         console.warn(`WARN: Placeholder "${VERSION_PLACEHOLDER}" might still be present.`);
+    }
+    if (outputContent.includes(TRANSLATIONS_PLACEHOLDER)) {
+        console.warn(`WARN: Placeholder "${TRANSLATIONS_PLACEHOLDER}" might still be present.`);
     } else {
         console.log(`Placeholders substituted successfully.`);
     }
