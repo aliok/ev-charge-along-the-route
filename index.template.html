@@ -1729,16 +1729,36 @@
     }
 
     // --- POI/Station Handling ---
-    function loadPois(stations, totalStations) { // Accept totalStations
-        console.log("loadPois called. Adding marker badges.");
-        allPoiMarkers.forEach(marker => marker.map = null); allPoiMarkers = []; visiblePoiMarkers = [];
-        if (!google.maps.marker || !google.maps.marker.AdvancedMarkerElement) { console.error("AdvancedMarkerElement not available."); showTemporaryMessage(translate('messageErrorGmapsLoad'), true); return; }
-        if (!map) { console.error("Map not available in loadPois."); return; }
+    function loadPois(stations, totalStations) {
+        console.log("loadPois called. Starting asynchronous marker creation.");
+        allPoiMarkers.forEach(marker => marker.map = null);
+        allPoiMarkers = [];
+        visiblePoiMarkers = [];
 
-        let processedCount = 0;
+        if (!google.maps.marker || !google.maps.marker.AdvancedMarkerElement) {
+            console.error("AdvancedMarkerElement not available.");
+            showTemporaryMessage(translate('messageErrorGmapsLoad'), true);
+            return;
+        }
+        if (!map) {
+            console.error("Map not available in loadPois.");
+            return;
+        }
 
-        stations.forEach((station) => {
-            if (typeof station.lat !== 'number' || typeof station.lng !== 'number' || !station.id) { console.warn("Skipping station due to invalid data:", station); return; }
+        // Start the asynchronous processing
+        processStationsInChunks(stations, 0, totalStations);
+    }
+
+    function processStationsInChunks(stations, startIndex, totalStations) {
+        const CHUNK_SIZE = 100; // Process 100 stations per chunk
+        const endIndex = Math.min(startIndex + CHUNK_SIZE, stations.length);
+
+        for (let i = startIndex; i < endIndex; i++) {
+            const station = stations[i];
+            if (typeof station.lat !== 'number' || typeof station.lng !== 'number' || !station.id) {
+                console.warn("Skipping station due to invalid data:", station);
+                continue; // Use continue to skip to the next iteration
+            }
             try {
                 const brandName = station.brand?.trim() || null;
                 const stationIdString = String(station.id);
@@ -1793,22 +1813,26 @@
                 station.brand = brandName; station.id = stationIdString;
                 marker.poiData = station; marker.detourData = null; marker.liveSocketData = null; marker.cachedInfoWindowContent = null; marker.stationId = stationIdString;
 
-                // We use the container for listeners as it's the visual part
                 marker.addListener('click', () => { if (marker.map != null) { fetchPoiDetails(marker, marker.poiData, false); } });
                 container.addEventListener('mouseover', () => { if (marker !== selectedPoiMarker) { marker.zIndex = HOVER_POI_ZINDEX; } });
                 container.addEventListener('mouseout', () => { if (marker !== selectedPoiMarker) { marker.zIndex = DEFAULT_POI_ZINDEX; } });
 
                 allPoiMarkers.push(marker);
-            } catch (error) { console.error(`Error creating AdvancedMarkerElement for Station ${station.id}:`, error); }
+            } catch (error) {
+                console.error(`Error creating AdvancedMarkerElement for Station ${station.id}:`, error);
+            }
+        }
 
-            // Update progress after processing each station
-            processedCount++;
-            updateLoadingProgress(processedCount, totalStations);
-        });
+        // Update progress after processing the chunk
+        updateLoadingProgress(endIndex, totalStations);
 
-        // Ensure final update (in case stations array was empty or loop finished)
-        updateLoadingProgress(processedCount, totalStations);
-        console.log(`Finished loadPois. ${allPoiMarkers.length} station markers created.`);
+        // If there are more stations to process, schedule the next chunk
+        if (endIndex < stations.length) {
+            requestAnimationFrame(() => processStationsInChunks(stations, endIndex, totalStations));
+        } else {
+            console.log(`Finished asynchronous marker creation. ${allPoiMarkers.length} markers created.`);
+            // The `finally` block in fetchInitialStations will handle hiding the overlay.
+        }
     }
 
 
