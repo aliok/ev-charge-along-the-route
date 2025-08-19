@@ -40,6 +40,33 @@ export const translations = {
         titleBrandModeAll: "Showing all (non-blacklisted, non-ignored) brands. Click to show only favorites.",
         titleBrandModeFavOnly: "Showing only favorite brands. Click to show all.",
         titleBrandModeDisabled: "Mark brands as favorite (⭐) to enable 'Favorites Only' mode",
+
+        // --- NEW: Route Builder ---
+        ariaToggleRouteBuilder: "Toggle Route Builder Panel",
+        titleToggleRouteBuilder: "Toggle Route Builder Panel",
+        ariaCloseRouteBuilder: "Close Route Builder",
+        routeBuilderHeader: "Route Plan",
+        titleClearRoutePlan: "Clear all waypoints from the route plan",
+        buttonClearRoute: "Clear",
+        routeBuilderPlaceholder: "Set a start and destination, then add stations to build your route.",
+        summaryTotalDist: "Total Dist",
+        summaryTotalTime: "Total Time",
+        buttonAddToRoute: "Add to Route",
+        buttonInRoute: "In Route",
+        tooltipMoveUp: "Move up",
+        tooltipMoveDown: "Move down",
+        tooltipRemoveWaypoint: "Remove from route",
+        buttonOptimize: "Optimize",
+        titleOptimizeRoute: "Find the most efficient order for stops",
+        titleOpenRouteInGmaps: "Open Route in Google Maps",
+        ariaOpenRouteInGmaps: "Open Route in Google Maps",
+        titleHidePois: "Hide Stations on Map",
+        titleShowPois: "Show Stations on Map",
+        titlePoisHiddenNoRoute: "Stations are hidden when no route is active",
+        messageOptimizing: "Optimizing route...",
+        messageRouteOptimized: "Route has been optimized.",
+        messageOptimizationNA: "Optimization requires more than one station.",
+
         // Filter Panel
         ariaCloseFilters: "Close Filters",
         filterHeader: "Filters",
@@ -135,6 +162,12 @@ export const translations = {
         messageResolveProxyStatusError: "Error contacting URL resolver (Status: {status}).",
         messageUseFullUrl: "Please open this short link and paste the full URL.",
         messageResolvingShortUrl: "Resolving short URL via proxy...",
+        messageGmapsNoRoute: "Cannot open in Maps: No route is defined.",
+        messageGmapsNoStartEnd: "Cannot open in Maps: Missing a start or destination point.",
+        // --- NEW: Route Builder Messages ---
+        messageStationAddedToRoute: "Added {name} to your route plan.",
+        messageStationAlreadyInRoute: "This station is already in your route plan.",
+        messageRoutePlanCleared: "Route plan cleared.",
         // InfoWindow & Markers
         iwOpenMap: "Open in Google Maps",
         iwVisitWebsite: "Visit Website",
@@ -209,6 +242,33 @@ export const translations = {
         titleBrandModeAll: "Tüm (kara listeye alınmamış, yok sayılmamış) markalar gösteriliyor. Sadece favorileri göstermek için tıklayın.",
         titleBrandModeFavOnly: "Sadece favori markalar gösteriliyor. Tümünü göstermek için tıklayın.",
         titleBrandModeDisabled: "'Sadece Favoriler' modunu etkinleştirmek için markaları favori (⭐) olarak işaretleyin.",
+
+        // --- NEW: Route Builder ---
+        ariaToggleRouteBuilder: "Rota Planlayıcı Panelini Aç/Kapat",
+        titleToggleRouteBuilder: "Rota Planlayıcı Panelini Aç/Kapat",
+        ariaCloseRouteBuilder: "Rota Planlayıcıyı Kapat",
+        routeBuilderHeader: "Rota Planı",
+        titleClearRoutePlan: "Rota planındaki tüm ara noktaları temizle",
+        buttonClearRoute: "Temizle",
+        routeBuilderPlaceholder: "Rotanızı oluşturmak için bir başlangıç ve varış noktası belirleyin, ardından istasyonları ekleyin.",
+        summaryTotalDist: "Toplam Mesafe",
+        summaryTotalTime: "Toplam Süre",
+        buttonAddToRoute: "Rotaya Ekle",
+        buttonInRoute: "Rotada",
+        tooltipMoveUp: "Yukarı taşı",
+        tooltipMoveDown: "Aşağı taşı",
+        tooltipRemoveWaypoint: "Rotadan kaldır",
+        buttonOptimize: "Optimize Et",
+        titleOptimizeRoute: "Duraklar için en verimli sıralamayı bul",
+        titleOpenRouteInGmaps: "Rotayı Google Haritalar'da Aç", // NEW
+        ariaOpenRouteInGmaps: "Rotayı Google Haritalar'da Aç", // NEW
+        titleHidePois: "İstasyonları Haritadan Gizle",
+        titleShowPois: "İstasyonları Haritada Göster",
+        titlePoisHiddenNoRoute: "Rota olmadığında istasyonlar gizlenir",
+        messageOptimizing: "Rota optimize ediliyor...",
+        messageRouteOptimized: "Rota optimize edildi.",
+        messageOptimizationNA: "Optimizasyon için birden fazla istasyon gerekir.",
+
         // Filter Panel
         ariaCloseFilters: "Filtreleri Kapat",
         filterHeader: "Filtreler",
@@ -304,6 +364,12 @@ export const translations = {
         messageResolveProxyStatusError: "URL çözümleyici ile iletişim hatası (Durum: {status}).",
         messageUseFullUrl: "Lütfen bu kısa bağlantıyı açıp tam URL'yi yapıştırın.",
         messageResolvingShortUrl: "Kısa URL vekil sunucu aracılığıyla çözülüyor...",
+        messageGmapsNoRoute: "Haritalar'da açılamıyor: Rota tanımlı değil.", // NEW
+        messageGmapsNoStartEnd: "Haritalar'da açılamıyor: Başlangıç veya varış noktası eksik.", // NEW
+        // --- NEW: Route Builder Messages ---
+        messageStationAddedToRoute: "{name} rota planınıza eklendi.",
+        messageStationAlreadyInRoute: "Bu istasyon zaten rota planınızda.",
+        messageRoutePlanCleared: "Rota planı temizlendi.",
         // InfoWindow & Markers
         iwOpenMap: "Google Haritalar'da Aç",
         iwVisitWebsite: "Web Sitesini Ziyaret Et",

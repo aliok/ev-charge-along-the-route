@@ -185,6 +185,13 @@
                       clip-rule="evenodd"/>
             </svg>
         </button>
+        <!-- NEW: Route Builder Toggle Button -->
+        <button id="route-builder-toggle-btn" data-i18n-key="[aria-label]ariaToggleRouteBuilder;[title]titleToggleRouteBuilder"
+                aria-label="Toggle Route Builder Panel" title="Toggle Route Builder Panel">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+            </svg>
+        </button>
     </div>
     <!-- Filter Panel -->
     <div id="filter-panel">
@@ -259,9 +266,51 @@
             <p class="filter-text-hint" data-i18n-key="filterIgnoreHint">Use the 👁️‍🗨️🚫 icon in station popups to
                 ignore.</p>
         </div>
-
-
     </div>
+
+    <!-- NEW: Route Builder Panel -->
+    <div id="route-builder-panel">
+        <button id="close-route-builder-btn" data-i18n-key="[aria-label]ariaCloseRouteBuilder" aria-label="Close Route Builder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clip-rule="evenodd"/>
+            </svg>
+        </button>
+        <div class="route-builder-header">
+            <h3 data-i18n-key="routeBuilderHeader">Route Plan</h3>
+            <div> <!-- NEW: Wrapper div for buttons -->
+                <button id="open-route-in-gmaps-btn"
+                        data-i18n-key="[title]titleOpenRouteInGmaps;[aria-label]ariaOpenRouteInGmaps"
+                        title="Open Route in Google Maps"
+                        aria-label="Open Route in Google Maps">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17H4.25A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M6.194 6.194a.75.75 0 0 1 1.06 0L15.5 14.439V10.5a.75.75 0 0 1 1.5 0v5.25a.75.75 0 0 1-.75.75H10.5a.75.75 0 0 1 0-1.5h3.94l-8.246-8.246a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <button id="toggle-poi-visibility-btn"
+                        data-i18n-key="[title]titleHidePois;[aria-label]titleHidePois"
+                        title="Hide Stations on Map"
+                        aria-label="Hide Stations on Map">
+                    <!-- Icon will be set by JS -->
+                </button>
+                <button id="optimize-route-btn" data-i18n-key="[title]titleOptimizeRoute" title="Find the most efficient order for stops">
+                    <span data-i18n-key="buttonOptimize">Optimize</span>
+                </button>
+                <button id="clear-waypoints-btn" data-i18n-key="[title]titleClearRoutePlan" title="Clear all waypoints">
+                    <span data-i18n-key="buttonClearRoute">Clear</span>
+                </button>
+            </div>
+        </div>
+        <div id="route-waypoints-list-container">
+            <!-- Waypoints will be populated by JS -->
+        </div>
+        <div id="route-summary">
+            <!-- Summary like Total Distance/Time populated by JS -->
+        </div>
+    </div>
+
     <!-- Route Offset Controls -->
     <div id="offset-controls">
         <div class="offset-group">
@@ -529,6 +578,11 @@
     let endOffsetKm = 0; // Destination offset in KM (from the end)
     const OFFSET_INCREMENT_KM = 5; // How much to change offset per click
 
+    // NEW: Route Builder State
+    let routeWaypoints = []; // The single source of truth for the route
+    let routeWaypointMarkers = []; // Holds the special blue markers for stations in the route
+    let arePoisVisible = true; // State for the new toggle
+
     const MAX_PRECALCULATE_DETOURS = 10;
     const DEFAULT_EV_SVG_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#059669"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 11.5L13 17v-4h-2v4L7.5 13.5H11V9h2v4.5h3.5z"/></svg>`;
     const DEFAULT_EV_SVG_DATA_URI = `data:image/svg+xml;base64,${btoa(DEFAULT_EV_SVG_ICON)}`;
@@ -557,6 +611,8 @@
     const IGNORE_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.18l-.877-.584a1.651 1.651 0 0 0-1.8-.001l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.552.368a10.029 10.029 0 0 0-2.53-1.884l-1.745-1.745ZM10 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM6.604 9.166a.75.75 0 0 0-1.06 1.06l1.43 1.43a2.5 2.5 0 0 1 3.086-3.086l-1.43-1.43a.75.75 0 0 0-1.06-1.06l-1.956 1.956Z" clip-rule="evenodd" /></svg>`;
     const MAP_PIN_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.145l.005-.002.007-.004.012-.007a7.489 7.489 0 0 0 .98-.641 14.049 14.049 0 0 0 2.017-1.61.182.182 0 0 0 .006-.007 15.007 15.007 0 0 0 2.49-3.842 17.94 17.94 0 0 0 .848-4.011c0-3.564-2.618-6.5-6-6.5S4 3.936 4 7.5c0 1.57.414 3.015.848 4.011a17.94 17.94 0 0 0 2.49 3.842l.006.006a14.05 14.05 0 0 0 2.997 2.251l.012.007.007.004.005.002a5.745 5.745 0 0 0 .28.145l.019.008.006.003ZM10 11.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" /></svg>`;
     const LOCATION_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /> <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /> </svg>`;
+    const EYE_ICON_SVG_ROUTE_PANEL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" /><path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 0 1 0-1.18l.877-.584a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.932-.621a1.651 1.651 0 0 1 1.804 0l.932.621a1.651 1.651 0 0 1 1.804 0l.877.584a1.651 1.651 0 0 1 0 1.18l-.877.584a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.932-.621a1.651 1.651 0 0 1-1.804 0l-.932.621a1.651 1.651 0 0 1-1.804 0l-.877-.584ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" clip-rule="evenodd" /></svg>`;
+    const EYE_SLASH_ICON_SVG_ROUTE_PANEL = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.28 2.22a.75.75 0 0 0-1.06 1.06l14.5 14.5a.75.75 0 1 0 1.06-1.06l-1.745-1.745a10.029 10.029 0 0 0 3.3-4.38 1.651 1.651 0 0 0 0-1.18l-.877-.584a1.651 1.651 0 0 0-1.8-.001l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.933.621a1.651 1.651 0 0 0-1.8 0l-.933-.621a1.651 1.651 0 0 0-1.8 0l-.552.368a10.029 10.029 0 0 0-2.53-1.884l-1.745-1.745ZM10 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM6.604 9.166a.75.75 0 0 0-1.06 1.06l1.43 1.43a2.5 2.5 0 0 1 3.086-3.086l-1.43-1.43a.75.75 0 0 0-1.06-1.06l-1.956 1.956Z" clip-rule="evenodd" /></svg>`;
 
 
     // UI Elements
@@ -576,6 +632,12 @@
     let ignoredStationsListContainer; // Container for ignored stations list
     let offsetControlsContainer, startOffsetDisplay, destOffsetDisplay; // Offset UI elements
     let offsetStartIncBtn, offsetStartDecBtn, offsetDestIncBtn, offsetDestDecBtn;
+
+    // NEW: Route Builder UI elements
+    let routeBuilderToggleButton, routeBuilderPanel, closeRouteBuilderBtn;
+    let waypointsListContainer, clearWaypointsBtn, routeSummaryContainer, optimizeRouteBtn; // Add optimizeRouteBtn
+    let togglePoiVisibilityBtn; // The new button in the route panel
+    let openRouteInGmapsBtn;
 
     // --- Default Filter States ---
     const defaultFilters = {
@@ -650,8 +712,19 @@
         offsetDestIncBtn = document.getElementById('offset-dest-inc');
         offsetDestDecBtn = document.getElementById('offset-dest-dec');
 
+        // NEW: Route Builder UI elements
+        routeBuilderToggleButton = document.getElementById('route-builder-toggle-btn');
+        routeBuilderPanel = document.getElementById('route-builder-panel');
+        closeRouteBuilderBtn = document.getElementById('close-route-builder-btn');
+        waypointsListContainer = document.getElementById('route-waypoints-list-container');
+        clearWaypointsBtn = document.getElementById('clear-waypoints-btn');
+        routeSummaryContainer = document.getElementById('route-summary');
+        optimizeRouteBtn = document.getElementById('optimize-route-btn');
+        togglePoiVisibilityBtn = document.getElementById('toggle-poi-visibility-btn');
+        openRouteInGmapsBtn = document.getElementById('open-route-in-gmaps-btn');
+
         // --- Check Core Elements ---
-        if (!loadingOverlay || !loadingText || !loadingDetails || !loadingProgressBarInner || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn) {
+        if (!loadingOverlay || !loadingText || !loadingDetails || !loadingProgressBarInner || !controlPanel || !inputContainer || !hamburgerButton || !startInput || !endInput || !clearStartBtn || !clearEndBtn || !pasteStartBtn || !pasteEndBtn || !useLocationStartBtn || !useLocationEndBtn || !messageBox || !distanceContainer || !distanceSlider || !distanceValueDisplay || !mapTypeControlContainer || !languageControlContainer || !languageSelectorButton || !languageDropdown || !languageFlagDisplay || !filterToggleButton || !brandFilterModeButton || !filterPanel || !closeFilterButton || !resetFiltersButton || !brandListContainer || !brandListViewControls || !ignoredStationsListContainer || !offsetControlsContainer || !startOffsetDisplay || !destOffsetDisplay || !offsetStartIncBtn || !offsetStartDecBtn || !offsetDestIncBtn || !offsetDestDecBtn || !routeBuilderToggleButton || !routeBuilderPanel || !closeRouteBuilderBtn || !waypointsListContainer || !clearWaypointsBtn || !routeSummaryContainer || !optimizeRouteBtn || !togglePoiVisibilityBtn || !openRouteInGmapsBtn) {
             console.error("Required UI elements not found!");
             alert("Initialization Error: Missing UI elements.");
             return;
@@ -878,13 +951,223 @@
         offsetDestIncBtn.addEventListener('click', () => handleOffsetChange('dest', OFFSET_INCREMENT_KM));
         offsetDestDecBtn.addEventListener('click', () => handleOffsetChange('dest', -OFFSET_INCREMENT_KM));
 
+        // NEW Route Builder Listeners
+        routeBuilderToggleButton.addEventListener('click', toggleRouteBuilderPanel);
+        closeRouteBuilderBtn.addEventListener('click', toggleRouteBuilderPanel);
+        clearWaypointsBtn.addEventListener('click', clearAllWaypoints);
+        optimizeRouteBtn.addEventListener('click', optimizeRoute);
+        togglePoiVisibilityBtn.addEventListener('click', togglePoiVisibility);
+        openRouteInGmapsBtn.addEventListener('click', handleOpenRouteInGmaps);
+        waypointsListContainer.addEventListener('click', handleWaypointAction); // Event delegation
+
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('click', handleDocumentClickForDropdown); // To close dropdown on outside click
 
         window.addEventListener('resize', handleResize);
         handleResize();
         updateOffsetControlsVisibility();
+        updatePoiVisibilityButtonUI(); // Set initial disabled state
+        updateGmapsButtonState
         console.log("Map services and listeners setup finished.");
+    }
+
+    // --- Route Builder Logic ---
+    function toggleRouteBuilderPanel() {
+        if (!routeBuilderPanel) return;
+        routeBuilderPanel.classList.toggle('open');
+    }
+
+    function optimizeRoute() {
+        const stationWaypoints = routeWaypoints.filter(wp => wp.type === 'station');
+        if (stationWaypoints.length > 1) {
+            showTemporaryMessage(translate('messageOptimizing'), false);
+            calculateRoute(true); // Call calculateRoute with optimization explicitly enabled
+        } else {
+            showTemporaryMessage(translate('messageOptimizationNA'), false);
+        }
+    }
+
+    function handleAddStationToRoute(stationId) {
+        const station = allStationData.find(s => s.id === String(stationId));
+        if (!station) {
+            console.error(`Station with ID ${stationId} not found.`);
+            return;
+        }
+
+        // Check if station is already in the route
+        if (routeWaypoints.some(wp => wp.type === 'station' && wp.id === String(stationId))) {
+            showTemporaryMessage(translate('messageStationAlreadyInRoute'), false);
+            return;
+        }
+
+        const waypoint = {
+            type: 'station',
+            id: String(stationId),
+            name: station.brand || station.title,
+            location: new google.maps.LatLng(station.lat, station.lng)
+        };
+
+        // Insert station before the destination
+        const destinationIndex = routeWaypoints.findIndex(wp => wp.type === 'destination');
+        if (destinationIndex !== -1) {
+            routeWaypoints.splice(destinationIndex, 0, waypoint);
+        } else {
+            routeWaypoints.push(waypoint);
+        }
+
+        showTemporaryMessage(translate('messageStationAddedToRoute', { name: waypoint.name }), false);
+        updateRouteBuilderUI();
+        calculateRoute(true);
+        updateGmapsButtonState();
+        // Update the currently open infowindow to disable the 'Add' button
+        if (infoWindow && infoWindow.getMap()){
+            const anchor = infoWindow.getAnchor();
+            if(anchor && anchor.stationId === String(stationId)) {
+                updateInfoWindowIfVisible(anchor);
+            }
+        }
+    }
+
+    function updateRouteBuilderUI(directionsResult = null) {
+        if (!waypointsListContainer) return;
+        waypointsListContainer.innerHTML = '';
+
+        if (routeWaypoints.length < 2) { // Show placeholder if not at least a start and end
+            waypointsListContainer.innerHTML = `<div class="waypoint-placeholder" data-i18n-key="routeBuilderPlaceholder">${translate('routeBuilderPlaceholder')}</div>`;
+            routeBuilderToggleButton.classList.remove('route-active');
+            return;
+        }
+
+        routeBuilderToggleButton.classList.add('route-active');
+
+        const legs = directionsResult?.routes?.[0]?.legs;
+
+        routeWaypoints.forEach((wp, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'waypoint-item-wrapper';
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'waypoint-item';
+
+            let icon = '';
+            let name = wp.name || `Waypoint ${index + 1}`;
+
+            if (wp.type === 'start') {
+                icon = '📍';
+                name = `<strong>${translate('labelStart')}:</strong> ${name}`;
+            } else if (wp.type === 'destination') {
+                icon = '🏁'; // Or an SVG
+                name = `<strong>${translate('labelDestination')}:</strong> ${name}`;
+            } else if (wp.type === 'station') {
+                icon = '🔌'; // Or an SVG
+            }
+
+            const isFirst = index === 0;
+            const isLast = index >= routeWaypoints.length - 1;
+            const isStation = wp.type === 'station';
+
+            const disableUp = isFirst || !isStation || routeWaypoints[index - 1]?.type === 'start';
+            const disableDown = isLast || !isStation || routeWaypoints[index + 1]?.type === 'destination';
+            const disableRemove = !isStation;
+
+            itemDiv.innerHTML = `
+                <span class="waypoint-icon">${icon}</span>
+                <span class="waypoint-name" title="${wp.name}">${name}</span>
+                <div class="waypoint-controls" data-index="${index}">
+                    <button class="move-waypoint-up-btn" title="${translate('tooltipMoveUp')}" ${disableUp ? 'disabled' : ''}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                    </button>
+                    <button class="move-waypoint-down-btn" title="${translate('tooltipMoveDown')}" ${disableDown ? 'disabled' : ''}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                    </button>
+                    <button class="remove-waypoint-btn" title="${translate('tooltipRemoveWaypoint')}" ${disableRemove ? 'disabled' : ''}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+            `;
+            wrapper.appendChild(itemDiv);
+
+            // Add leg info if available (for all but the last waypoint)
+            if (legs && index < legs.length) {
+                const leg = legs[index];
+                const legInfoDiv = document.createElement('div');
+                legInfoDiv.className = 'leg-info';
+                const distanceStr = leg.distance ? formatDistance(leg.distance.value) : '?';
+                const durationStr = leg.duration ? formatDuration(leg.duration.value) : '?';
+                legInfoDiv.innerHTML = `<span>${distanceStr} &bull; ${durationStr}</span>`;
+                wrapper.appendChild(legInfoDiv);
+            }
+
+            waypointsListContainer.appendChild(wrapper);
+        });
+    }
+
+    function handleWaypointAction(event) {
+        const button = event.target.closest('button');
+        if (!button) return;
+
+        const controlsDiv = button.closest('.waypoint-controls');
+        if (!controlsDiv) return;
+
+        const index = parseInt(controlsDiv.dataset.index, 10);
+
+        if (button.classList.contains('remove-waypoint-btn')) {
+            routeWaypoints.splice(index, 1);
+        } else if (button.classList.contains('move-waypoint-up-btn') && index > 0) {
+            [routeWaypoints[index], routeWaypoints[index - 1]] = [routeWaypoints[index - 1], routeWaypoints[index]];
+        } else if (button.classList.contains('move-waypoint-down-btn') && index < routeWaypoints.length - 1) {
+            [routeWaypoints[index], routeWaypoints[index + 1]] = [routeWaypoints[index + 1], routeWaypoints[index]];
+        }
+
+        // After removing a point, check if we need to clear the whole route state
+        if (routeWaypoints.length < 2) {
+            clearAllWaypoints();
+        } else {
+            updateRouteBuilderUI();
+            calculateRoute(false); // do NOT optimize on manual up/down/remove
+            updateGmapsButtonState();
+        }
+    }
+
+    function clearAllWaypoints() {
+        arePoisVisible = true; // <-- ADD THIS LINE to reset the toggle state
+        routeWaypoints = [];
+        updateRouteBuilderUI();
+        clearRoute(); // This already handles clearing markers and directions
+        updateGmapsButtonState();
+        showTemporaryMessage(translate('messageRoutePlanCleared'), false);
+    }
+
+    function togglePoiVisibility() {
+        if (!isRouteActive) return; // Should be disabled, but as a safeguard
+        arePoisVisible = !arePoisVisible;
+        console.log(`Toggling POI visibility to: ${arePoisVisible}`);
+
+        // Apply visibility to all markers currently tracked as "matching filters"
+        for (const marker of visiblePoiMarkers.values()) {
+            marker.map = arePoisVisible ? map : null;
+        }
+
+        updatePoiVisibilityButtonUI();
+    }
+
+    function updatePoiVisibilityButtonUI() {
+        if (!togglePoiVisibilityBtn) return;
+
+        if (isRouteActive) {
+            togglePoiVisibilityBtn.disabled = false;
+            togglePoiVisibilityBtn.innerHTML = arePoisVisible ? EYE_SLASH_ICON_SVG_ROUTE_PANEL : EYE_ICON_SVG_ROUTE_PANEL;
+            const titleKey = arePoisVisible ? 'titleHidePois' : 'titleShowPois';
+            const titleText = translate(titleKey);
+            togglePoiVisibilityBtn.title = titleText;
+            togglePoiVisibilityBtn.setAttribute('aria-label', titleText);
+        } else {
+            togglePoiVisibilityBtn.disabled = true;
+            togglePoiVisibilityBtn.innerHTML = EYE_ICON_SVG_ROUTE_PANEL; // Default icon
+            const titleText = translate('titlePoisHiddenNoRoute');
+            togglePoiVisibilityBtn.title = titleText;
+            togglePoiVisibilityBtn.setAttribute('aria-label', titleText);
+        }
     }
 
     // --- Language Dropdown Logic ---
@@ -1391,7 +1674,13 @@
         const phoneRaw = poiData.phone;
         const phoneHtml = phoneRaw ? `<a href="tel:${phoneRaw}">${phoneRaw}</a>` : translate('iwNA');
         const websiteUrl = poiData.reportUrl;
-        const gmapsLink = `https://www.google.com/maps?q=${poiLocation.lat},${poiLocation.lng}`;
+
+        // --- THE FIX IS HERE ---
+        // Safely get lat/lng regardless of whether poiLocation is a LatLng object or a plain object.
+        const lat = typeof poiLocation.lat === 'function' ? poiLocation.lat() : poiLocation.lat;
+        const lng = typeof poiLocation.lng === 'function' ? poiLocation.lng() : poiLocation.lng;
+        const gmapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+        // --- END OF FIX ---
 
         const detourSection = buildDetourSectionHtml(marker, detourHtml);
 
@@ -1484,11 +1773,26 @@
 
         const escHintHtml = `<span class="esc-hint hidden sm:inline">${translate('iwEscHint')}</span>`;
 
+        // NEW: Logic for "Add to Route" button
+        let addToRouteButtonHtml = '';
+        const canAddToRoute = routeWaypoints.some(wp => wp.type === 'start') && routeWaypoints.some(wp => wp.type === 'destination');
+        const isAlreadyInRoute = routeWaypoints.some(wp => wp.type === 'station' && wp.id === String(poiData.id));
+
+        if (canAddToRoute) {
+            addToRouteButtonHtml = `
+                <button class="add-to-route-btn"
+                        onclick="handleAddStationToRoute('${poiData.id}')"
+                        ${isAlreadyInRoute ? 'disabled' : ''}>
+                    ${isAlreadyInRoute ? translate('buttonInRoute') : translate('buttonAddToRoute')}
+                </button>
+             `;
+        }
+
         return `
             <div class="poi-info-window">
                  <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', {name: poiData.brand || poiData.title || poiData.id})}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
                  <div class="title-area">
-                     <h3>${mainTitle}</h3>
+                     <h3>${mainTitle}${addToRouteButtonHtml}</h3>
                      ${infoActionsHtml}
                  </div>
                 ${subTitle}
@@ -1992,24 +2296,46 @@
                     markerTitle = displayName; // Marker title matches display name
                 }
 
+                // NEW LOGIC: Update routeWaypoints instead of start/endLocation
+                const newWaypoint = {
+                    name: displayName,
+                    location: finalLocationLatLng,
+                    // Add a unique ID for stability, especially for start/end
+                    id: `wp-${Date.now()}`
+                };
+
                 if (type === 'start') {
-                    startLocation = finalLocationLatLng;
-                } else {
-                    endLocation = finalLocationLatLng;
+                    newWaypoint.type = 'start';
+                    routeWaypoints.unshift(newWaypoint); // Add to the beginning
+                    // If there are duplicate starts, remove the older one
+                    const firstStartIndex = routeWaypoints.findIndex(wp => wp.type === 'start');
+                    const lastStartIndex = routeWaypoints.findLastIndex(wp => wp.type === 'start');
+                    if (firstStartIndex !== lastStartIndex) {
+                        routeWaypoints.splice(lastStartIndex, 1);
+                    }
+                } else { // type === 'end'
+                    newWaypoint.type = 'destination';
+                    routeWaypoints.push(newWaypoint); // Add to the end
+                    // If there are duplicate destinations, remove the older one
+                    const firstDestIndex = routeWaypoints.findIndex(wp => wp.type === 'destination');
+                    const lastDestIndex = routeWaypoints.findLastIndex(wp => wp.type === 'destination');
+                    if (firstDestIndex !== lastDestIndex) {
+                        routeWaypoints.splice(firstDestIndex, 1);
+                    }
                 }
 
                 inputElement.value = displayName;
                 handleInputChange(inputElement, clearButton);
                 updateMarker(type, finalLocationLatLng, markerTitle);
+                updateRouteBuilderUI();
                 // Show success message using the *original* parsedType string for translation lookup
                 showTemporaryMessage(translate('messageSetLocation', {
                     type: type,
                     parsedType: parsedType
                 }), false);
 
-                if (startLocation && endLocation) {
-                    calculateRoute();
-                }
+                calculateRoute();
+                updateGmapsButtonState();
 
             } else {
                 console.warn(`Location for ${type} is not in Turkey:`, placeForTurkeyCheck);
@@ -2044,11 +2370,11 @@
 
         const clickedLatLng = event.latLng;
         const placeId = event.placeId;
-        if (startLocation && endLocation && !placeId) {
+        if (routeWaypoints.length >= 2 && !placeId) {
             console.log("Route already set. Base map click ignored.");
             return;
         }
-        const targetType = startLocation ? 'end' : 'start';
+        const targetType = routeWaypoints.some(wp => wp.type === 'start') ? 'end' : 'start';
 
         if (placeId) {
             console.log("Clicked on Google feature:", placeId);
@@ -2106,31 +2432,72 @@
         return isInBox;
     }
 
-    function calculateRoute() {
-        if (!directionsService || !startLocation || !endLocation) {
-            console.log("Cannot calculate route: Missing service or locations.");
+    function calculateRoute(useOptimization = false) {
+        if (!directionsService || routeWaypoints.length < 2) {
+            console.log("Cannot calculate route: Need at least 2 waypoints.");
+            if (isRouteActive) {
+                clearRouteDisplayAndState();
+            }
             return;
         }
-        console.log("Calculating route...");
+
+        const startWp = routeWaypoints.find(wp => wp.type === 'start');
+        const destinationWp = routeWaypoints.find(wp => wp.type === 'destination');
+
+        if (!startWp || !destinationWp) {
+            console.log("Cannot calculate route: Missing start or destination.");
+            return;
+        }
+
+        console.log(`Calculating route with ${routeWaypoints.length} waypoints. Optimization: ${useOptimization}`);
         showTemporaryMessage(translate('messageCalculatingRoute'), false);
+
+        startLocation = startWp.location; // Keep legacy variable for detour calculations
+        endLocation = destinationWp.location;
+
+        const stationWaypoints = routeWaypoints.filter(wp => wp.type === 'station');
+        const waypointsForApi = stationWaypoints.map(wp => ({
+            location: wp.location,
+            stopover: true,
+        }));
+
+        // Disable optimize button during calculation
+        if(optimizeRouteBtn) optimizeRouteBtn.disabled = true;
+
         const request = {
             origin: startLocation,
             destination: endLocation,
+            waypoints: waypointsForApi,
+            optimizeWaypoints: useOptimization && waypointsForApi.length > 1,
             travelMode: google.maps.TravelMode.DRIVING,
-            provideRouteAlternatives: true
+            provideRouteAlternatives: false,
         };
+
         directionsService.route(request, (result, status) => {
+            if(optimizeRouteBtn) optimizeRouteBtn.disabled = false; // Re-enable button
             const okStatus = google.maps.DirectionsStatus?.OK || 'OK';
+
             if (status == okStatus) {
+                // If we optimized, we MUST update our master array to reflect the new order.
+                if (useOptimization && result.routes[0].waypoint_order.length > 0) {
+                    console.log("Optimized waypoint order received:", result.routes[0].waypoint_order);
+                    const orderedStationWaypoints = result.routes[0].waypoint_order.map(index => stationWaypoints[index]);
+
+                    // Rebuild the routeWaypoints array
+                    routeWaypoints = [
+                        startWp,
+                        ...orderedStationWaypoints,
+                        destinationWp
+                    ];
+                    updateRouteBuilderUI(); // Update panel to show new order
+                    showTemporaryMessage(translate('messageRouteOptimized'), false);
+                }
+
                 if (directionsRenderer) {
                     directionsRenderer.setDirections(result);
-                } else {
-                    showTemporaryMessage(translate('messageRouteCalcFailedDisplay'), true);
                 }
             } else {
-                showTemporaryMessage(translate('messageDirectionsFailed', {
-                    status: status
-                }), true);
+                showTemporaryMessage(translate('messageDirectionsFailed', { status: status }), true);
                 console.error("Directions request failed due to " + status);
                 clearRoute();
             }
@@ -2164,6 +2531,9 @@
             return;
         }
 
+        // Update the panel to show the new route structure with leg info
+        updateRouteBuilderUI(directionsResult);
+
         const routeIndex = directionsRenderer.getRouteIndex();
         const selectedRoute = directionsResult.routes[routeIndex];
         if (!selectedRoute || !selectedRoute.overview_path) {
@@ -2171,6 +2541,8 @@
             clearRoute();
             return;
         }
+
+        updateWaypointMarkers(directionsResult);
 
         currentRoutePolylinePath = selectedRoute.overview_path;
         isRouteActive = true;
@@ -2184,6 +2556,15 @@
                 originalRouteDuration += leg.duration.value;
             }
         });
+
+        // NEW: Update route summary panel
+        if (routeSummaryContainer) {
+            routeSummaryContainer.innerHTML = `
+                <div><span>${translate('summaryTotalDist')}:</span> <span>${formatDistance(originalRouteDistance)}</span></div>
+                <div><span>${translate('summaryTotalTime')}:</span> <span>${formatDuration(originalRouteDuration)}</span></div>
+            `;
+        }
+
         console.log(`New Route: ${formatDistance(originalRouteDistance)}, ${formatDuration(originalRouteDuration)}`);
         resetOffsets();
 
@@ -2199,24 +2580,9 @@
         });
         console.log("Resetting POI state for new route.");
 
-        if (selectedRoute.legs?.length > 0) {
-            const firstLeg = selectedRoute.legs[0];
-            const lastLeg = selectedRoute.legs[selectedRoute.legs.length - 1];
-            const startMarkerLoc = startLocation || firstLeg.start_location;
-            const endMarkerLoc = endLocation || lastLeg.end_location;
-            if (startMarkerLoc) {
-                const startInputVal = startInput.value;
-                const startTitle = startInputVal && !startInputVal.startsWith("Lat:") && startInputVal !== translate('locationTypeCurrentLocation') ? startInputVal : (firstLeg.start_address?.split(',')[0] || translate('markerTitleStartDefault'));
-                updateMarker('start', startMarkerLoc, startTitle);
-            }
-            if (endMarkerLoc) {
-                const endInputVal = endInput.value;
-                const endTitle = endInputVal && !endInputVal.startsWith("Lat:") && endInputVal !== translate('locationTypeCurrentLocation') ? endInputVal : (lastLeg.end_address?.split(',')[0] || translate('markerTitleEndDefault'));
-                updateMarker('end', endMarkerLoc, endTitle);
-            }
-        }
         updateControlVisibility();
         updateOffsetControlsVisibility();
+        updatePoiVisibilityButtonUI(); // <-- ADD THIS LINE
 
         const visibleCount = applyFilters();
         let messageKey = 'messageNoStationsFound';
@@ -2732,6 +3098,10 @@
     function poiMatchesFilters(stationData) {
         if (!stationData || !stationData.id) return false;
 
+        if (routeWaypoints.some(wp => wp.type === 'station' && wp.id === stationData.id)) {
+            return false;
+        }
+
         // Check against ignored, blacklisted, and favorite brand lists
         const stationIdString = stationData.id;
         if (ignoredStationIds.has(stationIdString)) {
@@ -2884,6 +3254,10 @@
                 if (stationData) {
                     const newMarker = createMarkerForStation(stationData);
                     if (newMarker) {
+                        // If POIs are globally hidden, hide this new marker immediately
+                        if (!arePoisVisible) {
+                            newMarker.map = null;
+                        }
                         visiblePoiMarkers.set(stationId, newMarker); // Start tracking the new marker
                     }
                 }
@@ -3035,10 +3409,17 @@
 
 
     function triggerDetourPrecalculation() {
-        if (!isRouteActive || !startLocation || !endLocation || originalRouteDistance == null) {
+        const startWp = routeWaypoints.find(wp => wp.type === 'start');
+        const endWp = routeWaypoints.find(wp => wp.type === 'destination');
+
+        if (!isRouteActive || !startWp || !endWp || originalRouteDistance == null) {
             console.log("Skipping pre-calc/pre-fetch: Route not active or missing data.");
             return;
         }
+
+        const legacyStart = startWp.location;
+        const legacyEnd = endWp.location;
+
         const visibleCount = visiblePoiMarkers.length;
         const markersWithinLimit = visibleCount <= MAX_PRECALCULATE_DETOURS;
         console.log(`Pre-processing check. Visible & Filtered POIs: ${visibleCount}. Limit: ${MAX_PRECALCULATE_DETOURS}. Enabled: ${markersWithinLimit}`);
@@ -3056,7 +3437,7 @@
                         status: 'Pending'
                     };
                     updateMarkerDetourText(marker, null);
-                    calculateDetourForPoi(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration).then(result => {
+                    calculateDetourForPoi(marker, marker.position, legacyStart, legacyEnd, originalRouteDistance, originalRouteDuration).then(result => {
                         if (marker.map && marker.detourData?.status === 'Pending') {
                             marker.detourData = result;
                             updateMarkerDetourText(marker, result);
@@ -3295,7 +3676,10 @@
             console.error(`Marker not found for retryDetourCalculation with ID: ${stationId}`);
             return;
         }
-        if (!isRouteActive || !startLocation || !endLocation || originalRouteDistance === null || originalRouteDuration === null) {
+        const startWp = routeWaypoints.find(wp => wp.type === 'start');
+        const endWp = routeWaypoints.find(wp => wp.type === 'destination');
+
+        if (!isRouteActive || !startWp || !endWp || originalRouteDistance === null || originalRouteDuration === null) {
             console.warn(`Cannot retry detour calculation: Route not active or missing data for Station ID: ${stationId}`);
             marker.detourData = {
                 status: 'Error'
@@ -3304,6 +3688,9 @@
             return;
         }
 
+        const legacyStart = startWp.location;
+        const legacyEnd = endWp.location;
+
         marker.detourData = {
             status: 'Pending'
         };
@@ -3311,7 +3698,7 @@
         updateInfoWindowIfVisible(marker); // Show loading
         setTimeout(() => {
             console.log(`Starting detour calculation after retry for ${stationId}`);
-            calculateAndDisplayDetourOnClick(marker, marker.position, startLocation, endLocation, originalRouteDistance, originalRouteDuration);
+            calculateAndDisplayDetourOnClick(marker, marker.position, legacyStart, legacyEnd, originalRouteDistance, originalRouteDuration);
         }, 50);
     }
 
@@ -3368,10 +3755,20 @@
         updateControlVisibility();
         updateOffsetControlsVisibility();
         resetSelectedMarkerZIndex();
+        if (routeSummaryContainer) routeSummaryContainer.innerHTML = '';
     }
 
     function clearRoute() {
         console.log("Clearing route display, state, offsets, and start/end markers.");
+
+        if (infoWindow && infoWindow.getMap()) {
+            const anchor = infoWindow.getAnchor();
+            // This is a simplified check. It assumes if the anchor is not a start/end/poi marker, it must be a waypoint.
+            if (anchor && !visiblePoiMarkers.has(anchor.stationId) && anchor !== startMarker && anchor !== endMarker) {
+                infoWindow.close();
+            }
+        }
+
         isRouteActive = false;
         currentRoutePolylinePath = null;
         effectiveRoutePath = null;
@@ -3379,6 +3776,10 @@
         originalRouteDuration = null;
         resetOffsets();
         clearRouteDisplay();
+
+        routeWaypointMarkers.forEach(marker => marker.map = null);
+        routeWaypointMarkers = [];
+
         if (startMarker) {
             startMarker.map = null;
             startMarker = null;
@@ -3387,11 +3788,84 @@
             endMarker.map = null;
             endMarker = null;
         }
+        startLocation = null;
+        endLocation = null;
         hideAllPois();
         if (infoWindow) infoWindow.close();
         updateControlVisibility();
         updateOffsetControlsVisibility();
+        updatePoiVisibilityButtonUI();
+        updateGmapsButtonState();
         resetSelectedMarkerZIndex();
+        if (routeSummaryContainer) routeSummaryContainer.innerHTML = '';
+    }
+
+    function updateWaypointMarkers(directionsResult) {
+        // 1. Clear any existing waypoint markers
+        routeWaypointMarkers.forEach(marker => marker.map = null);
+        routeWaypointMarkers = [];
+
+        if (!directionsResult || !directionsResult.routes || !directionsResult.routes[0]) return;
+
+        const route = directionsResult.routes[0];
+        const waypointOrder = route.waypoint_order || [];
+
+        // 2. Get our station waypoints and reorder them based on Google's optimization
+        const stationWaypoints = routeWaypoints.filter(wp => wp.type === 'station');
+        const orderedStationWaypoints = waypointOrder.length > 0 ? waypointOrder.map(index => stationWaypoints[index]) : stationWaypoints;
+
+        // 3. Create a new, interactive, numbered marker for each station
+        orderedStationWaypoints.forEach((waypoint, index) => {
+            const stationData = allStationData.find(s => s.id === waypoint.id);
+            if (!stationData) return; // Skip if station data not found
+
+            // Build the composite marker HTML
+            const markerWrapper = document.createElement('div');
+            markerWrapper.className = 'waypoint-marker-wrapper';
+
+            const logoUrl = getFaviconUrlFromReportUrl(stationData.reportUrl) || DEFAULT_EV_SVG_DATA_URI;
+            const logoAltText = translate('markerLogoAlt', {
+                name: stationData.brand || stationData.title
+            });
+
+            markerWrapper.innerHTML = `
+            <div class="waypoint-marker-container">
+                <div class="waypoint-marker-logo-container">
+                    <img src="${logoUrl}" alt="${logoAltText}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
+                </div>
+                <div class="waypoint-marker-pin">
+                    <span class="waypoint-number">${index + 1}</span>
+                </div>
+            </div>
+        `;
+
+            try {
+                const waypointMarker = new google.maps.marker.AdvancedMarkerElement({
+                    position: waypoint.location,
+                    map: map,
+                    content: markerWrapper,
+                    title: `#${index + 1}: ${waypoint.name}`,
+                    zIndex: 99 // Below start/end markers but above regular POIs
+                });
+
+                // CORRECTED LOGIC: Attach all necessary data directly to the waypoint marker
+                waypointMarker.poiData = stationData;
+                waypointMarker.stationId = stationData.id;
+                waypointMarker.detourData = null;
+                waypointMarker.liveSocketData = null;
+                waypointMarker.cachedInfoWindowContent = null;
+
+
+                waypointMarker.addListener('click', () => {
+                    fetchPoiDetails(waypointMarker, waypointMarker.poiData);
+                });
+
+                routeWaypointMarkers.push(waypointMarker);
+            } catch (e) {
+                console.error("Failed to create waypoint marker:", e);
+            }
+        });
+        console.log(`Created ${routeWaypointMarkers.length} interactive waypoint markers on the map.`);
     }
 
     function clearAllInputsAndRoute() {
@@ -3400,18 +3874,9 @@
         if (endInput) endInput.value = '';
         if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
         if (endInput && clearEndBtn) handleInputChange(endInput, clearEndBtn);
-        startLocation = null;
-        endLocation = null;
-        if (startMarker) {
-            startMarker.map = null;
-            startMarker = null;
-        }
-        if (endMarker) {
-            endMarker.map = null;
-            endMarker = null;
-        }
-        clearRouteDisplayAndState();
-        showTemporaryMessage(translate('messageClearedAll'), false);
+
+        // This single call now handles everything
+        clearAllWaypoints();
     }
 
     function handleInputChange(inputElement, clearButtonElement) {
@@ -3424,6 +3889,13 @@
         inputElement.value = '';
         clearButtonElement.classList.add('hidden');
         console.log(`Clearing ${locationType} location and marker.`);
+
+        // Remove from waypoints
+        const indexToRemove = routeWaypoints.findIndex(wp => wp.type === (locationType === 'start' ? 'start' : 'destination'));
+        if (indexToRemove !== -1) {
+            routeWaypoints.splice(indexToRemove, 1);
+        }
+
         if (locationType === 'start') {
             startLocation = null;
             if (startMarker) {
@@ -3437,10 +3909,17 @@
                 endMarker = null;
             }
         }
-        if (isRouteActive && (!startLocation || !endLocation)) {
-            console.log(`Clearing ${locationType} broke the active route. Clearing full route state.`);
+
+        updateRouteBuilderUI();
+
+        if (routeWaypoints.length < 2) {
             clearRouteDisplayAndState();
+        } else {
+            calculateRoute();
         }
+
+        updateGmapsButtonState();
+
         inputElement.focus();
     }
 
@@ -3478,6 +3957,11 @@
             if (filterPanel && filterPanel.classList.contains('open')) {
                 console.log("Escape key pressed, closing Filter Panel.");
                 toggleFilterPanel();
+                closedSomething = true;
+            }
+            if (routeBuilderPanel && routeBuilderPanel.classList.contains('open')) {
+                console.log("Escape key pressed, closing Route Builder Panel.");
+                toggleRouteBuilderPanel();
                 closedSomething = true;
             }
             // If Escape was pressed and we closed something, prevent further action
@@ -3534,6 +4018,42 @@
         if (isRouteActive) {
             triggerDetourPrecalculation();
         }
+    }
+
+    function updateGmapsButtonState() {
+        if (!openRouteInGmapsBtn) return;
+
+        const hasStart = routeWaypoints.some(wp => wp.type === 'start');
+        const hasDestination = routeWaypoints.some(wp => wp.type === 'destination');
+
+        openRouteInGmapsBtn.disabled = !(hasStart && hasDestination);
+    }
+
+    function handleOpenRouteInGmaps() {
+        const startWp = routeWaypoints.find(wp => wp.type === 'start');
+        const destWp = routeWaypoints.find(wp => wp.type === 'destination');
+
+        if (!startWp || !destWp) {
+            showTemporaryMessage(translate('messageGmapsNoStartEnd'), true);
+            return;
+        }
+
+        const stationWps = routeWaypoints.filter(wp => wp.type === 'station');
+
+        // The order is always Start -> Stations -> Destination
+        const allPoints = [startWp, ...stationWps, destWp];
+
+        // Format each point as "lat,lng" and join them with "/"
+        const locationsString = allPoints.map(wp => {
+            const lat = wp.location.lat();
+            const lng = wp.location.lng();
+            return `${lat},${lng}`;
+        }).join('/');
+
+        const gmapsUrl = `https://www.google.com/maps/dir/${locationsString}`;
+
+        console.log("Opening route in Google Maps:", gmapsUrl);
+        window.open(gmapsUrl, '_blank');
     }
 
 

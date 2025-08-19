@@ -546,3 +546,261 @@ input.input-loading {
     color: #6b7280; /* text-gray-500 */
     margin-top: 0.25rem; /* mt-1 */
 }
+
+#route-builder-toggle-btn {
+    background-color: white; border: none;
+    padding: 8px; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.2); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px;
+    position: relative;
+}
+#route-builder-toggle-btn svg { width: 20px; height: 20px; fill: #374151; }
+#route-builder-toggle-btn:hover { background-color: #f3f4f6; }
+/* Active route indicator dot */
+#route-builder-toggle-btn.route-active::after {
+    content: '';
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 8px; height: 8px;
+    background-color: #3b82f6; /* Blue for route */
+    border-radius: 50%;
+    border: 1px solid white;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    pointer-events: none;
+}
+
+
+/* Route Builder Panel */
+#route-builder-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding: 1.5rem 1rem 1rem 1rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#route-builder-panel.open {
+    transform: translateX(0);
+}
+
+#route-builder-panel .route-builder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+/* NEW: Style for the new wrapper div */
+#route-builder-panel .route-builder-header > div {
+    display: flex;
+    gap: 8px;
+    align-items: center; /* Vertically align buttons */
+}
+
+/* NEW: Style for the Optimize button */
+#route-builder-panel #optimize-route-btn {
+    font-size: 0.75rem; font-weight: 500; color: #1d4ed8; background: none; border: 1px solid #93c5fd;
+    border-radius: 4px; padding: 3px 8px; cursor: pointer;
+}
+#route-builder-panel #optimize-route-btn:hover { background-color: #dbeafe; }
+#route-builder-panel #optimize-route-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+    color: #6b7280;
+}
+
+/* Style for the POI visibility and Open in Maps toggle buttons */
+#route-builder-panel #toggle-poi-visibility-btn,
+#route-builder-panel #open-route-in-gmaps-btn {
+    padding: 4px;
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background-color: #f9fafb;
+    cursor: pointer;
+}
+#route-builder-panel #toggle-poi-visibility-btn:hover:not(:disabled),
+#route-builder-panel #open-route-in-gmaps-btn:hover:not(:disabled) {
+    background-color: #f3f4f6;
+}
+#route-builder-panel #toggle-poi-visibility-btn:disabled,
+#route-builder-panel #open-route-in-gmaps-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+}
+#route-builder-panel #toggle-poi-visibility-btn svg,
+#route-builder-panel #open-route-in-gmaps-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: #4b5563;
+}
+
+/* Adjust the existing Clear button style */
+#route-builder-panel #clear-waypoints-btn {
+    font-size: 0.75rem; font-weight: 500; color: #ef4444; background: none; border: 1px solid #fca5a5;
+    border-radius: 4px; padding: 3px 8px; cursor: pointer;
+}
+
+#route-builder-panel h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+#route-builder-panel #clear-waypoints-btn:hover {
+    background-color: #fee2e2;
+}
+
+#route-builder-panel #close-route-builder-btn {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+#route-builder-panel #close-route-builder-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: #6b7280;
+}
+
+#route-builder-panel #close-route-builder-btn:hover svg {
+    fill: #1f2937;
+}
+
+/* Waypoints List */
+#route-waypoints-list-container {
+    border: 1px solid #e5e7eb; border-radius: 4px; padding: 0.25rem;
+    background-color: #f9fafb; flex-grow: 1; overflow-y: auto;
+}
+.waypoint-item {
+    display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e7eb;
+}
+.waypoint-item:last-child { border-bottom: none; }
+.waypoint-icon { font-size: 1rem; margin-right: 0.75rem; flex-shrink: 0; }
+.waypoint-name { font-size: 0.85rem; color: #1f2937; flex-grow: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.waypoint-controls { display: flex; gap: 4px; flex-shrink: 0; }
+.waypoint-controls button {
+    background: none; border: 1px solid #d1d5db; border-radius: 50%;
+    padding: 2px; cursor: pointer; width: 22px; height: 22px;
+    display: flex; justify-content: center; align-items: center;
+}
+.waypoint-controls button:hover { background-color: #f3f4f6; }
+.waypoint-controls button svg { width: 14px; height: 14px; stroke: #6b7280; }
+.waypoint-controls button.remove-waypoint-btn svg { stroke: #ef4444; }
+.waypoint-controls button:disabled { opacity: 0.4; cursor: not-allowed; background-color: transparent; }
+.waypoint-placeholder {
+    font-size: 0.8rem; text-align: center; color: #6b7280; padding: 1rem;
+}
+/* NEW: Styles for the leg info (distance/time) between waypoints */
+.waypoint-item-wrapper {
+    /* A container for a waypoint and the leg info that follows it */
+}
+.leg-info {
+    font-size: 0.8rem;
+    color: #4b5563; /* gray-600 */
+    padding: 0 0.5rem 0.75rem 2.25rem; /* T, R, B, L -- Indent past where the icon is */
+}
+
+/* Route Summary */
+#route-summary {
+    margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;
+    font-size: 0.9rem; color: #374151;
+}
+#route-summary div { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
+#route-summary span:first-child { font-weight: 600; }
+
+/* InfoWindow "Add to Route" button */
+.add-to-route-btn {
+    font-size: 0.8rem; font-weight: 500; color: #1d4ed8; background-color: #dbeafe;
+    border: 1px solid #93c5fd; border-radius: 4px; padding: 2px 6px;
+    cursor: pointer; margin-left: 8px;
+}
+.add-to-route-btn:hover:not(:disabled) { background-color: #bfdbfe; }
+.add-to-route-btn:disabled { opacity: 0.6; cursor: not-allowed; background-color: #e5e7eb; border-color: #d1d5db; color: #6b7280; }
+
+/* Custom Waypoint Marker on the Map */
+.waypoint-marker-wrapper {
+    position: relative;
+    width: 0;
+    height: 0;
+    cursor: pointer;
+}
+
+.waypoint-marker-container {
+    position: absolute;
+    bottom: 0; /* Anchors the pin tip to the map coordinate */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.15s ease-in-out;
+}
+.waypoint-marker-wrapper:hover .waypoint-marker-container {
+    transform: translateX(-50%) scale(1.1);
+    transform-origin: bottom center;
+}
+
+.waypoint-marker-logo-container {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid #3b82f6; /* Blue border for route waypoints */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 2; /* Ensures logo is on top of the pin */
+}
+
+.waypoint-marker-logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 50%;
+}
+
+.waypoint-marker-pin {
+    position: relative;
+    top: -8px; /* Pull the pin up to overlap with the logo */
+    width: 24px;
+    height: 24px;
+    background-color: #3b82f6;
+    color: white;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 24px; /* Vertically center the number */
+    text-align: center;
+    border: 1px solid white;
+    z-index: 1;
+}
+
+.waypoint-marker-pin .waypoint-number {
+    display: inline-block;
+    transform: rotate(45deg); /* Counter-rotate the number */
+}
