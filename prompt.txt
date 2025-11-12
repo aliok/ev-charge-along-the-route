@@ -808,3 +808,12 @@ Let's do it.
 - "Calculating leg..." --> doesn't finish
 - There should be a way to change the order of the stations in the trip plan.
 --------------
+
+
+TODO:
+- Close icons in panels
+- Open in Google Maps button icon in route panel
+- Station name in the route panel
+- Tesla browser: user agent, resolution, etc.
+  - Make buttons larger
+  -

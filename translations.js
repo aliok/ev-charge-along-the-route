@@ -77,8 +77,8 @@ export const translations = {
         // AC/DC don't need translation
         filterMinPower: "Min Power (Any Socket)",
         filterPowerLow: "(< 60 kW)",
-        filterPowerMedium: "(60-120 kW)",
-        filterPowerHigh: "(> 120 kW)",
+        filterPowerMedium: "(60-119 kW)",
+        filterPowerHigh: "(≥ 120 kW)",
         filterServiceType: "Service Type",
         filterServicePublic: "Public",
         filterServicePrivate: "Private/Restricted",
@@ -279,8 +279,8 @@ export const translations = {
         // AC/DC don't need translation
         filterMinPower: "Min Güç (Herhangi Bir Soket)",
         filterPowerLow: "(< 60 kW)",
-        filterPowerMedium: "(60-120 kW)",
-        filterPowerHigh: "(> 120 kW)",
+        filterPowerMedium: "(60-119 kW)",
+        filterPowerHigh: "(≥ 120 kW)",
         filterServiceType: "Hizmet Türü",
         filterServicePublic: "Halka Açık",
         filterServicePrivate: "Özel/Kısıtlı",

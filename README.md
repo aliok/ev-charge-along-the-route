@@ -31,7 +31,8 @@ The frontend and functions are served from the same domain, eliminating the need
 *   [Node.js](https://nodejs.org/) (v18+ recommended for native fetch)
 *   [Netlify](https://www.netlify.com/) (Platform for Hosting, Build, Functions)
 *   Netlify Functions
-*   Static HTML, CSS, JavaScript
+*   Static HTML, CSS, TypeScript (compiled to JavaScript)
+*   [TypeScript](https://www.typescriptlang.org/) (for type-safe JavaScript)
 *   `dotenv` (for local build environment variables)
 *   Native `fetch` API (in Node.js functions)
 
@@ -46,8 +47,10 @@ The frontend and functions are served from the same domain, eliminating the need
 │ └── build-html.mjs # Node.js script to build index.html from template
 ├── css/ # Example directory for static CSS
 │ └── style.css
-├── js/ # Example directory for static client-side JS
-│ └── script.js
+├── js/ # TypeScript source files for client-side code
+│ ├── *.ts # TypeScript source files
+│ └── *.js # Compiled JavaScript files (generated)
+├── tsconfig.json # TypeScript configuration
 ├── netlify/
 │ └── functions/ # Directory for Netlify Function source code
 │ ├── station-sockets.js
@@ -101,10 +104,13 @@ The frontend and functions are served from the same domain, eliminating the need
     ```
 
 4.  **Run the local build:**
-    This step generates the `dist/index.html` file with the local API key injected. You need to run this at least once before `netlify dev` or whenever you change the template/assets.
+    This step compiles TypeScript to JavaScript and generates the `dist/index.html` file with the local API key injected. You need to run this at least once before `netlify dev` or whenever you change the template/assets or TypeScript files.
     ```bash
     npm run build
     ```
+    The build process:
+    1. Compiles TypeScript files from `js/*.ts` to `js/*.js`
+    2. Processes the HTML template and copies assets to `dist/`
 
 5.  **Run the development server:**
     `netlify dev` serves static files from the `dist` directory and runs your functions locally.
