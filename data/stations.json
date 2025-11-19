@@ -15294,38 +15294,6 @@
     ]
   },
   {
-    "id": 14555649,
-    "lat": 41.179362,
-    "lng": 28.891144,
-    "title": "Migros Göktürk İstanbul Mmm",
-    "address": "Göktürk Cumhuriyet 10  Eyüpsultan/İstanbul",
-    "phone": "08502004000",
-    "reportUrl": "https://www.mig-go.com/",
-    "reservationUrl": null,
-    "operatorId": "1052446",
-    "operatorTitle": "Migen Enerji Ve Elektrikli Araç Şarj Hizmetleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "MİGGO",
-    "cityId": "34",
-    "districtId": "432",
-    "sockets": [
-      {
-        "id": 360907,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/5792",
-        "power": 22
-      },
-      {
-        "id": 360908,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/8564",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14555652,
     "lat": 40.7268,
     "lng": 31.60355,
@@ -15903,31 +15871,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/6895",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14555686,
-    "lat": 41.055794,
-    "lng": 29.023223,
-    "title": "Migros Ortaköy Mmm",
-    "address": "Ortaköy Dereboyu 2  Beşiktaş/İstanbul",
-    "phone": "08502004000",
-    "reportUrl": "https://www.mig-go.com/",
-    "reservationUrl": null,
-    "operatorId": "1052446",
-    "operatorTitle": "Migen Enerji Ve Elektrikli Araç Şarj Hizmetleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "MİGGO",
-    "cityId": "34",
-    "districtId": "428",
-    "sockets": [
-      {
-        "id": 360952,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/7960",
         "power": 22
       }
     ]
@@ -19606,120 +19549,6 @@
     ]
   },
   {
-    "id": 14568140,
-    "lat": 41.07492,
-    "lng": 28.902905,
-    "title": "Dumlupınar",
-    "address": "Yeni Cebeci  Gaziosmanpaşa/İstanbul",
-    "phone": "+90 850 241 03 60",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "434",
-    "sockets": [
-      {
-        "id": 386672,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9418",
-        "power": 3.7
-      },
-      {
-        "id": 386673,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9681",
-        "power": 3.7
-      }
-    ]
-  },
-  {
-    "id": 14568142,
-    "lat": 41.081875,
-    "lng": 28.877659,
-    "title": "Karadeniz-01",
-    "address": "Karadeniz  Gaziosmanpaşa/İstanbul",
-    "phone": "+90 850 241 03 60",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "434",
-    "sockets": [
-      {
-        "id": 386675,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9425",
-        "power": 3.7
-      }
-    ]
-  },
-  {
-    "id": 14568143,
-    "lat": 41.074323,
-    "lng": 28.902694,
-    "title": "Küçükköy-01",
-    "address": "Yeni Cebeci 3  Gaziosmanpaşa/İstanbul",
-    "phone": "+90 850 241 03 60",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "434",
-    "sockets": [
-      {
-        "id": 386676,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9427",
-        "power": 3.7
-      }
-    ]
-  },
-  {
-    "id": 14568144,
-    "lat": 41.077299,
-    "lng": 28.898959,
-    "title": "Kadirtopbaş",
-    "address": "Barbaros Hayrettinpaşa Cebeci 71  Gaziosmanpaşa/İstanbul",
-    "phone": "+90 850 241 03 60",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "434",
-    "sockets": [
-      {
-        "id": 386677,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9430",
-        "power": 3.7
-      },
-      {
-        "id": 386678,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9687",
-        "power": 3.7
-      }
-    ]
-  },
-  {
     "id": 14568157,
     "lat": 41.013245,
     "lng": 29.190923,
@@ -19872,38 +19701,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/9813",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14568164,
-    "lat": 40.926853,
-    "lng": 29.318021,
-    "title": "Teknoparkistanbul",
-    "address": "Kurtköy Ankara  Pendik/İstanbul",
-    "phone": "+90 850 241 03 60",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "441",
-    "sockets": [
-      {
-        "id": 386711,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9814",
-        "power": 22
-      },
-      {
-        "id": 386712,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/9815",
         "power": 22
       }
     ]
@@ -92377,59 +92174,6 @@
     ]
   },
   {
-    "id": 14606738,
-    "lat": 41.019465,
-    "lng": 29.082009,
-    "title": "Çağrı Market Bulgurlu Açık Otoparkı",
-    "address": "Bulgurlu İzzettinbey 39  Üsküdar/İstanbul",
-    "phone": "+908502410360",
-    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
-    "reservationUrl": null,
-    "operatorId": "992885",
-    "operatorTitle": "360 Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "360° ENERJİ",
-    "cityId": "34",
-    "districtId": "452",
-    "sockets": [
-      {
-        "id": 432324,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/19370",
-        "power": 120
-      },
-      {
-        "id": 432325,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/19372",
-        "power": 120
-      },
-      {
-        "id": 432326,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/19373",
-        "power": 22
-      },
-      {
-        "id": 432327,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/19374",
-        "power": 22
-      },
-      {
-        "id": 432328,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/19375",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14606760,
     "lat": 37.89948,
     "lng": 34.5579,
@@ -95197,7 +94941,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -95236,7 +94980,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -105945,7 +105689,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -105970,7 +105714,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -112176,7 +111920,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -117096,7 +116840,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "980",
     "sockets": [
@@ -120295,7 +120039,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -120327,7 +120071,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -120770,7 +120514,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "981",
     "sockets": [
@@ -122686,7 +122430,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -134629,7 +134373,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "34",
     "districtId": "452",
     "sockets": [
@@ -139329,7 +139073,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -150615,7 +150359,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "80",
     "districtId": "944",
     "sockets": [
@@ -150647,7 +150391,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -156346,7 +156090,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "386",
     "sockets": [
@@ -157063,7 +156807,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "389",
     "sockets": [
@@ -159772,7 +159516,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "981",
     "sockets": [
@@ -160871,7 +160615,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "980",
     "sockets": [
@@ -163280,7 +163024,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "379",
     "sockets": [
@@ -163931,7 +163675,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "979",
     "sockets": [
@@ -169268,52 +169012,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/2574",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14626262,
-    "lat": 40.590507,
-    "lng": 31.807227,
-    "title": "Grand Kartal Otel",
-    "address": "Kartalkaya  Kıbrıscık/Bolu",
-    "phone": "0850 377 76 10",
-    "reportUrl": "https://obisarj.com/iletisim/",
-    "reservationUrl": "https://obisarj.com/iletisim/",
-    "operatorId": "1081065",
-    "operatorTitle": "Obişarj Elektrikli Araç Şarj Sistemleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Obişarj",
-    "cityId": "14",
-    "districtId": "172",
-    "sockets": [
-      {
-        "id": 449408,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/15828",
-        "power": 22
-      },
-      {
-        "id": 449409,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/15829",
-        "power": 22
-      },
-      {
-        "id": 449410,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/15830",
-        "power": 22
-      },
-      {
-        "id": 449411,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/15831",
         "power": 22
       }
     ]
@@ -186026,7 +185724,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "33",
     "districtId": "409",
     "sockets": [
@@ -186051,7 +185749,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "13",
     "sockets": [
@@ -192011,7 +191709,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "7",
     "districtId": "94",
     "sockets": [
@@ -208251,66 +207949,6 @@
     ]
   },
   {
-    "id": 14650180,
-    "lat": 37.716893,
-    "lng": 33.488673,
-    "title": "Opet Apak Petrol",
-    "address": "Adalet Konya Ereğli 1041/1  Karapınar/Konya",
-    "phone": "08507559898",
-    "reportUrl": "https://www.watmobilite.com/",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "42",
-    "districtId": "574",
-    "sockets": [
-      {
-        "id": 466813,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31034",
-        "power": 120
-      },
-      {
-        "id": 466814,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31035",
-        "power": 120
-      },
-      {
-        "id": 466815,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/35226",
-        "power": 120
-      },
-      {
-        "id": 466816,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/35227",
-        "power": 120
-      },
-      {
-        "id": 466817,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/35228",
-        "power": 180
-      },
-      {
-        "id": 466818,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/35229",
-        "power": 180
-      }
-    ]
-  },
-  {
     "id": 14650184,
     "lat": 40.70582,
     "lng": 30.245666,
@@ -224043,38 +223681,6 @@
     ]
   },
   {
-    "id": 14662214,
-    "lat": 37.968,
-    "lng": 32.5163,
-    "title": "Opet Şeflek",
-    "address": "Kosova Yeni İstanbul 118  Selçuklu/Konya",
-    "phone": "08507559898",
-    "reportUrl": "https://www.watmobilite.com/",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "42",
-    "districtId": "579",
-    "sockets": [
-      {
-        "id": 470324,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/37473",
-        "power": 120
-      },
-      {
-        "id": 470325,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/37474",
-        "power": 120
-      }
-    ]
-  },
-  {
     "id": 14662234,
     "lat": 37.839973,
     "lng": 27.246353,
@@ -225540,7 +225146,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "6",
     "districtId": "78",
     "sockets": [
@@ -233079,45 +232685,29 @@
     "id": 14663281,
     "lat": 39.332305,
     "lng": 26.700161,
-    "title": "Gıoev - Ayvalık Kırlangıç Avm",
-    "address": "150 Evler 267  Ayvalık/Balıkesir",
-    "phone": "0850 203 82 58",
-    "reportUrl": "https://gioev.com/destek",
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
     "reservationUrl": null,
-    "operatorId": "1004808",
-    "operatorTitle": "Gioev Şarj İstasyonları İşletmeleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "GIOEV",
-    "cityId": "10",
-    "districtId": "127",
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
     "sockets": [
       {
-        "id": 471893,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/32609",
-        "power": 300
+        "id": 471893
       },
       {
-        "id": 471894,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/32610",
-        "power": 300
+        "id": 471894
       },
       {
-        "id": 471895,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/32611",
-        "power": 11
+        "id": 471895
       },
       {
-        "id": 471896,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/32612",
-        "power": 11
+        "id": 471896
       }
     ]
   },
@@ -239577,52 +239167,6 @@
         "type": "dc",
         "subType": "dcCcs",
         "socketNumber": "SKT/13171",
-        "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14684077,
-    "lat": 41.104969,
-    "lng": 28.986445,
-    "title": "Vadistanbul Vakko",
-    "address": "Ayazağa Kemerburgaz 6a Blok  Sarıyer/İstanbul",
-    "phone": "2125711355",
-    "reportUrl": "https://www.efish.com.tr/",
-    "reservationUrl": "https://www.efish.com.tr/",
-    "operatorId": "1039920",
-    "operatorTitle": "Artaş Enerji Yatırımları Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "efish",
-    "cityId": "34",
-    "districtId": "443",
-    "sockets": [
-      {
-        "id": 492994,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/13172",
-        "power": 120
-      },
-      {
-        "id": 492995,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/13173",
-        "power": 120
-      },
-      {
-        "id": 492996,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/13174",
-        "power": 120
-      },
-      {
-        "id": 492997,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/13175",
         "power": 120
       }
     ]
@@ -256130,31 +255674,6 @@
     ]
   },
   {
-    "id": 14685177,
-    "lat": 37.896328,
-    "lng": 32.505791,
-    "title": "Uğurel Arçelik",
-    "address": "Musalla Bağları Ankara 99/1  Selçuklu/Konya",
-    "phone": "0850 755 98 98",
-    "reportUrl": "https://www.watmobilite.com/",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "42",
-    "districtId": "579",
-    "sockets": [
-      {
-        "id": 495179,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40161",
-        "power": 11
-      }
-    ]
-  },
-  {
     "id": 14685188,
     "lat": 40.950876,
     "lng": 29.215387,
@@ -257225,38 +256744,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/27043",
         "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14685294,
-    "lat": 37.8848,
-    "lng": 32.4656,
-    "title": "Kültür Sitesi",
-    "address": "Şeker İnanç 1  Selçuklu/Konya",
-    "phone": "08508889192",
-    "reportUrl": "https://www.biogreen.com.tr",
-    "reservationUrl": null,
-    "operatorId": "1133163",
-    "operatorTitle": "Enay Enerji Gıda Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "biogreen",
-    "cityId": "42",
-    "districtId": "579",
-    "sockets": [
-      {
-        "id": 495307,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40056",
-        "power": 9
-      },
-      {
-        "id": 495308,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40057",
-        "power": 9
       }
     ]
   },
@@ -265304,38 +264791,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/39918",
         "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14685913,
-    "lat": 40.653117,
-    "lng": 29.254438,
-    "title": "Vega Avm, Yalova Merkez - Dc",
-    "address": "Kazım Karabekir Ömer Faydalı 233  Merkez/Yalova",
-    "phone": "+90 850 242 42 47",
-    "reportUrl": "https://otopriz.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "133819",
-    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Otopriz",
-    "cityId": "77",
-    "districtId": "929",
-    "sockets": [
-      {
-        "id": 496520,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/39919",
-        "power": 180
-      },
-      {
-        "id": 496521,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/39920",
-        "power": 180
       }
     ]
   },
@@ -274250,7 +273705,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -274282,7 +273737,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -274307,7 +273762,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -294414,38 +293869,6 @@
     ]
   },
   {
-    "id": 14708583,
-    "lat": 36.91382,
-    "lng": 31.12043,
-    "title": "Opet Karalar",
-    "address": "Kürüş Serik 260  Serik/Antalya",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/Bize-Ulasin",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "7",
-    "districtId": "100",
-    "sockets": [
-      {
-        "id": 521931,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/42975",
-        "power": 120
-      },
-      {
-        "id": 521932,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/42976",
-        "power": 120
-      }
-    ]
-  },
-  {
     "id": 14708586,
     "lat": 37.086073,
     "lng": 37.411085,
@@ -307197,140 +306620,6 @@
         "subType": "acType2",
         "socketNumber": "SKT/44193",
         "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14719668,
-    "lat": 39.911034,
-    "lng": 32.808808,
-    "title": "Damşa Petrol Dc-2",
-    "address": "Söğütözü 120  Çankaya/Ankara",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/iletisim",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 533919,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44199",
-        "power": 120
-      },
-      {
-        "id": 533920,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44200",
-        "power": 120
-      },
-      {
-        "id": 533921,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44201",
-        "power": 120
-      },
-      {
-        "id": 533922,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44202",
-        "power": 120
-      },
-      {
-        "id": 533923,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44203",
-        "power": 120
-      },
-      {
-        "id": 533924,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44204",
-        "power": 120
-      },
-      {
-        "id": 533925,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44205",
-        "power": 180
-      },
-      {
-        "id": 533926,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44206",
-        "power": 180
-      }
-    ]
-  },
-  {
-    "id": 14719669,
-    "lat": 39.860031,
-    "lng": 32.636727,
-    "title": "Akıncı Kule",
-    "address": "Yaşamkent 3250 19/B  Çankaya/Ankara",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/Bize-Ulasin",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 533927,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/34100",
-        "power": 22
-      },
-      {
-        "id": 533928,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/34101",
-        "power": 22
-      },
-      {
-        "id": 533929,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/34102",
-        "power": 120
-      },
-      {
-        "id": 533930,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/34103",
-        "power": 120
-      },
-      {
-        "id": 533931,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/34104",
-        "power": 120
-      },
-      {
-        "id": 533932,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44207",
-        "power": 120
       }
     ]
   },
@@ -330332,38 +329621,6 @@
     ]
   },
   {
-    "id": 14751696,
-    "lat": 37.0489,
-    "lng": 35.2993,
-    "title": "Glamm Bakery & Coffee, Çukurova-dc",
-    "address": "Güzelyalı 81150 3/1a  Çukurova/Adana",
-    "phone": "+90 850 242 42 47",
-    "reportUrl": "https://otopriz.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "133819",
-    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Otopriz",
-    "cityId": "1",
-    "districtId": "14",
-    "sockets": [
-      {
-        "id": 567410,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/46732",
-        "power": 180
-      },
-      {
-        "id": 567411,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/46733",
-        "power": 180
-      }
-    ]
-  },
-  {
     "id": 14751698,
     "lat": 37.682161,
     "lng": 27.380321,
@@ -339816,7 +339073,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -339873,7 +339130,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "10",
     "sockets": [
@@ -339919,7 +339176,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -341432,7 +340689,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "1",
     "districtId": "14",
     "sockets": [
@@ -343428,63 +342685,6 @@
     ]
   },
   {
-    "id": 14762704,
-    "lat": 39.881294,
-    "lng": 32.817767,
-    "title": "Türksat Öveçler",
-    "address": "Cevizlidere Cevizlidere  Çankaya/Ankara",
-    "phone": "08504087275",
-    "reportUrl": "https://usarj.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1105291",
-    "operatorTitle": "Tcdd Teknik Mühendislik Ve Müşavirlik Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "U-ŞARJ",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 579321,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28310",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14762705,
-    "lat": 39.952983,
-    "lng": 32.776715,
-    "title": "Türksat Macunköy",
-    "address": "Çamlıca 149 21  Yenimahalle/Ankara",
-    "phone": "08504087275",
-    "reportUrl": "https://usarj.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1105291",
-    "operatorTitle": "Tcdd Teknik Mühendislik Ve Müşavirlik Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "U-ŞARJ",
-    "cityId": "6",
-    "districtId": "78",
-    "sockets": [
-      {
-        "id": 579322,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28308",
-        "power": 22
-      },
-      {
-        "id": 579323,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28309",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14762707,
     "lat": 40.772569,
     "lng": 30.36355,
@@ -344839,24 +344039,20 @@
     "id": 14762803,
     "lat": 36.230155,
     "lng": 36.165767,
-    "title": "Migros Antakya Mm",
-    "address": "Odabaşı Mahallesi Kanguru Sokak No:3/1  Antakya/Hatay",
-    "phone": "08502004000",
-    "reportUrl": "https://www.mig-go.com/",
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
     "reservationUrl": null,
-    "operatorId": "1052446",
-    "operatorTitle": "Migen Enerji Ve Elektrikli Araç Şarj Hizmetleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "MİGGO",
-    "cityId": "31",
-    "districtId": "979",
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
     "sockets": [
       {
-        "id": 579431,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/47893",
-        "power": 22
+        "id": 579431
       }
     ]
   },
@@ -344946,38 +344142,26 @@
     "id": 14762807,
     "lat": 37.080495,
     "lng": 30.613651,
-    "title": "Antalya Osb Elektrikli Araç Şarj İstasyonu",
-    "address": "Antalya Osb 1.kısım 5. 5  Döşemealtı/Antalya",
-    "phone": "4442207",
-    "reportUrl": "https://www.cw-enerji.com/tr/iletisim",
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
     "reservationUrl": null,
-    "operatorId": "919069",
-    "operatorTitle": "Cw Enerji Mühendislik Ticaret Ve Sanayi Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "CHARGING VEHICLES CV",
-    "cityId": "7",
-    "districtId": "87",
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
     "sockets": [
       {
-        "id": 579436,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/4611",
-        "power": 22
+        "id": 579436
       },
       {
-        "id": 579437,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/4612",
-        "power": 22
+        "id": 579437
       },
       {
-        "id": 579438,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/11310",
-        "power": 22
+        "id": 579438
       }
     ]
   },
@@ -346847,24 +346031,20 @@
     "id": 14762866,
     "lat": 37.008077,
     "lng": 30.597603,
-    "title": "Yiğit Altun Petrol",
-    "address": "Bahçeyaka Atatürk 391  Döşemealtı/Antalya",
-    "phone": "4442207",
-    "reportUrl": "https://www.cw-enerji.com/tr/iletisim",
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
     "reservationUrl": null,
-    "operatorId": "919069",
-    "operatorTitle": "Cw Enerji Mühendislik Ticaret Ve Sanayi Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "CHARGING VEHICLES CV",
-    "cityId": "7",
-    "districtId": "87",
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
     "sockets": [
       {
-        "id": 579563,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/5916",
-        "power": 22
+        "id": 579563
       }
     ]
   },
@@ -347610,45 +346790,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/47922",
         "power": 60
-      }
-    ]
-  },
-  {
-    "id": 14762900,
-    "lat": 39.610115,
-    "lng": 26.949319,
-    "title": "Acc Olives Otel, Edremit - Dc, Ac",
-    "address": "Zeytinli 53a  Edremit/Balıkesir",
-    "phone": "+90 850 242 42 47",
-    "reportUrl": "https://otopriz.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "133819",
-    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Otopriz",
-    "cityId": "10",
-    "districtId": "133",
-    "sockets": [
-      {
-        "id": 579636,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/47928",
-        "power": 120
-      },
-      {
-        "id": 579637,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/47929",
-        "power": 120
-      },
-      {
-        "id": 579638,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/47930",
-        "power": 22
       }
     ]
   },
@@ -349105,38 +348246,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/47999",
         "power": 180
-      }
-    ]
-  },
-  {
-    "id": 14763024,
-    "lat": 40.07865,
-    "lng": 32.96475,
-    "title": "Şan Petrol, Akyurt - Dc",
-    "address": "Saracalar 194/B  Akyurt/Ankara",
-    "phone": "+90 850 242 42 47",
-    "reportUrl": "https://otopriz.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "133819",
-    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Otopriz",
-    "cityId": "6",
-    "districtId": "58",
-    "sockets": [
-      {
-        "id": 579875,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48002",
-        "power": 120
-      },
-      {
-        "id": 579876,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48003",
-        "power": 120
       }
     ]
   },
@@ -351667,7 +350776,7 @@
     "operatorId": "1037081",
     "operatorTitle": "Voltgo Şarj Hizmetleri Anonim Şirketi",
     "serviceType": "public",
-    "brand": "VOLTPO",
+    "brand": "VOLTGO",
     "cityId": "31",
     "districtId": "979",
     "sockets": [
@@ -352560,38 +351669,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/48192",
         "power": 160
-      }
-    ]
-  },
-  {
-    "id": 14763247,
-    "lat": 37.802137,
-    "lng": 27.839505,
-    "title": "Efemak Petrol",
-    "address": "Çeştepe 99  Merkez/Aydın",
-    "phone": "850 474 60 11",
-    "reportUrl": "https://ovolt.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1108533",
-    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "ovolt",
-    "cityId": "9",
-    "districtId": "120",
-    "sockets": [
-      {
-        "id": 580412,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48193",
-        "power": 60
-      },
-      {
-        "id": 580413,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48194",
-        "power": 60
       }
     ]
   },
@@ -364539,38 +363616,6 @@
     ]
   },
   {
-    "id": 14763911,
-    "lat": 37.895095,
-    "lng": 32.476669,
-    "title": "Koçtaş Konya",
-    "address": "Akıncılar Yeni Sille 4  Selçuklu/Konya",
-    "phone": "0850 755 98 98",
-    "reportUrl": "https://www.watmobilite.com",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "42",
-    "districtId": "579",
-    "sockets": [
-      {
-        "id": 582058,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49204",
-        "power": 180
-      },
-      {
-        "id": 582059,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49205",
-        "power": 180
-      }
-    ]
-  },
-  {
     "id": 14763912,
     "lat": 41.00806,
     "lng": 29.035528,
@@ -370894,182 +369939,6 @@
     ]
   },
   {
-    "id": 14764327,
-    "lat": 41.015523,
-    "lng": 29.178818,
-    "title": "Metrogarden Avm Kapalı Otopark",
-    "address": "Necip Fazıl Alemdağ 940  Ümraniye/İstanbul",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/iletisim",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "34",
-    "districtId": "451",
-    "sockets": [
-      {
-        "id": 583031,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49765",
-        "power": 120
-      },
-      {
-        "id": 583032,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49766",
-        "power": 120
-      },
-      {
-        "id": 583033,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49767",
-        "power": 120
-      },
-      {
-        "id": 583034,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49768",
-        "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14764328,
-    "lat": 41.040951,
-    "lng": 29.0779,
-    "title": "Çengelköy Charge Hub",
-    "address": "Mehmet Akif Ersoy 95  Üsküdar/İstanbul",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/iletisim",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "34",
-    "districtId": "452",
-    "sockets": [
-      {
-        "id": 583035,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49769",
-        "power": 120
-      },
-      {
-        "id": 583036,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49770",
-        "power": 120
-      },
-      {
-        "id": 583037,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49771",
-        "power": 120
-      },
-      {
-        "id": 583038,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49772",
-        "power": 120
-      },
-      {
-        "id": 583039,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49773",
-        "power": 120
-      },
-      {
-        "id": 583040,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49774",
-        "power": 120
-      },
-      {
-        "id": 583041,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49775",
-        "power": 120
-      },
-      {
-        "id": 583042,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49776",
-        "power": 120
-      },
-      {
-        "id": 583043,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49777",
-        "power": 120
-      },
-      {
-        "id": 583044,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49778",
-        "power": 120
-      },
-      {
-        "id": 583045,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49779",
-        "power": 120
-      },
-      {
-        "id": 583046,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49780",
-        "power": 120
-      },
-      {
-        "id": 583047,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49781",
-        "power": 120
-      },
-      {
-        "id": 583048,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49782",
-        "power": 120
-      },
-      {
-        "id": 583049,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49783",
-        "power": 120
-      },
-      {
-        "id": 583050,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/49784",
-        "power": 120
-      }
-    ]
-  },
-  {
     "id": 14764332,
     "lat": 40.21466,
     "lng": 28.90643,
@@ -372170,38 +371039,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/49840",
         "power": 200
-      }
-    ]
-  },
-  {
-    "id": 14764408,
-    "lat": 37.045409,
-    "lng": 27.398868,
-    "title": "Zai Yaşam Bodrum",
-    "address": "Geriş Erdemil 80/A-1  Bodrum/Muğla",
-    "phone": "444 98 77",
-    "reportUrl": "https://dcharge.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1092971",
-    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "D-Charge",
-    "cityId": "48",
-    "districtId": "650",
-    "sockets": [
-      {
-        "id": 583194,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/49850",
-        "power": 11
-      },
-      {
-        "id": 583195,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/49852",
-        "power": 11
       }
     ]
   },
@@ -392046,63 +390883,6 @@
     ]
   },
   {
-    "id": 14785797,
-    "lat": 41.090439,
-    "lng": 28.624303,
-    "title": "İstanbul Üni. Cerrahpaşa Büyükçekmece Kampüsü",
-    "address": "Alkent 2000  Büyükçekmece/İstanbul",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/iletisim",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "34",
-    "districtId": "429",
-    "sockets": [
-      {
-        "id": 605907,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/51288",
-        "power": 30
-      }
-    ]
-  },
-  {
-    "id": 14785798,
-    "lat": 39.948494,
-    "lng": 32.886847,
-    "title": "Mertay Altındağ",
-    "address": "Gültepe Gültepe 63  Altındağ/Ankara",
-    "phone": "08502816166",
-    "reportUrl": "https://qcharge.io/iletisim",
-    "reservationUrl": null,
-    "operatorId": "932023",
-    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Q Charge",
-    "cityId": "6",
-    "districtId": "59",
-    "sockets": [
-      {
-        "id": 605908,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/51289",
-        "power": 120
-      },
-      {
-        "id": 605909,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/51290",
-        "power": 120
-      }
-    ]
-  },
-  {
     "id": 14785801,
     "lat": 40.724239,
     "lng": 31.46356,
@@ -400322,38 +399102,6 @@
         "subType": "acType2",
         "socketNumber": "SKT/52106",
         "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14786500,
-    "lat": 40.895329,
-    "lng": 29.228436,
-    "title": "Doğuş Oto Kartal - Porsche",
-    "address": "Hürriyet Mah. Yakacık D-100 E-5 Kuzey Yanyol Cad. 45  Kartal/İstanbul",
-    "phone": "444 98 77",
-    "reportUrl": "https://dcharge.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1092971",
-    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "D-Charge",
-    "cityId": "34",
-    "districtId": "437",
-    "sockets": [
-      {
-        "id": 607156,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/52015",
-        "power": 43
-      },
-      {
-        "id": 607157,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/52016",
-        "power": 50
       }
     ]
   },
@@ -409266,52 +408014,6 @@
     ]
   },
   {
-    "id": 14787130,
-    "lat": 39.946905,
-    "lng": 32.736385,
-    "title": "Velux Avm Açık Otopark",
-    "address": "İnönü 1729.  Yenimahalle/Ankara",
-    "phone": "08503050173",
-    "reportUrl": "https://www.basergrup.com.tr",
-    "reservationUrl": null,
-    "operatorId": "1108496",
-    "operatorTitle": "Başer Otomotiv Petrol İnşaat Kiralama Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "B-FORCE",
-    "cityId": "6",
-    "districtId": "78",
-    "sockets": [
-      {
-        "id": 608321,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/30738",
-        "power": 11
-      },
-      {
-        "id": 608322,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/30739",
-        "power": 11
-      },
-      {
-        "id": 608323,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/30740",
-        "power": 11
-      },
-      {
-        "id": 608324,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/52768",
-        "power": 60
-      }
-    ]
-  },
-  {
     "id": 14787136,
     "lat": 39.162387,
     "lng": 34.158143,
@@ -409590,45 +408292,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/52808",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14787149,
-    "lat": 41.015243,
-    "lng": 29.0766,
-    "title": "Libadiye Katlı Otopark",
-    "address": "Bulgurlu Libadiye 19  Üsküdar/İstanbul",
-    "phone": "0850 755 98 98",
-    "reportUrl": "https://www.watmobilite.com",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "34",
-    "districtId": "452",
-    "sockets": [
-      {
-        "id": 608401,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/52811",
-        "power": 120
-      },
-      {
-        "id": 608402,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/52812",
-        "power": 120
-      },
-      {
-        "id": 608403,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/52813",
         "power": 22
       }
     ]
@@ -410465,6 +409128,2504 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/52924",
         "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787244,
+    "lat": 40.926853,
+    "lng": 29.318021,
+    "title": "Teknoparkistanbul",
+    "address": "Kurtköy Ankara  Pendik/İstanbul",
+    "phone": "+90 850 241 03 60",
+    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
+    "reservationUrl": null,
+    "operatorId": "992885",
+    "operatorTitle": "360 Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "360° ENERJİ",
+    "cityId": "34",
+    "districtId": "441",
+    "sockets": [
+      {
+        "id": 608539,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/9814",
+        "power": 22
+      },
+      {
+        "id": 608540,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/9815",
+        "power": 22
+      },
+      {
+        "id": 608541,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52954",
+        "power": 22
+      },
+      {
+        "id": 608542,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52955",
+        "power": 22
+      },
+      {
+        "id": 608543,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52956",
+        "power": 22
+      },
+      {
+        "id": 608544,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52957",
+        "power": 22
+      },
+      {
+        "id": 608545,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52958",
+        "power": 22
+      },
+      {
+        "id": 608546,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52959",
+        "power": 22
+      },
+      {
+        "id": 608547,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52960",
+        "power": 22
+      },
+      {
+        "id": 608548,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52961",
+        "power": 22
+      },
+      {
+        "id": 608549,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52962",
+        "power": 22
+      },
+      {
+        "id": 608550,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52963",
+        "power": 22
+      },
+      {
+        "id": 608551,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52964",
+        "power": 22
+      },
+      {
+        "id": 608552,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52965",
+        "power": 22
+      },
+      {
+        "id": 608553,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52966",
+        "power": 22
+      },
+      {
+        "id": 608554,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52967",
+        "power": 22
+      },
+      {
+        "id": 608555,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52968",
+        "power": 22
+      },
+      {
+        "id": 608556,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52969",
+        "power": 22
+      },
+      {
+        "id": 608557,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52970",
+        "power": 22
+      },
+      {
+        "id": 608558,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52971",
+        "power": 22
+      },
+      {
+        "id": 608559,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52972",
+        "power": 22
+      },
+      {
+        "id": 608560,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52973",
+        "power": 22
+      },
+      {
+        "id": 608561,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52974",
+        "power": 22
+      },
+      {
+        "id": 608562,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52975",
+        "power": 22
+      },
+      {
+        "id": 608563,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52976",
+        "power": 22
+      },
+      {
+        "id": 608564,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52977",
+        "power": 22
+      },
+      {
+        "id": 608565,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52978",
+        "power": 22
+      },
+      {
+        "id": 608566,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52979",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787246,
+    "lat": 41.179198,
+    "lng": 28.891125,
+    "title": "Migros Göktürk İstanbul Mmm",
+    "address": "Göktürk Cumhuriyet 10  Eyüpsultan/İstanbul",
+    "phone": "08502004000",
+    "reportUrl": "https://www.mig-go.com/",
+    "reservationUrl": null,
+    "operatorId": "1052446",
+    "operatorTitle": "Migen Enerji Ve Elektrikli Araç Şarj Hizmetleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "MİGGO",
+    "cityId": "34",
+    "districtId": "432",
+    "sockets": [
+      {
+        "id": 608569,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/5792",
+        "power": 22
+      },
+      {
+        "id": 608570,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/8564",
+        "power": 22
+      },
+      {
+        "id": 608571,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52987",
+        "power": 60
+      },
+      {
+        "id": 608572,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52988",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14787252,
+    "lat": 37.895095,
+    "lng": 32.476669,
+    "title": "Koçtaş Konya",
+    "address": "Akıncılar Yeni Sille 4  Selçuklu/Konya",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "42",
+    "districtId": "579",
+    "sockets": [
+      {
+        "id": 608573,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49204",
+        "power": 180
+      },
+      {
+        "id": 608574,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49205",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787261,
+    "lat": 40.3831,
+    "lng": 29.0739,
+    "title": "Cennet Sitesi",
+    "address": "Çamlık Hasanbaba 21  Çınarcık/Yalova",
+    "phone": "05530198359",
+    "reportUrl": "https://fixcharge.io/",
+    "reservationUrl": "https://fixcharge.io/",
+    "operatorId": "1068016",
+    "operatorTitle": "Beyttürk Enerji Üretim Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "fixcharge",
+    "cityId": "77",
+    "districtId": "931",
+    "sockets": [
+      {
+        "id": 608575,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52991",
+        "power": 22
+      },
+      {
+        "id": 608576,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52992",
+        "power": 30
+      }
+    ]
+  },
+  {
+    "id": 14787262,
+    "lat": 38.27363,
+    "lng": 28.62117,
+    "title": "Po Alaşehir-yanıklar Petrol",
+    "address": "Delemenler  Alaşehir/Manisa",
+    "phone": "08507620708",
+    "reportUrl": "https://5sarj.com/tr/iletisim",
+    "reservationUrl": "https://5sarj.com/tr/iletisim",
+    "operatorId": "1040808",
+    "operatorTitle": "Borenco Şarj Teknoloji Yatırımları Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "5 şarj",
+    "cityId": "45",
+    "districtId": "616",
+    "sockets": [
+      {
+        "id": 608577,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52993",
+        "power": 180
+      },
+      {
+        "id": 608578,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52994",
+        "power": 180
+      },
+      {
+        "id": 608579,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52995",
+        "power": 180
+      },
+      {
+        "id": 608580,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52996",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787263,
+    "lat": 41.019465,
+    "lng": 29.082009,
+    "title": "Çağrı Market Bulgurlu Açık Otoparkı",
+    "address": "Bulgurlu İzzettinbey 39  Üsküdar/İstanbul",
+    "phone": "+908502410360",
+    "reportUrl": "https://www.360enerji.com.tr/360sarj/Iletisim",
+    "reservationUrl": null,
+    "operatorId": "992885",
+    "operatorTitle": "360 Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "360° ENERJİ",
+    "cityId": "34",
+    "districtId": "452",
+    "sockets": [
+      {
+        "id": 608581,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/19370",
+        "power": 120
+      },
+      {
+        "id": 608582,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/19372",
+        "power": 120
+      },
+      {
+        "id": 608583,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52989",
+        "power": 120
+      },
+      {
+        "id": 608584,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52990",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787276,
+    "lat": 39.694526,
+    "lng": 27.942721,
+    "title": "Fırıntaş Cafe Yeni Mahalle",
+    "address": "Yeni 104  Karesi/Balıkesir",
+    "phone": "08507333567",
+    "reportUrl": "https://ekosmobility.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1052075",
+    "operatorTitle": "Ekos Mobilite Çözümleri Teknoloji Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EKOS",
+    "cityId": "10",
+    "districtId": "977",
+    "sockets": [
+      {
+        "id": 608591,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52997",
+        "power": 22
+      },
+      {
+        "id": 608592,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52998",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787277,
+    "lat": 41.004499,
+    "lng": 29.129215,
+    "title": "Zone216 Gym Avrupa Şarj",
+    "address": "Tatlısu Server 18  Ümraniye/İstanbul",
+    "phone": "05532282722",
+    "reportUrl": "https://avrupasarj.com",
+    "reservationUrl": "https://avrupasarj.com",
+    "operatorId": "1052941",
+    "operatorTitle": "Avel Enerji Üretim Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "GLADSOME",
+    "cityId": "34",
+    "districtId": "451",
+    "sockets": [
+      {
+        "id": 608593,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52999",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787286,
+    "lat": 37.004876,
+    "lng": 37.436409,
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
+    "reservationUrl": null,
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
+    "sockets": [
+      {
+        "id": 608594
+      },
+      {
+        "id": 608595
+      },
+      {
+        "id": 608596
+      }
+    ]
+  },
+  {
+    "id": 14787313,
+    "lat": 37.934481,
+    "lng": 32.513602,
+    "title": "Yavuz Renault Özel Servisi",
+    "address": "Horozluhan Ulus 8  Selçuklu/Konya",
+    "phone": "444 90 91",
+    "reportUrl": "https://www.monokonev.com",
+    "reservationUrl": "https://www.monokonev.com",
+    "operatorId": "932087",
+    "operatorTitle": "Monokon Elektrik Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Monokon elektrik",
+    "cityId": "42",
+    "districtId": "579",
+    "sockets": [
+      {
+        "id": 608658,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53036",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787316,
+    "lat": 40.001207,
+    "lng": 32.828927,
+    "title": "Huzurova Sitesi",
+    "address": "Yayla 1545 8  Keçiören/Ankara",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "6",
+    "districtId": "71",
+    "sockets": [
+      {
+        "id": 608659,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53081",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787320,
+    "lat": 41.093957,
+    "lng": 28.739789,
+    "title": "Zeplin Kiptaş Kayabaşı Konutları Dc",
+    "address": "Güvercintepe İstiklal 202  Başakşehir/İstanbul",
+    "phone": "08504740303",
+    "reportUrl": "https://www.zeplinenerji.com.tr/",
+    "reservationUrl": "https://www.zeplinenerji.com.tr/",
+    "operatorId": "993552",
+    "operatorTitle": "Zeplin Turizm Araç Kiralama Mobilite Ve Enerji Yatırımları Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ZEPLİN CAR rental",
+    "cityId": "34",
+    "districtId": "424",
+    "sockets": [
+      {
+        "id": 608702,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53053",
+        "power": 120
+      },
+      {
+        "id": 608703,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53054",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787322,
+    "lat": 41.105245,
+    "lng": 28.786292,
+    "title": "Zeplin Başakşehir 2.etap Dc",
+    "address": "Başakşehir Süleyman Çelebi 8  Başakşehir/İstanbul",
+    "phone": "08504740303",
+    "reportUrl": "https://www.zeplinenerji.com.tr/",
+    "reservationUrl": "https://www.zeplinenerji.com.tr/",
+    "operatorId": "993552",
+    "operatorTitle": "Zeplin Turizm Araç Kiralama Mobilite Ve Enerji Yatırımları Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ZEPLİN CAR rental",
+    "cityId": "34",
+    "districtId": "424",
+    "sockets": [
+      {
+        "id": 608709,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53095",
+        "power": 120
+      },
+      {
+        "id": 608710,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53096",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787328,
+    "lat": 37.8357,
+    "lng": 40.6355,
+    "title": "Bismil Başakşehirkonutları Dc",
+    "address": "Köseli  Bismil/Diyarbakır",
+    "phone": "5558229135",
+    "reportUrl": "https://turuncusarj.com/nedmin/production/sikayet",
+    "reservationUrl": "https://turuncusarj.com/nedmin/production/randevu",
+    "operatorId": "918800",
+    "operatorTitle": "Turuncu Mühendislik Elektrik Taah.san.ve Dış Tic. Ltd. Şti.",
+    "serviceType": "public",
+    "brand": "turuncu mühendislik",
+    "cityId": "21",
+    "districtId": "264",
+    "sockets": [
+      {
+        "id": 608728,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53113",
+        "power": 90
+      },
+      {
+        "id": 608729,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53114",
+        "power": 90
+      }
+    ]
+  },
+  {
+    "id": 14787331,
+    "lat": 40.003681,
+    "lng": 32.829072,
+    "title": "Vesa Ovacık Sitesi",
+    "address": "Yayla 1555  Keçiören/Ankara",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "6",
+    "districtId": "71",
+    "sockets": [
+      {
+        "id": 608730,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53115",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787335,
+    "lat": 41.05579,
+    "lng": 29.02323,
+    "title": "Migros Ortaköy Mmm",
+    "address": "Ortaköy Dereboyu 2  Beşiktaş/İstanbul",
+    "phone": "08502004000",
+    "reportUrl": "https://www.mig-go.com/",
+    "reservationUrl": null,
+    "operatorId": "1052446",
+    "operatorTitle": "Migen Enerji Ve Elektrikli Araç Şarj Hizmetleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "MİGGO",
+    "cityId": "34",
+    "districtId": "428",
+    "sockets": [
+      {
+        "id": 608733,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/7960",
+        "power": 22
+      },
+      {
+        "id": 608734,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53116",
+        "power": 120
+      },
+      {
+        "id": 608735,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53117",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787338,
+    "lat": 38.275118,
+    "lng": 27.151175,
+    "title": "Sintaç Depoları, Menderes - Dc 1, Dc 2",
+    "address": "Görece Cumhuriyet 44/10  Menderes/İzmir",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "35",
+    "districtId": "474",
+    "sockets": [
+      {
+        "id": 608758,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53140",
+        "power": 120
+      },
+      {
+        "id": 608759,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53141",
+        "power": 120
+      },
+      {
+        "id": 608760,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53142",
+        "power": 120
+      },
+      {
+        "id": 608761,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53143",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787339,
+    "lat": 37.8517,
+    "lng": 32.4869,
+    "title": "Can Nova Sitesi, Meram - Dc",
+    "address": "Uzunharmanlar Çeçenistan 98­-100  Meram/Konya",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "42",
+    "districtId": "577",
+    "sockets": [
+      {
+        "id": 608762,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53144",
+        "power": 160
+      },
+      {
+        "id": 608763,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53145",
+        "power": 160
+      }
+    ]
+  },
+  {
+    "id": 14787340,
+    "lat": 40.0254,
+    "lng": 27.7248,
+    "title": "Eriş Un Dinlenme Tesisleri",
+    "address": "Yenice 229  Çorlu/Tekirdağ",
+    "phone": "08508087846",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "59",
+    "districtId": "786",
+    "sockets": [
+      {
+        "id": 608764,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53146",
+        "power": 180
+      },
+      {
+        "id": 608765,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53147",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787346,
+    "lat": 41.015243,
+    "lng": 29.0766,
+    "title": "Libadiye Katlı Otopark",
+    "address": "Bulgurlu Libadiye 19  Üsküdar/İstanbul",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "34",
+    "districtId": "452",
+    "sockets": [
+      {
+        "id": 608795,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52811",
+        "power": 120
+      },
+      {
+        "id": 608796,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52812",
+        "power": 120
+      },
+      {
+        "id": 608797,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/52813",
+        "power": 22
+      },
+      {
+        "id": 608798,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53158",
+        "power": 22
+      },
+      {
+        "id": 608799,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53159",
+        "power": 22
+      },
+      {
+        "id": 608800,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53160",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787347,
+    "lat": 37.716893,
+    "lng": 33.488673,
+    "title": "Opet Apak Petrol",
+    "address": "Adalet Konya Ereğli 1041/1  Karapınar/Konya",
+    "phone": "08507559898",
+    "reportUrl": "https://www.watmobilite.com/",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "42",
+    "districtId": "574",
+    "sockets": [
+      {
+        "id": 608801,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31034",
+        "power": 120
+      },
+      {
+        "id": 608802,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31035",
+        "power": 120
+      },
+      {
+        "id": 608803,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/35226",
+        "power": 120
+      },
+      {
+        "id": 608804,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/35227",
+        "power": 120
+      },
+      {
+        "id": 608805,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/35228",
+        "power": 180
+      },
+      {
+        "id": 608806,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/35229",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787348,
+    "lat": 37.968,
+    "lng": 32.5163,
+    "title": "Opet Şeflek",
+    "address": "Kosova Yeni İstanbul 118  Selçuklu/Konya",
+    "phone": "08507559898",
+    "reportUrl": "https://www.watmobilite.com/",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "42",
+    "districtId": "579",
+    "sockets": [
+      {
+        "id": 608807,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/37473",
+        "power": 120
+      },
+      {
+        "id": 608808,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/37474",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787349,
+    "lat": 37.896328,
+    "lng": 32.505791,
+    "title": "Uğurel Arçelik",
+    "address": "Musalla Bağları Ankara 99/1  Selçuklu/Konya",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com/",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "42",
+    "districtId": "579",
+    "sockets": [
+      {
+        "id": 608809,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/40161",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787350,
+    "lat": 41.025528,
+    "lng": 29.0351,
+    "title": "Vakıfbank Spor Salonu",
+    "address": "Selami Ali Vakıf 8  Üsküdar/İstanbul",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "34",
+    "districtId": "452",
+    "sockets": [
+      {
+        "id": 608810,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53161",
+        "power": 22
+      },
+      {
+        "id": 608811,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53162",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787355,
+    "lat": 39.911034,
+    "lng": 32.808808,
+    "title": "Damla Petrol",
+    "address": "Söğütözü 120  Çankaya/Ankara",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 608930,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53218",
+        "power": 120
+      },
+      {
+        "id": 608931,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53219",
+        "power": 120
+      },
+      {
+        "id": 608932,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53220",
+        "power": 120
+      },
+      {
+        "id": 608933,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53221",
+        "power": 120
+      },
+      {
+        "id": 608934,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53222",
+        "power": 120
+      },
+      {
+        "id": 608935,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53223",
+        "power": 120
+      },
+      {
+        "id": 608936,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53224",
+        "power": 120
+      },
+      {
+        "id": 608937,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53225",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787356,
+    "lat": 39.860031,
+    "lng": 32.636727,
+    "title": "Akıncı Kule",
+    "address": "Yaşamkent 3250 19/B  Çankaya/Ankara",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 608820,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/34100",
+        "power": 22
+      },
+      {
+        "id": 608821,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/34101",
+        "power": 22
+      },
+      {
+        "id": 608822,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/34102",
+        "power": 120
+      },
+      {
+        "id": 608823,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/34103",
+        "power": 120
+      },
+      {
+        "id": 608824,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/34104",
+        "power": 120
+      },
+      {
+        "id": 608825,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/44207",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787357,
+    "lat": 41.015523,
+    "lng": 29.178818,
+    "title": "Metro Garden Avm Kapalı Otopark",
+    "address": "Necip Fazıl Alemdağ 940  Ümraniye/İstanbul",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "34",
+    "districtId": "451",
+    "sockets": [
+      {
+        "id": 608826,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49765",
+        "power": 120
+      },
+      {
+        "id": 608827,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49766",
+        "power": 120
+      },
+      {
+        "id": 608828,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49767",
+        "power": 120
+      },
+      {
+        "id": 608829,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49768",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787358,
+    "lat": 41.040951,
+    "lng": 29.0779,
+    "title": "Çengelköy Hub",
+    "address": "Mehmet Akif Ersoy 95  Üsküdar/İstanbul",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "34",
+    "districtId": "452",
+    "sockets": [
+      {
+        "id": 608830,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49769",
+        "power": 120
+      },
+      {
+        "id": 608831,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49770",
+        "power": 120
+      },
+      {
+        "id": 608832,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49771",
+        "power": 120
+      },
+      {
+        "id": 608833,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49772",
+        "power": 120
+      },
+      {
+        "id": 608834,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49773",
+        "power": 120
+      },
+      {
+        "id": 608835,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49774",
+        "power": 120
+      },
+      {
+        "id": 608836,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49775",
+        "power": 120
+      },
+      {
+        "id": 608837,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49776",
+        "power": 120
+      },
+      {
+        "id": 608838,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49777",
+        "power": 120
+      },
+      {
+        "id": 608839,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49778",
+        "power": 120
+      },
+      {
+        "id": 608840,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49779",
+        "power": 120
+      },
+      {
+        "id": 608841,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49780",
+        "power": 120
+      },
+      {
+        "id": 608842,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49781",
+        "power": 120
+      },
+      {
+        "id": 608843,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49782",
+        "power": 120
+      },
+      {
+        "id": 608844,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49783",
+        "power": 120
+      },
+      {
+        "id": 608845,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/49784",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787359,
+    "lat": 41.090439,
+    "lng": 28.624303,
+    "title": "İstanbul Üniversitesi Büyükçekmece",
+    "address": "Alkent 2000  Büyükçekmece/İstanbul",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "34",
+    "districtId": "429",
+    "sockets": [
+      {
+        "id": 608846,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/51288",
+        "power": 30
+      }
+    ]
+  },
+  {
+    "id": 14787360,
+    "lat": 39.948494,
+    "lng": 32.886847,
+    "title": "Mertay Altındağ",
+    "address": "Gültepe Gültepe 63  Altındağ/Ankara",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "6",
+    "districtId": "59",
+    "sockets": [
+      {
+        "id": 608847,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/51289",
+        "power": 120
+      },
+      {
+        "id": 608848,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/51290",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787361,
+    "lat": 36.91382,
+    "lng": 31.12043,
+    "title": "Karalar Opet Akaryakıt İstasyonu",
+    "address": "Kürüş Serik 260  Serik/Antalya",
+    "phone": "0(850) 808 78 46",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "7",
+    "districtId": "100",
+    "sockets": [
+      {
+        "id": 608849,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/42975",
+        "power": 120
+      },
+      {
+        "id": 608850,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/42976",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787364,
+    "lat": 37.21834,
+    "lng": 27.66091,
+    "title": "Lena Bodrum - Audi",
+    "address": "Kemikler 5/1b  Milas/Muğla",
+    "phone": "444 98 77",
+    "reportUrl": "https://dcharge.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1092971",
+    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "D-Charge",
+    "cityId": "48",
+    "districtId": "658",
+    "sockets": [
+      {
+        "id": 608851,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53151",
+        "power": 22
+      },
+      {
+        "id": 608852,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53152",
+        "power": 22
+      },
+      {
+        "id": 608853,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53163",
+        "power": 120
+      },
+      {
+        "id": 608854,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53164",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787369,
+    "lat": 40.769087,
+    "lng": 29.797864,
+    "title": "Tem 76 Ankara Yönü",
+    "address": "Yavuz Sultan Selim Yaşar Doğru 777  Körfez/Kocaeli",
+    "phone": "4440810",
+    "reportUrl": "https://www.aksasarj.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "952581",
+    "operatorTitle": "Aksa Müşteri Çözümleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "AKSA ŞARJ",
+    "cityId": "41",
+    "districtId": "553",
+    "sockets": [
+      {
+        "id": 608868,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53168",
+        "power": 400
+      },
+      {
+        "id": 608869,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53169",
+        "power": 400
+      },
+      {
+        "id": 608870,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53170",
+        "power": 400
+      },
+      {
+        "id": 608871,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53173",
+        "power": 400
+      }
+    ]
+  },
+  {
+    "id": 14787370,
+    "lat": 40.999719,
+    "lng": 29.101174,
+    "title": "Varyap Merıdıan 2",
+    "address": "Barbaros Ardıç 1/1  Ataşehir/İstanbul",
+    "phone": "4440810",
+    "reportUrl": "https://www.aksasarj.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "952581",
+    "operatorTitle": "Aksa Müşteri Çözümleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "AKSA ŞARJ",
+    "cityId": "34",
+    "districtId": "418",
+    "sockets": [
+      {
+        "id": 608872,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53176",
+        "power": 160
+      },
+      {
+        "id": 608873,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53177",
+        "power": 160
+      },
+      {
+        "id": 608874,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53178",
+        "power": 160
+      },
+      {
+        "id": 608875,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53179",
+        "power": 160
+      }
+    ]
+  },
+  {
+    "id": 14787373,
+    "lat": 36.77733,
+    "lng": 34.58133,
+    "title": "Suphi Öner Öğretmenevi",
+    "address": "Dumlupınar 1524 1  Yenişehir/Mersin",
+    "phone": "08508087846",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "33",
+    "districtId": "414",
+    "sockets": [
+      {
+        "id": 608876,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53180",
+        "power": 180
+      },
+      {
+        "id": 608877,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53181",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787380,
+    "lat": 38.456987,
+    "lng": 27.247477,
+    "title": "Park Bornova Avm",
+    "address": "Doğanlar Ankara 192  Bornova/İzmir",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "35",
+    "districtId": "461",
+    "sockets": [
+      {
+        "id": 608897,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53193",
+        "power": 11
+      },
+      {
+        "id": 608898,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53194",
+        "power": 11
+      },
+      {
+        "id": 608899,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53195",
+        "power": 100
+      },
+      {
+        "id": 608900,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53196",
+        "power": 100
+      },
+      {
+        "id": 608901,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53197",
+        "power": 100
+      },
+      {
+        "id": 608902,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53198",
+        "power": 100
+      },
+      {
+        "id": 608903,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53199",
+        "power": 100
+      },
+      {
+        "id": 608904,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53200",
+        "power": 100
+      }
+    ]
+  },
+  {
+    "id": 14787381,
+    "lat": 38.428735,
+    "lng": 27.146326,
+    "title": "İzelman Kültür Park Yeraltı Otoparkı",
+    "address": "Mimar Sinan İzmir Fuarı  Konak/İzmir",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "35",
+    "districtId": "472",
+    "sockets": [
+      {
+        "id": 608905,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53201",
+        "power": 11
+      },
+      {
+        "id": 608906,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53202",
+        "power": 11
+      },
+      {
+        "id": 608907,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53203",
+        "power": 11
+      },
+      {
+        "id": 608908,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53204",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787385,
+    "lat": 37.802137,
+    "lng": 27.839505,
+    "title": "Efemak Petrol",
+    "address": "Çeştepe 99  Merkez/Aydın",
+    "phone": "850 474 60 11",
+    "reportUrl": "https://ovolt.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1108533",
+    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ovolt",
+    "cityId": "9",
+    "districtId": "120",
+    "sockets": [
+      {
+        "id": 608909,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/48193",
+        "power": 60
+      },
+      {
+        "id": 608910,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/48194",
+        "power": 60
+      },
+      {
+        "id": 608911,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53205",
+        "power": 20
+      }
+    ]
+  },
+  {
+    "id": 14787387,
+    "lat": 39.97166,
+    "lng": 32.88881,
+    "title": "Megalife Konutları A Blok",
+    "address": "Güneşevler 90 3  Altındağ/Ankara",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "6",
+    "districtId": "59",
+    "sockets": [
+      {
+        "id": 608915,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53209",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787388,
+    "lat": 41.104969,
+    "lng": 28.986445,
+    "title": "Vadistanbul Vakko",
+    "address": "Ayazağa Kemerburgaz 6a Blok  Sarıyer/İstanbul",
+    "phone": "2125711355",
+    "reportUrl": "https://www.efish.com.tr/",
+    "reservationUrl": "https://www.efish.com.tr/",
+    "operatorId": "1039920",
+    "operatorTitle": "Artaş Enerji Yatırımları Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "efish",
+    "cityId": "34",
+    "districtId": "443",
+    "sockets": [
+      {
+        "id": 608916,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/13172",
+        "power": 120
+      },
+      {
+        "id": 608917,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/13173",
+        "power": 120
+      },
+      {
+        "id": 608918,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/13174",
+        "power": 120
+      },
+      {
+        "id": 608919,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/13175",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787391,
+    "lat": 40.895329,
+    "lng": 29.228436,
+    "title": "Doğuş Oto Kartal - Porsche",
+    "address": "Hürriyet Mah. Yakacık D-100 E-5 Kuzey Yanyol Cad. 45  Kartal/İstanbul",
+    "phone": "444 98 77",
+    "reportUrl": "https://dcharge.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1092971",
+    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "D-Charge",
+    "cityId": "34",
+    "districtId": "437",
+    "sockets": [
+      {
+        "id": 608923,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52016",
+        "power": 50
+      }
+    ]
+  },
+  {
+    "id": 14787395,
+    "lat": 40.91113,
+    "lng": 29.31827,
+    "title": "Heaş Gümrük Önü",
+    "address": "Sanayi Havaalanı 1  Pendik/İstanbul",
+    "phone": "08508087846",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "34",
+    "districtId": "441",
+    "sockets": [
+      {
+        "id": 608938,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53226",
+        "power": 240
+      },
+      {
+        "id": 608939,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53227",
+        "power": 240
+      },
+      {
+        "id": 608940,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53228",
+        "power": 240
+      },
+      {
+        "id": 608941,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53229",
+        "power": 240
+      },
+      {
+        "id": 608942,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53230",
+        "power": 240
+      },
+      {
+        "id": 608943,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53231",
+        "power": 240
+      },
+      {
+        "id": 608944,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53232",
+        "power": 240
+      },
+      {
+        "id": 608945,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53233",
+        "power": 240
+      }
+    ]
+  },
+  {
+    "id": 14787396,
+    "lat": 39.9724,
+    "lng": 32.599,
+    "title": "Vega Otonomi",
+    "address": "Plevne Çatalca 238  Sincan/Ankara",
+    "phone": "08508087846",
+    "reportUrl": "https://trugo.com.tr/contact",
+    "reservationUrl": "https://bit.ly/3Zn9rva",
+    "operatorId": "929964",
+    "operatorTitle": "Trugo Akıllı Şarj Çözümleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Trugo",
+    "cityId": "6",
+    "districtId": "77",
+    "sockets": [
+      {
+        "id": 608946,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53234",
+        "power": 120
+      },
+      {
+        "id": 608947,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53235",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787397,
+    "lat": 39.849286,
+    "lng": 32.634267,
+    "title": "Babylon 2 Sitesi",
+    "address": "Alacaatlı 5094 4  Çankaya/Ankara",
+    "phone": "0850 309 6605",
+    "reportUrl": "https://getacharge.com.tr/iletisim/",
+    "reservationUrl": "https://getacharge.com.tr/iletisim/",
+    "operatorId": "1005204",
+    "operatorTitle": "Proşarj Araç Şarj Sistemleri Enerji Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "getacharge",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 608948,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53236",
+        "power": 22
+      },
+      {
+        "id": 608949,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53237",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787398,
+    "lat": 39.946905,
+    "lng": 32.736385,
+    "title": "Velux Avm Açık Otopark",
+    "address": "İnönü 1729.  Yenimahalle/Ankara",
+    "phone": "08503050173",
+    "reportUrl": "https://www.basergrup.com.tr",
+    "reservationUrl": null,
+    "operatorId": "1108496",
+    "operatorTitle": "Başer Otomotiv Petrol İnşaat Kiralama Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "B-FORCE",
+    "cityId": "6",
+    "districtId": "78",
+    "sockets": [
+      {
+        "id": 608950,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/30738",
+        "power": 11
+      },
+      {
+        "id": 608951,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/30739",
+        "power": 11
+      },
+      {
+        "id": 608952,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/30740",
+        "power": 11
+      },
+      {
+        "id": 608953,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/52768",
+        "power": 60
+      },
+      {
+        "id": 608954,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53238",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14787411,
+    "lat": 40.188355,
+    "lng": 31.350877,
+    "title": "Nallıhan Otogar",
+    "address": "Aliağa Ankara İstanbul Devlet Yolu 1  Nallıhan/Ankara",
+    "phone": "08502415775",
+    "reportUrl": "https://solarsarj.org/",
+    "reservationUrl": "https://solarsarj.org/",
+    "operatorId": "1039122",
+    "operatorTitle": "Solar Araç Şarj Hizmetleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "solarşarj",
+    "cityId": "6",
+    "districtId": "74",
+    "sockets": [
+      {
+        "id": 608969,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53251",
+        "power": 60
+      },
+      {
+        "id": 608970,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53252",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14787414,
+    "lat": 40.192699,
+    "lng": 29.13129,
+    "title": "Enis Garden",
+    "address": "Çınarönü  Yıldırım/Bursa",
+    "phone": "08502428862",
+    "reportUrl": "https://tuncmatikcharge.com/iletisim/",
+    "reservationUrl": "https://tuncmatikcharge.com/iletisim/",
+    "operatorId": "1006519",
+    "operatorTitle": "Tunçmatik Şarj Teknolojileri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "tunçmatik",
+    "cityId": "16",
+    "districtId": "203",
+    "sockets": [
+      {
+        "id": 608971,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53253",
+        "power": 60
+      },
+      {
+        "id": 608972,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53254",
+        "power": 60
+      },
+      {
+        "id": 608973,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53255",
+        "power": 22
+      },
+      {
+        "id": 608974,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53256",
+        "power": 22
+      },
+      {
+        "id": 608975,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53257",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787417,
+    "lat": 40.901535,
+    "lng": 29.219394,
+    "title": "Gedik Üniversitesi",
+    "address": "Cumhuriyet İlkbahar 3/1  Kartal/İstanbul",
+    "phone": "05305525874",
+    "reportUrl": "https://gezcarenerji.com/iletisim",
+    "reservationUrl": "https://gezcarenerji.com/iletisim",
+    "operatorId": "1105320",
+    "operatorTitle": "Gezcar Turizm Otomotiv Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "GezCar",
+    "cityId": "34",
+    "districtId": "437",
+    "sockets": [
+      {
+        "id": 608976,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53272",
+        "power": 60
+      },
+      {
+        "id": 608977,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53273",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14787421,
+    "lat": 40.5527,
+    "lng": 34.9567,
+    "title": "Corumbel-ac",
+    "address": "Karakeçili Recep Tayyip Erdoğan 10  Merkez/Çorum",
+    "phone": "8508080352",
+    "reportUrl": "https://www.ekaenerjiteknoloji.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1277438",
+    "operatorTitle": "Eka Enerji Ve Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EKA ENERJİ",
+    "cityId": "19",
+    "districtId": "237",
+    "sockets": [
+      {
+        "id": 608978,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53258",
+        "power": 22
+      },
+      {
+        "id": 608979,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53259",
+        "power": 22
+      },
+      {
+        "id": 608980,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53260",
+        "power": 22
+      },
+      {
+        "id": 608981,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53261",
+        "power": 22
+      },
+      {
+        "id": 608982,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53262",
+        "power": 22
+      },
+      {
+        "id": 608983,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53263",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787422,
+    "lat": 36.5928,
+    "lng": 36.1599,
+    "title": "Eka-parkforbesawm",
+    "address": "Süleymaniye 97/2  İskenderun/Hatay",
+    "phone": "8508080352",
+    "reportUrl": "https://www.ekaenerjiteknoloji.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1277438",
+    "operatorTitle": "Eka Enerji Ve Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EKA ENERJİ",
+    "cityId": "31",
+    "districtId": "389",
+    "sockets": [
+      {
+        "id": 608984,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53264",
+        "power": 120
+      },
+      {
+        "id": 608985,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53265",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787439,
+    "lat": 39.9198,
+    "lng": 32.8498,
+    "title": "Saraçoğlu Dc1",
+    "address": "Namık Kemal 95 1/26  Çankaya/Ankara",
+    "phone": "8508080352",
+    "reportUrl": "https://www.ekaenerjiteknoloji.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1277438",
+    "operatorTitle": "Eka Enerji Ve Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EKA ENERJİ",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 609072,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53363",
+        "power": 120
+      },
+      {
+        "id": 609073,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53364",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14787441,
+    "lat": 41.094908,
+    "lng": 28.6647,
+    "title": "Başakkent Gölet Konutları Sitesi",
+    "address": "Bahçeşehir 2 Kısım Dumlupınar 4  Başakşehir/İstanbul",
+    "phone": "(+90) 212 980-0144",
+    "reportUrl": "https://toger.co/contact",
+    "reservationUrl": null,
+    "operatorId": "1052460",
+    "operatorTitle": "Mionti Enerji Ve Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "TOGER",
+    "cityId": "34",
+    "districtId": "424",
+    "sockets": [
+      {
+        "id": 609076,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53365",
+        "power": 19
+      },
+      {
+        "id": 609077,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53366",
+        "power": 19
+      }
+    ]
+  },
+  {
+    "id": 14787443,
+    "lat": 40.875861,
+    "lng": 26.607292,
+    "title": "Po Keşan-kale Madencilik",
+    "address": "İstasyon Şehit Astsb.ömer Halisdemir  Keşan/Edirne",
+    "phone": "08507620708",
+    "reportUrl": "https://5sarj.com/tr/iletisim",
+    "reservationUrl": "https://5sarj.com/tr/iletisim",
+    "operatorId": "1040808",
+    "operatorTitle": "Borenco Şarj Teknoloji Yatırımları Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "5 şarj",
+    "cityId": "22",
+    "districtId": "282",
+    "sockets": [
+      {
+        "id": 609080,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53371",
+        "power": 150
+      },
+      {
+        "id": 609081,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53372",
+        "power": 150
+      },
+      {
+        "id": 609082,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53373",
+        "power": 150
+      },
+      {
+        "id": 609083,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/53374",
+        "power": 150
+      }
+    ]
+  },
+  {
+    "id": 14787444,
+    "lat": 40.7989,
+    "lng": 29.9681,
+    "title": "Töle İzmit",
+    "address": "Gündoğdu Yeşilbahçe  İzmit/Kocaeli",
+    "phone": "05333800436",
+    "reportUrl": "https://ctgelektrik.com/#iletisim",
+    "reservationUrl": null,
+    "operatorId": "1052133",
+    "operatorTitle": "Ctg Elektrik Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "CTG ELEKTRİK ANONİM ŞİRKETİ",
+    "cityId": "41",
+    "districtId": "555",
+    "sockets": [
+      {
+        "id": 609084,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53367",
+        "power": 11
+      },
+      {
+        "id": 609085,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53369",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14787445,
+    "lat": 40.653117,
+    "lng": 29.254438,
+    "title": "Vega Avm, Yalova - Dc",
+    "address": "Kazım Karabekir Ömer Faydalı 233  Merkez/Yalova",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "77",
+    "districtId": "929",
+    "sockets": [
+      {
+        "id": 609086,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/39919",
+        "power": 180
+      },
+      {
+        "id": 609087,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/39920",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14787451,
+    "lat": 40.010948,
+    "lng": 32.651679,
+    "title": "Ende-yaşam Sitesi",
+    "address": "Susuz Kümeevleri  Yenimahalle/Ankara",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "6",
+    "districtId": "78",
+    "sockets": [
+      {
+        "id": 609088,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53375",
+        "power": 22
+      },
+      {
+        "id": 609089,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53376",
+        "power": 22
+      },
+      {
+        "id": 609090,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53377",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14787458,
+    "lat": 40.107605,
+    "lng": 29.142416,
+    "title": "Ceylan Splend’or Uludağ",
+    "address": "Kirazlı Gelişim 18  Osmangazi/Bursa",
+    "phone": "08502428862",
+    "reportUrl": "https://tuncmatikcharge.com/iletisim/",
+    "reservationUrl": "https://tuncmatikcharge.com/iletisim/",
+    "operatorId": "1006519",
+    "operatorTitle": "Tunçmatik Şarj Teknolojileri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "tunçmatik",
+    "cityId": "16",
+    "districtId": "201",
+    "sockets": [
+      {
+        "id": 609097,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53382",
+        "power": 22
+      },
+      {
+        "id": 609098,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53383",
+        "power": 22
       }
     ]
   }
