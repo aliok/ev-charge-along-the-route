@@ -24,6 +24,11 @@ import { createLogger } from './logger.js';
 
 const logger = createLogger('marker');
 
+// Station Info Panel elements
+let stationInfoPanel: HTMLElement | null = null;
+let stationInfoContent: HTMLElement | null = null;
+let closeStationInfoBtn: HTMLElement | null = null;
+
 // Callbacks for business logic (set by main.js)
 let calculateAndDisplayDetourOnClickCallback: ((marker: ExtendedMarker, poiLocation: google.maps.LatLng, startLoc: google.maps.LatLng, endLoc: google.maps.LatLng, originalDist: number, originalDur: number) => void) | null = null;
 
@@ -35,6 +40,118 @@ export function setupMarkerCallbacks(callbacks: MarkerCallbacks): void {
     if (callbacks.calculateAndDisplayDetourOnClick) {
         calculateAndDisplayDetourOnClickCallback = callbacks.calculateAndDisplayDetourOnClick;
     }
+}
+
+// --- Station Info Panel Management ---
+export function initializeStationInfoPanel(): void {
+    stationInfoPanel = document.getElementById('station-info-panel');
+    stationInfoContent = document.getElementById('station-info-content');
+    closeStationInfoBtn = document.getElementById('close-station-info-btn');
+
+    if (closeStationInfoBtn) {
+        closeStationInfoBtn.addEventListener('click', closeStationInfoPanel);
+    }
+
+    // Close panel when clicking outside on desktop or ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && stationInfoPanel?.classList.contains('open')) {
+            closeStationInfoPanel();
+        }
+    });
+
+    // Add swipe gesture support for mobile
+    if (stationInfoPanel) {
+        let touchStartY = 0;
+        let touchCurrentY = 0;
+        let isDragging = false;
+
+        stationInfoPanel.addEventListener('touchstart', (e) => {
+            // Only handle swipe on the panel itself, not on scrollable content
+            const target = e.target as HTMLElement;
+            if (target === stationInfoPanel || target.closest('#close-station-info-btn')) {
+                touchStartY = e.touches[0].clientY;
+                isDragging = true;
+            }
+        }, { passive: true });
+
+        stationInfoPanel.addEventListener('touchmove', (e) => {
+            if (!isDragging || !stationInfoPanel) return;
+
+            touchCurrentY = e.touches[0].clientY;
+            const deltaY = touchCurrentY - touchStartY;
+
+            // Only allow downward swipe on mobile
+            if (deltaY > 0 && window.innerWidth <= 768) {
+                stationInfoPanel.style.transform = `translateY(${deltaY}px)`;
+            }
+        }, { passive: true });
+
+        stationInfoPanel.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+
+            const deltaY = touchCurrentY - touchStartY;
+
+            // If swiped down more than 100px, close the panel
+            if (deltaY > 100 && window.innerWidth <= 768) {
+                closeStationInfoPanel();
+            } else {
+                // Reset position
+                if (stationInfoPanel) {
+                    stationInfoPanel.style.transform = '';
+                }
+            }
+
+            touchStartY = 0;
+            touchCurrentY = 0;
+        }, { passive: true });
+    }
+
+    logger.debug('Station info panel initialized');
+}
+
+export function openStationInfoPanel(content: string): void {
+    if (!stationInfoPanel || !stationInfoContent) {
+        logger.error('Station info panel not initialized');
+        return;
+    }
+
+    stationInfoContent.innerHTML = content;
+    stationInfoPanel.classList.add('open');
+    logger.debug('Station info panel opened');
+}
+
+export function closeStationInfoPanel(): void {
+    if (!stationInfoPanel) {
+        logger.error('Station info panel not initialized');
+        return;
+    }
+
+    stationInfoPanel.classList.remove('open');
+    // Reset any inline transform from swipe gesture
+    stationInfoPanel.style.transform = '';
+    resetSelectedMarkerZIndex();
+
+    // Reset map padding
+    if (state.map) {
+        (state.map as any).setOptions({ padding: { top: 0, left: 0, bottom: 0, right: 0 } });
+    }
+
+    logger.debug('Station info panel closed');
+}
+
+export function updateStationInfoPanel(content: string): void {
+    if (!stationInfoContent) {
+        logger.error('Station info panel content not initialized');
+        return;
+    }
+
+    stationInfoContent.innerHTML = content;
+    logger.debug('Station info panel updated');
+}
+
+export function isStationInfoPanelOpen(): boolean {
+    return stationInfoPanel?.classList.contains('open') || false;
 }
 
 // --- Marker Creation ---
@@ -216,13 +333,14 @@ export function updateMarkerDetourText(marker: ExtendedMarker, detourData: Detou
     detourEl.textContent = text;
 }
 
-// --- Info Window Management ---
+// --- Info Panel Management ---
 export function updateInfoWindowIfVisible(marker: ExtendedMarker): void {
-    if (!state.infoWindow || !marker) return;
-    const infoWindowWithMethods = state.infoWindow as google.maps.InfoWindow & { getAnchor?: () => ExtendedMarker | null; getMap?: () => google.maps.Map | null };
-    const anchor = infoWindowWithMethods.getAnchor?.();
-    const map = infoWindowWithMethods.getMap?.();
-    if (anchor !== marker || !map) {
+    if (!marker) return;
+
+    // Check if this marker's info is currently displayed in the panel
+    const isPanelOpenForThisMarker = state.selectedPoiMarker === marker && isStationInfoPanelOpen();
+
+    if (!isPanelOpenForThisMarker) {
         if (marker) {
             // Update cache even if not visible, in case it becomes visible later
             const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
@@ -232,12 +350,12 @@ export function updateInfoWindowIfVisible(marker: ExtendedMarker): void {
         return;
     }
 
-    logger.debug(`Updating visible IW for ${marker.stationId}`);
+    logger.debug(`Updating visible panel for ${marker.stationId}`);
     const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
     const detourHtml = getDetourHtmlFromData(marker.detourData);
     const finalContentString = buildInfoWindowHtml(marker, marker.poiData!, marker.liveSocketData ?? null, fetchStatus, detourHtml);
     marker.cachedInfoWindowContent = finalContentString;
-    state.infoWindow.setContent(finalContentString);
+    updateStationInfoPanel(finalContentString);
 }
 
 function getDetourHtmlFromData(detourData: DetourData | null | undefined): string {
@@ -500,18 +618,21 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
         updateMarkerDetourText(marker, null);
     }
 
-    if (!suppressInfoWindowOpen && state.infoWindow && state.map && marker.position) {
-        (state.map as any).setOptions({ padding: { top: 350 } });
+    if (!suppressInfoWindowOpen && state.map && marker.position) {
+        // Pan to marker (adjust padding based on screen size)
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            // On mobile, no top padding needed (panel comes from bottom)
+            (state.map as any).setOptions({ padding: { bottom: window.innerHeight * 0.6 } });
+        } else {
+            // On desktop, add left padding for the side panel
+            (state.map as any).setOptions({ padding: { left: 418 } });
+        }
         state.map.panTo(marker.position);
 
         const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
-        state.infoWindow.setContent(initialContent);
-        state.infoWindow.open({
-            anchor: marker,
-            map: state.map,
-            shouldFocus: false
-        });
-        logger.debug(`Displayed initial InfoWindow for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
+        openStationInfoPanel(initialContent);
+        logger.debug(`Displayed initial panel for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
     } else if (suppressInfoWindowOpen) {
         logger.debug(`fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`);
     }

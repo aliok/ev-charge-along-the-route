@@ -804,3 +804,94 @@ input.input-loading {
     display: inline-block;
     transform: rotate(45deg); /* Counter-rotate the number */
 }
+
+/* Station Info Panel - Desktop (Left Side Panel) */
+#station-info-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 418px; /* 10% wider than original 380px */
+    max-width: 90vw;
+    height: 100%;
+    background-color: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    border-top: 3px solid #3b82f6; /* Blue accent line at top */
+    z-index: 15; /* Higher than filter panel */
+    padding: 3rem 1rem 1rem 1rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#station-info-panel.open {
+    transform: translateX(0);
+}
+
+#station-info-panel #close-station-info-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 1;
+}
+
+#station-info-panel #close-station-info-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: #6b7280;
+}
+
+#station-info-panel #close-station-info-btn:hover svg {
+    fill: #1f2937;
+}
+
+#station-info-content {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Mobile: Bottom Sheet */
+@media (max-width: 768px) {
+    #station-info-panel {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 60vh;
+        max-height: 80vh;
+        transform: translateY(100%);
+        border-radius: 16px 16px 0 0;
+        border-top: 3px solid #3b82f6; /* Blue accent line at top */
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        padding-top: 1.5rem;
+    }
+
+    #station-info-panel.open {
+        transform: translateY(0);
+    }
+
+    /* Swipe handle for mobile */
+    #station-info-panel::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 4px;
+        background-color: #d1d5db;
+        border-radius: 2px;
+    }
+
+    #station-info-panel #close-station-info-btn {
+        top: 16px;
+        right: 16px;
+    }
+}

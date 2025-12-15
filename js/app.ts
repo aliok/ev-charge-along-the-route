@@ -36,6 +36,8 @@ import {
     updateInfoWindowIfVisible,
     updateMarker,
     updateMarkerDetourText,
+    initializeStationInfoPanel,
+    closeStationInfoPanel,
 } from './markers.js';
 
 import {
@@ -440,6 +442,9 @@ export class App {
         // Initialize Autocomplete
         this.initializeAutocomplete();
 
+        // Initialize Station Info Panel
+        initializeStationInfoPanel();
+
         // Load station data
         await this.loadStationData();
 
@@ -843,7 +848,7 @@ export class App {
 
         this.clearRouteDisplay();
         hideAllPois(resetSelectedMarkerZIndex);
-        if (this.mapComponent.infoWindow) this.mapComponent.infoWindow.close();
+        closeStationInfoPanel();
         updateControlVisibility();
         updateOffsetControlsVisibility();
         resetSelectedMarkerZIndex();
@@ -1117,15 +1122,9 @@ export class App {
         this.saveSettings();
         updateFilterIndicator();
 
-        // Close InfoWindow if it's for this station
-        type InfoWindowWithMethods = google.maps.InfoWindow & {
-            getMap?: () => google.maps.Map | null;
-            getAnchor?: () => ExtendedMarker | null;
-        };
-        const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
-        if (infoWindow?.getMap?.() && infoWindow.getAnchor?.()?.stationId === stationId) {
-            infoWindow.close();
-            resetSelectedMarkerZIndex();
+        // Close station info panel if it's for this station
+        if (state.selectedPoiMarker?.stationId === stationId) {
+            closeStationInfoPanel();
         }
 
         this.applyFilters();
@@ -1217,15 +1216,9 @@ export class App {
      * Handles map click
      */
     private handleMapClick(event: google.maps.MapMouseEvent): void {
-        type InfoWindowWithMethods = google.maps.InfoWindow & {
-            getMap?: () => google.maps.Map | null;
-        };
-        const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
-        if (infoWindow?.getMap?.()) {
-            console.log("Map click detected, closing InfoWindow.");
-            infoWindow.close();
-            resetSelectedMarkerZIndex();
-        }
+        // Close station info panel if open
+        closeStationInfoPanel();
+
         event.stop?.();
         event.domEvent?.stopPropagation();
 
@@ -1295,16 +1288,7 @@ export class App {
             let closedSomething = false;
             if (closeLanguageDropdown()) closedSomething = true;
 
-            type InfoWindowWithMethods = google.maps.InfoWindow & {
-                getMap?: () => google.maps.Map | null;
-            };
-            const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
-            if (infoWindow?.getMap?.()) {
-                console.log("Escape key pressed, closing InfoWindow.");
-                infoWindow.close();
-                resetSelectedMarkerZIndex();
-                closedSomething = true;
-            }
+            // Note: Station info panel closes itself on ESC via its own handler
 
             if (filterPanel?.classList.contains('open')) {
                 console.log("Escape key pressed, closing Filter Panel.");
