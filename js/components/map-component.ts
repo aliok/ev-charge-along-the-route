@@ -69,6 +69,7 @@ export class MapComponent {
             
             this.infoWindow = new google.maps.InfoWindow({
                 maxWidth: 350,
+                pixelOffset: new google.maps.Size(0, -90)
             });
 
             this.infoWindow.addListener('closeclick', () => {
