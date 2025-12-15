@@ -485,17 +485,30 @@ function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveS
 
     let infoActionsHtml = '';
     if (!isIgnored) {
-        infoActionsHtml = `<span class="info-actions">`;
+        infoActionsHtml = `<div class="info-actions">`;
+
+        // Brand actions group
         if (currentBrand) {
             const escapedBrand = JSON.stringify(currentBrand);
-            infoActionsHtml += `<button class="brand-fav ${isFav ? 'active-fav' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "favorite")' title="${translate('brandFavoriteAction')}">⭐</button>`;
-            infoActionsHtml += `<button class="brand-blk ${isBlk ? 'active-blk' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "blacklist")' title="${translate('brandBlacklistAction')}">🚫</button>`;
+            infoActionsHtml += `<div class="action-group brand-actions">`;
+            infoActionsHtml += `<span class="action-group-label">${translate('brandActions')}</span>`;
+            infoActionsHtml += `<div class="action-buttons">`;
+            infoActionsHtml += `<button class="action-btn brand-fav ${isFav ? 'active-fav' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "favorite")'>⭐ ${isFav ? translate('unfavorite') : translate('favorite')}</button>`;
+            infoActionsHtml += `<button class="action-btn brand-blk ${isBlk ? 'active-blk' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "blacklist")'>🚫 ${isBlk ? translate('unblock') : translate('block')}</button>`;
+            infoActionsHtml += `</div></div>`;
         }
+
+        // Station action group
         const escapedStationId = JSON.stringify(stationId);
-        infoActionsHtml += `<button class="ignore-station" onclick='handleIgnoreStationClick(${escapedStationId})' title="${translate('ignoreStationAction')}">${IGNORE_ICON_SVG}</button>`;
-        infoActionsHtml += `</span>`;
+        infoActionsHtml += `<div class="action-group station-actions">`;
+        infoActionsHtml += `<span class="action-group-label">${translate('stationActions')}</span>`;
+        infoActionsHtml += `<div class="action-buttons">`;
+        infoActionsHtml += `<button class="action-btn ignore-station" onclick='handleIgnoreStationClick(${escapedStationId})'>${IGNORE_ICON_SVG} ${translate('ignore')}</button>`;
+        infoActionsHtml += `</div></div>`;
+
+        infoActionsHtml += `</div>`;
     } else {
-        infoActionsHtml = `<span class="text-xs text-gray-500 ml-2">${translate('iwIgnored')}</span>`;
+        infoActionsHtml = `<div class="text-xs text-gray-500 ml-2">${translate('iwIgnored')}</div>`;
     }
 
     const operatorTitle = poiData.operatorTitle || translate('iwNA');
@@ -603,11 +616,11 @@ function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveS
                  <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', {name: poiData.brand || poiData.title || poiData.id})}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
                  <div class="title-area">
                      <h3>${mainTitle}${addToRouteButtonHtml}</h3>
-                     ${infoActionsHtml}
                  </div>
                 ${subTitle}
                 ${detourSection}
                 ${socketsSection}
+                ${infoActionsHtml}
                 ${linksStaticInfoSection}
                 ${escHintHtml}
             </div>`;

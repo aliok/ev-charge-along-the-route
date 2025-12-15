@@ -211,6 +211,13 @@ export const translations = {
         brandFavoriteAction: "Favorite Brand",
         brandBlacklistAction: "Blacklist Brand",
         ignoreStationAction: "Ignore this Station",
+        favorite: "Favorite",
+        unfavorite: "Unfavorite",
+        block: "Block",
+        unblock: "Unblock",
+        ignore: "Ignore",
+        brandActions: "Brand Actions",
+        stationActions: "Station Actions",
     },
     tr: {
         // General UI & Title
@@ -420,6 +427,13 @@ export const translations = {
         brandFavoriteAction: "Favori Marka",
         brandBlacklistAction: "Markayı Kara Listeye Al",
         ignoreStationAction: "Bu İstasyonu Yok Say",
+        favorite: "Favorile",
+        unfavorite: "Favorilerden Çıkar",
+        block: "Engelle",
+        unblock: "Engeli Kaldır",
+        ignore: "Yok Say",
+        brandActions: "Marka İşlemleri",
+        stationActions: "İstasyon İşlemleri",
     }
 };
 
