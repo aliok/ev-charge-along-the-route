@@ -418,6 +418,10 @@ export function populateBrandFilterList(): void {
         return;
     }
 
+    // Determine current view
+    const activeButton = brandListViewControls?.querySelector('button.active') as HTMLElement | null;
+    const currentView = activeButton?.dataset.view || 'all';
+
     state.allUniqueBrands.forEach(brand => {
         // Determine brand status
         const isFavorite = state.favoriteBrands.has(brand);
@@ -439,22 +443,49 @@ export function populateBrandFilterList(): void {
 
         const controlsDiv = createElement('div', { className: 'brand-item-controls' });
 
-        const favButton = createButton({
-            className: `brand-fav ${isFavorite ? 'active-fav' : ''}`,
-            title: translate('brandFavoriteAction'),
-            textContent: '⭐',
-            onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'favorite')
-        });
+        // Show different buttons based on the current view
+        if (currentView === 'fav') {
+            // In Favorites view, only show remove button
+            if (isFavorite) {
+                const removeButton = createButton({
+                    className: 'brand-remove',
+                    title: translate('removeFavorite'),
+                    textContent: '✕',
+                    onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'favorite')
+                });
+                controlsDiv.appendChild(removeButton);
+            }
+        } else if (currentView === 'blk') {
+            // In Blacklist view, only show remove button
+            if (isBlacklisted) {
+                const removeButton = createButton({
+                    className: 'brand-remove',
+                    title: translate('removeBlacklist'),
+                    textContent: '✕',
+                    onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'blacklist')
+                });
+                controlsDiv.appendChild(removeButton);
+            }
+        } else {
+            // In All view, show both favorite and blacklist buttons
+            const favButton = createButton({
+                className: `brand-fav ${isFavorite ? 'active-fav' : ''}`,
+                title: translate('brandFavoriteAction'),
+                textContent: '⭐',
+                onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'favorite')
+            });
 
-        const blkButton = createButton({
-            className: `brand-blk ${isBlacklisted ? 'active-blk' : ''}`,
-            title: translate('brandBlacklistAction'),
-            textContent: '🚫',
-            onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'blacklist')
-        });
+            const blkButton = createButton({
+                className: `brand-blk ${isBlacklisted ? 'active-blk' : ''}`,
+                title: translate('brandBlacklistAction'),
+                textContent: '🚫',
+                onClick: () => handleBrandPreferenceChangeCallback?.(brand, 'blacklist')
+            });
 
-        controlsDiv.appendChild(favButton);
-        controlsDiv.appendChild(blkButton);
+            controlsDiv.appendChild(favButton);
+            controlsDiv.appendChild(blkButton);
+        }
+
         itemDiv.appendChild(controlsDiv);
         brandListContainer?.appendChild(itemDiv);
     });
@@ -503,10 +534,15 @@ export function filterBrandListView(viewType: string): void {
     console.log(`Filtering brand list view to: ${viewType}`);
     if (!brandListContainer || !brandListViewControls) return;
 
+    // Update active button
     brandListViewControls.querySelectorAll('button').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-view') === viewType);
     });
 
+    // Repopulate the list to show appropriate buttons for the view
+    populateBrandFilterList();
+
+    // Filter visibility based on view
     const brandItems = brandListContainer.querySelectorAll('.brand-item');
     let visibleCountInList = 0;
     brandItems.forEach(item => {

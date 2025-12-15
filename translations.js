@@ -218,6 +218,8 @@ export const translations = {
         ignore: "Ignore",
         brandActions: "Brand Actions",
         stationActions: "Station Actions",
+        removeFavorite: "Remove from favorites",
+        removeBlacklist: "Remove from blacklist",
     },
     tr: {
         // General UI & Title
@@ -434,6 +436,8 @@ export const translations = {
         ignore: "Yok Say",
         brandActions: "Marka İşlemleri",
         stationActions: "İstasyon İşlemleri",
+        removeFavorite: "Favorilerden çıkar",
+        removeBlacklist: "Kara listeden çıkar",
     }
 };
 

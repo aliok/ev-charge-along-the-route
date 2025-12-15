@@ -512,6 +512,18 @@ html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-ser
 #filter-brands .brand-controls button:hover { background-color: #f3f4f6; }
 #filter-brands .brand-controls button.brand-fav.active { color: #f59e0b; border-color: #f59e0b; background-color: #fffbeb; }
 #filter-brands .brand-controls button.brand-blk.active { color: #ef4444; border-color: #ef4444; background-color: #fee2e2; }
+#filter-brands .brand-controls button.brand-remove {
+    color: #ef4444;
+    border-color: #ef4444;
+    background-color: #fee2e2;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+#filter-brands .brand-controls button.brand-remove:hover {
+    background-color: #fecaca;
+    border-color: #dc2626;
+    color: #dc2626;
+}
 #filter-brands .brand-controls button { position: relative; }
 #filter-brands .brand-controls button::after {
     content: attr(data-tooltip);

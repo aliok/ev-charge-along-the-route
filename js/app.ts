@@ -1094,6 +1094,12 @@ export class App {
         updateBrandFilterModeButton();
         updateFilterIndicator();
 
+        // Update the brand filter list to show new state immediately
+        // filterBrandListView will also repopulate the list with appropriate buttons
+        const brandListViewControls = document.getElementById('brand-list-view-controls');
+        const activeButton = brandListViewControls?.querySelector('button.active') as HTMLElement | null;
+        filterBrandListView(activeButton?.dataset.view || 'all');
+
         const count = this.applyFilters();
         if (this.routeComponent.isRouteActive) {
             showTemporaryMessage(translate('messageStationsFound', { count }), false);
@@ -1106,6 +1112,11 @@ export class App {
      */
     handleInfoWindowBrandAction(brandName: string, action: BrandAction): void {
         this.handleBrandPreferenceChange(brandName, action);
+
+        // Update the currently visible panel to reflect the change
+        if (state.selectedPoiMarker) {
+            updateInfoWindowIfVisible(state.selectedPoiMarker);
+        }
     }
 
     /**
