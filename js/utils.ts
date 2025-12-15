@@ -1,3 +1,8 @@
+import { isValidNumber, isNonNegativeNumber } from './validation-utils.js';
+import { createLogger } from './logger.js';
+
+const logger = createLogger('ui');
+
 // Turkey bounding box constants
 const TURKEY_MIN_LAT = 35.5;
 const TURKEY_MAX_LAT = 42.5;
@@ -59,7 +64,7 @@ export function isPlaceInTurkey(place: PlaceLike): boolean {
         }
     }
     
-    console.warn("Cannot determine country for place, assuming not in Turkey:", place);
+    logger.warn("Cannot determine country for place, assuming not in Turkey:", place);
     return false;
 }
 
@@ -73,10 +78,16 @@ const METERS_PER_KILOMETER = 1000;
 const DISTANCE_DECIMAL_PLACES = 1;
 
 export function formatDistance(meters: number | null | undefined, translate: (key: string) => string): string {
-    if (meters == null || !Number.isFinite(meters)) {
+    if (!isValidNumber(meters)) {
         return translate('iwNA');
     }
-    
+
+    // Validate for negative numbers
+    if (!isNonNegativeNumber(meters)) {
+        logger.warn(`Negative distance value: ${meters}`);
+        return translate('iwNA');
+    }
+
     const unit = translate('unitKm');
     if (meters >= METERS_PER_KILOMETER) {
         return `${(meters / METERS_PER_KILOMETER).toFixed(DISTANCE_DECIMAL_PLACES)} ${unit}`;
@@ -94,10 +105,16 @@ const SECONDS_PER_MINUTE = 60;
 const MINUTES_PER_HOUR = 60;
 
 export function formatDuration(seconds: number | null | undefined, translate: (key: string) => string): string {
-    if (seconds == null || !Number.isFinite(seconds)) {
+    if (!isValidNumber(seconds)) {
         return translate('iwNA');
     }
-    
+
+    // Validate for negative numbers
+    if (!isNonNegativeNumber(seconds)) {
+        logger.warn(`Negative duration value: ${seconds}`);
+        return translate('iwNA');
+    }
+
     const totalMinutes = Math.round(seconds / SECONDS_PER_MINUTE);
     const minUnit = translate('unitMinuteShort');
     const hrUnit = translate('unitHourShort');
@@ -105,18 +122,18 @@ export function formatDuration(seconds: number | null | undefined, translate: (k
     if (totalMinutes < 1) {
         return `< 1 ${minUnit}`;
     }
-    
+
     if (totalMinutes < MINUTES_PER_HOUR) {
         return `${totalMinutes} ${minUnit}`;
     }
-    
+
     const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
     const minutes = totalMinutes % MINUTES_PER_HOUR;
-    
+
     if (minutes === 0) {
         return `${hours} ${hrUnit}`;
     }
-    
+
     return `${hours} ${hrUnit} ${minutes} ${minUnit}`;
 }
 
@@ -135,19 +152,19 @@ export function getFaviconUrlFromReportUrl(reportUrl: string | null | undefined)
     if (!reportUrl?.trim()) {
         return null;
     }
-    
+
     try {
         const fullUrl = URL_PROTOCOL_REGEX.test(reportUrl) ? reportUrl : `http://${reportUrl}`;
         const url = new URL(fullUrl);
-        
+
         if ((url.protocol !== HTTP_PROTOCOL && url.protocol !== HTTPS_PROTOCOL) || !url.hostname) {
-            console.warn(`Invalid reportUrl: ${reportUrl}`);
+            logger.warn(`Invalid reportUrl: ${reportUrl}`);
             return null;
         }
-        
+
         return `${FAVICON_SERVICE_URL}?sz=${FAVICON_SIZE}&domain_url=${encodeURIComponent(url.hostname)}`;
     } catch (error) {
-        console.warn(`Could not parse reportUrl: ${reportUrl}`, error);
+        logger.warn(`Could not parse reportUrl: ${reportUrl}`, error);
         return null;
     }
 }

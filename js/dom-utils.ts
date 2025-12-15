@@ -160,3 +160,168 @@ export function clearChildren(element: HTMLElement | null): void {
         element.innerHTML = '';
     }
 }
+
+/**
+ * Adds one or more CSS classes to an element.
+ * @param element - The element to modify
+ * @param classes - Class names to add (varargs)
+ */
+export function addClass(element: HTMLElement | null, ...classes: string[]): void {
+    if (element && classes.length > 0) {
+        element.classList.add(...classes);
+    }
+}
+
+/**
+ * Removes one or more CSS classes from an element.
+ * @param element - The element to modify
+ * @param classes - Class names to remove (varargs)
+ */
+export function removeClass(element: HTMLElement | null, ...classes: string[]): void {
+    if (element && classes.length > 0) {
+        element.classList.remove(...classes);
+    }
+}
+
+/**
+ * Toggles a CSS class on an element.
+ * @param element - The element to modify
+ * @param className - Class name to toggle
+ * @param force - Optional boolean to force add (true) or remove (false)
+ * @returns true if class is now present, false otherwise
+ */
+export function toggleClass(element: HTMLElement | null, className: string, force?: boolean): boolean {
+    if (!element) return false;
+    return element.classList.toggle(className, force);
+}
+
+/**
+ * Checks if an element has a CSS class.
+ * @param element - The element to check
+ * @param className - Class name to check for
+ * @returns true if element has the class
+ */
+export function hasClass(element: HTMLElement | null, className: string): boolean {
+    return element?.classList.contains(className) ?? false;
+}
+
+/**
+ * Sets the display style of an element.
+ * @param element - The element to modify
+ * @param display - Display value ('none', 'block', 'flex', etc.)
+ */
+export function setDisplay(element: HTMLElement | null, display: string): void {
+    if (element) {
+        element.style.display = display;
+    }
+}
+
+/**
+ * Shows an element by setting display to 'block' (or custom value).
+ * @param element - The element to show
+ * @param displayValue - Optional display value (defaults to 'block')
+ */
+export function show(element: HTMLElement | null, displayValue: string = 'block'): void {
+    setDisplay(element, displayValue);
+}
+
+/**
+ * Hides an element by setting display to 'none'.
+ * @param element - The element to hide
+ */
+export function hide(element: HTMLElement | null): void {
+    setDisplay(element, 'none');
+}
+
+/**
+ * Sets the visibility of an element.
+ * @param element - The element to modify
+ * @param visible - true to make visible, false to hide
+ */
+export function setVisibility(element: HTMLElement | null, visible: boolean): void {
+    if (element) {
+        element.style.visibility = visible ? 'visible' : 'hidden';
+    }
+}
+
+/**
+ * Sets the opacity of an element.
+ * @param element - The element to modify
+ * @param opacity - Opacity value (0-1)
+ */
+export function setOpacity(element: HTMLElement | null, opacity: number): void {
+    if (element) {
+        element.style.opacity = opacity.toString();
+    }
+}
+
+/**
+ * Queries for a single element with type safety.
+ * @param selector - CSS selector
+ * @param parent - Optional parent element (defaults to document)
+ * @returns The element or null
+ */
+export function querySelector<T extends HTMLElement = HTMLElement>(
+    selector: string,
+    parent: ParentNode = document
+): T | null {
+    return parent.querySelector<T>(selector);
+}
+
+/**
+ * Queries for multiple elements with type safety.
+ * @param selector - CSS selector
+ * @param parent - Optional parent element (defaults to document)
+ * @returns Array of elements
+ */
+export function querySelectorAll<T extends HTMLElement = HTMLElement>(
+    selector: string,
+    parent: ParentNode = document
+): T[] {
+    return Array.from(parent.querySelectorAll<T>(selector));
+}
+
+/**
+ * Gets an element by ID with type safety.
+ * @param id - Element ID
+ * @returns The element or null
+ */
+export function getById<T extends HTMLElement = HTMLElement>(id: string): T | null {
+    return document.getElementById(id) as T | null;
+}
+
+/**
+ * Adds an event listener with type safety.
+ * @param element - The element to attach listener to
+ * @param event - Event name
+ * @param handler - Event handler function
+ * @param options - Optional event listener options
+ */
+export function addEventListener<K extends keyof HTMLElementEventMap>(
+    element: HTMLElement | null,
+    event: K,
+    handler: (event: HTMLElementEventMap[K]) => void,
+    options?: AddEventListenerOptions
+): void {
+    if (element) {
+        element.addEventListener(event, handler as EventListener, options);
+    }
+}
+
+/**
+ * Removes an event listener with type safety.
+ * @param element - The element to remove listener from
+ * @param event - Event name
+ * @param handler - Event handler function
+ * @param options - Optional event listener options
+ */
+export function removeEventListener<K extends keyof HTMLElementEventMap>(
+    element: HTMLElement | null,
+    event: K,
+    handler: (event: HTMLElementEventMap[K]) => void,
+    options?: EventListenerOptions
+): void {
+    if (element) {
+        element.removeEventListener(event, handler as EventListener, options);
+    }
+}

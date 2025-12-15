@@ -6,6 +6,10 @@ import {
 } from './utils.js';
 import { getParsedTypeTranslationKey } from './i18n.js';
 import { TranslationParams, LocationType } from './types.js';
+import { areValidCoordinates } from './validation-utils.js';
+import { createLogger } from './logger.js';
+
+const logger = createLogger('geolocation');
 
 // Constants for parsed location types
 const PARSED_TYPE_COORDINATES = 'Coordinates';
@@ -159,13 +163,13 @@ export class LocationService {
         try {
             const text = await navigator.clipboard.readText();
             if (text.trim()) {
-                console.log(`Pasted via button (${type}):`, text.slice(0, 100));
+                logger.debug(`Pasted via button (${type}):`, text.slice(0, 100));
                 this._processPastedLocation(text, type);
             } else {
                 this.showTemporaryMessage(this.translate('messageClipboardEmpty'), false);
             }
         } catch (err) {
-            console.error('Failed to read clipboard contents: ', err);
+            logger.error('Failed to read clipboard contents: ', err);
             this.showTemporaryMessage(this.translate('messageClipboardError'), true);
             inputElement.focus();
         }
@@ -181,10 +185,10 @@ export class LocationService {
         const pastedText = event.clipboardData?.getData('text') || 
             (window as ExtendedWindow).clipboardData?.getData('text');
         if (pastedText?.trim()) {
-            console.log(`Pasted directly (${type}):`, pastedText.slice(0, 100));
+            logger.debug(`Pasted directly (${type}):`, pastedText.slice(0, 100));
             this._processPastedLocation(pastedText, type);
         } else {
-            console.log("Paste event detected, but no text data found.");
+            logger.debug("Paste event detected, but no text data found.");
         }
     }
 
@@ -193,7 +197,7 @@ export class LocationService {
      * @param type - 'start' or 'end'.
      */
     handleUseCurrentLocationClick(type: LocationType): void {
-        console.log(`Use current location clicked for: ${type}`);
+        logger.debug(`Use current location clicked for: ${type}`);
         if (!navigator.geolocation) {
             this.showTemporaryMessage(this.translate('messageGeoNotSupported'), true);
             return;
@@ -210,14 +214,14 @@ export class LocationService {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                console.log("Geolocation success:", exactCoords);
+                logger.debug("Geolocation success:", exactCoords);
                 this._geocodeAndSetLocation(type, {
                     location: exactCoords
                 }, PARSED_TYPE_CURRENT_LOCATION, exactCoords);
             },
             (error) => {
                 inputElement.classList.remove('input-loading');
-                console.error("Geolocation error:", error);
+                logger.error("Geolocation error:", error);
                 const messageKey = this._getGeolocationErrorKey(error);
                 this.showTemporaryMessage(this.translate(messageKey), true);
             },
@@ -236,12 +240,12 @@ export class LocationService {
         const targetType: LocationType = hasStartPoint ? 'end' : 'start';
 
         if (placeId) {
-            console.log("Clicked on Google feature:", placeId);
+            logger.debug("Clicked on Google feature:", placeId);
             this._geocodeAndSetLocation(targetType, {
                 placeId: placeId
             }, PARSED_TYPE_FEATURE_CLICK);
         } else if (clickedLatLng) {
-            console.log("Clicked on base map:", clickedLatLng.toString());
+            logger.debug("Clicked on base map:", clickedLatLng.toString());
             this._geocodeAndSetLocation(targetType, {
                 location: clickedLatLng
             }, PARSED_TYPE_MAP_CLICK, {
@@ -306,7 +310,7 @@ export class LocationService {
         parsedType: string,
         exactLocation: ExactLocation | null = null
     ): void {
-        console.log(`Geocoding request (${type}, parsed as ${parsedType}, exact: ${!!exactLocation}):`, request);
+        logger.debug(`Geocoding request (${type}, parsed as ${parsedType}, exact: ${!!exactLocation}):`, request);
         this.showTemporaryMessage(this.translate('messageProcessingLocation', {
             parsedType
         }), false);
@@ -355,7 +359,7 @@ export class LocationService {
         exactLocation: ExactLocation | null = null
     ): void {
         if (status !== google.maps.GeocoderStatus.OK || !results?.[0]) {
-            console.error(`Geocoding failed for ${type} (${parsedType}). Status: ${status}`);
+            logger.error(`Geocoding failed for ${type} (${parsedType}). Status: ${status}`);
             const errorMsgKey = status === google.maps.GeocoderStatus.ZERO_RESULTS
                 ? 'messagePastedNoResults'
                 : 'messagePastedError';
@@ -449,7 +453,7 @@ export class LocationService {
     private async _resolveShortUrl(shortUrl: string, type: LocationType): Promise<void> {
         const proxyUrl = SHORT_URL_RESOLVER_PROXY_TEMPLATE.replace('{encoded_url}', encodeURIComponent(shortUrl));
         const inputElement = this._getInputElement(type);
-        console.log(`Calling proxy to resolve short URL: ${proxyUrl}`);
+        logger.debug(`Calling proxy to resolve short URL: ${proxyUrl}`);
         
         inputElement.classList.add('input-loading');
         inputElement.disabled = true;
@@ -474,7 +478,7 @@ export class LocationService {
                 throw new Error(`Proxy returned invalid or empty response: ${JSON.stringify(responseData)}`);
             }
         } catch (error) {
-            console.error("Error resolving short URL via proxy:", error);
+            logger.error("Error resolving short URL via proxy:", error);
             const { key, params } = this._getShortUrlErrorKey(error);
             this.showTemporaryMessage(this.translate(key, params), true);
         } finally {
@@ -647,7 +651,7 @@ export class LocationService {
      */
     private _processPastedLocation(text: string, type: LocationType, isResolved: boolean = false): void {
         text = text.trim();
-        console.log(`Processing pasted text (isResolved=${isResolved}):`, text);
+        logger.debug(`Processing pasted text (isResolved=${isResolved}):`, text);
 
         // Handle short URLs if not already resolved
         if (!isResolved) {
@@ -700,7 +704,7 @@ export class LocationService {
             }
         } catch (e) {
             const error = e as Error;
-            console.log("Could not parse as URL or error during URL processing, continuing checks:", error.message);
+            logger.debug("Could not parse as URL or error during URL processing, continuing checks:", error.message);
         }
 
         // Try parsing as place ID

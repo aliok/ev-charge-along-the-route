@@ -3,7 +3,26 @@
  */
 
 /**
- * Delay for specified milliseconds.
+ * Custom error class for fetch operations
+ */
+export class FetchError extends Error {
+    constructor(
+        public readonly status: number,
+        public readonly statusText: string,
+        message?: string
+    ) {
+        super(message || `HTTP error! Status: ${status} ${statusText}`);
+        this.name = 'FetchError';
+    }
+}
+
+/**
+ * Creates a promise that resolves after the specified delay.
+ * @param ms - Delay in milliseconds
+ * @returns A promise that resolves after the delay
+ * @example
+ * await delay(1000); // Wait for 1 second
+ * @private
  */
 function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -19,10 +38,24 @@ export interface RetryOptions {
 }
 
 /**
- * Executes a function with retry logic.
+ * Executes an async function with automatic retry logic.
+ * Retries the function on failure with exponential backoff or fixed delay.
+ *
+ * @template T - The return type of the function
  * @param fn - The async function to execute
- * @param options - Retry options
- * @returns The result of the function or throws after all retries fail
+ * @param options - Retry configuration options
+ * @returns The result of the function execution
+ * @throws The last error encountered after all retries are exhausted
+ *
+ * @example
+ * const result = await withRetry(
+ *   async () => fetchJson('https://api.example.com/data'),
+ *   {
+ *     maxRetries: 3,
+ *     retryDelay: 1000,
+ *     onRetry: (attempt, error) => console.log(`Retry attempt ${attempt}`, error)
+ *   }
+ * );
  */
 export async function withRetry<T>(
     fn: () => Promise<T>,
@@ -48,22 +81,45 @@ export async function withRetry<T>(
 
 /**
  * Fetches JSON data with error handling.
+ * @throws {FetchError} When the HTTP request fails
+ * @throws {Error} When the response is not JSON
  */
 export async function fetchJson<T>(
     url: string,
     options?: RequestInit
 ): Promise<T> {
     const response = await fetch(url, options);
-    
+
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new FetchError(response.status, response.statusText);
     }
-    
+
+    const contentType = response.headers.get('content-type');
+    if (contentType && !contentType.includes('application/json')) {
+        throw new Error(`Expected JSON but got ${contentType}`);
+    }
+
     return response.json();
 }
 
 /**
- * Wraps Google Maps DirectionsService.route in a Promise.
+ * Wraps Google Maps DirectionsService.route in a Promise-based interface.
+ * Converts the callback-based API to a more modern async/await compatible format.
+ *
+ * @param directionsService - The Google Maps DirectionsService instance
+ * @param request - The directions request parameters
+ * @returns A promise that resolves with the route result and status
+ *
+ * @example
+ * const { result, status } = await routePromise(directionsService, {
+ *   origin: { lat: 41.0, lng: 29.0 },
+ *   destination: { lat: 41.1, lng: 29.1 },
+ *   travelMode: google.maps.TravelMode.DRIVING
+ * });
+ *
+ * if (status === google.maps.DirectionsStatus.OK && result) {
+ *   // Handle successful route
+ * }
  */
 export function routePromise(
     directionsService: google.maps.DirectionsService,

@@ -13,6 +13,10 @@ import {
     STATIONS_JSON_PATH
 } from './config.js';
 
+import { createLogger } from './logger.js';
+
+const logger = createLogger('app');
+
 import {
     applyTranslations,
     handleDocumentClickForDropdown,
@@ -177,13 +181,33 @@ export class App {
      * Initializes the application
      */
     async initialize(): Promise<void> {
-        console.log("App.initialize called");
+        logger.info("App.initialize called");
+
+        this.initializeLanguage();
+
+        if (!this.initializeUI()) {
+            return;
+        }
+
+        this.setupCallbacks();
+
+        if (!this.validateGoogleMaps()) {
+            return;
+        }
+
+        this.prepareForMapLoad();
+        this.loadSettings();
+        this.initializeGeolocation();
+
+        setupLanguageDropdown();
+    }
+
+    /**
+     * Initializes language support
+     */
+    private initializeLanguage(): void {
         loadLanguage();
 
-        // Get UI Elements
-        getUIElements();
-
-        // Language UI elements
         const languageUI = getLanguageUIElements();
         initLanguageUI(
             languageUI.control,
@@ -191,32 +215,50 @@ export class App {
             languageUI.dropdown,
             languageUI.flagDisplay
         );
+    }
 
-        // Check Core Elements
+    /**
+     * Initializes UI elements and validates them
+     * @returns true if initialization successful, false otherwise
+     */
+    private initializeUI(): boolean {
+        getUIElements();
+
         if (!validateUIElements()) {
-            console.error("Required UI elements not found!");
+            logger.error("Required UI elements not found!");
             alert("Initialization Error: Missing UI elements.");
-            return;
+            return false;
         }
 
-        // Setup UI callbacks
-        this.setupCallbacks();
+        return true;
+    }
 
+    /**
+     * Validates Google Maps API availability
+     * @returns true if Google Maps is available, false otherwise
+     */
+    private validateGoogleMaps(): boolean {
         if (typeof google === 'undefined' || typeof google.maps === 'undefined' || !google.maps.marker) {
-            console.error("Google Maps API or Advanced Marker library not loaded!");
+            logger.error("Google Maps API or Advanced Marker library not loaded!");
             showTemporaryMessage(translate('messageErrorGmapsLoad'), true);
-            return;
+            return false;
         }
+        return true;
+    }
 
-        // Show Loading
+    /**
+     * Prepares UI for map loading
+     */
+    private prepareForMapLoad(): void {
         applyTranslations();
         showLoadingOverlay();
         updateLoadingProgress(0, 0);
+    }
 
-        // Load Settings
-        this.loadSettings();
-
-        // Initialize map with geolocation or default
+    /**
+     * Initializes geolocation-based map centering
+     */
+    private initializeGeolocation(): void {
         if (navigator.geolocation) {
             console.log("Attempting geolocation...");
             navigator.geolocation.getCurrentPosition(
@@ -231,9 +273,49 @@ export class App {
             setUseLocationButtonsEnabled(false);
             this.initializeMapAndServices(defaultCenter, defaultZoom);
         }
-
-        setupLanguageDropdown();
     }
+
+    // ==================== State Synchronization ====================
+
+    /**
+     * Syncs component state to legacy global state
+     * This is a temporary solution during the migration to component-based architecture
+     */
+    private syncLegacyState(): void {
+        // Route state
+        state.isRouteActive = this.routeComponent.isRouteActive;
+        state.originalRouteDistance = this.routeComponent.originalRouteDistance;
+        state.originalRouteDuration = this.routeComponent.originalRouteDuration;
+        state.currentRoutePolylinePath = this.routeComponent.currentRoutePolylinePath;
+        state.effectiveRoutePath = this.routeComponent.effectiveRoutePath;
+        state.startOffsetKm = this.routeComponent.startOffsetKm;
+        state.endOffsetKm = this.routeComponent.endOffsetKm;
+        state.startLocation = this.routeComponent.startLocation;
+        state.endLocation = this.routeComponent.endLocation;
+
+        // Filter state
+        if (this.filterComponent) {
+            state.currentFilters = { ...this.filterComponent.currentFilters };
+            state.distanceThresholdKm = this.filterComponent.distanceThresholdKm;
+        }
+
+        // Preferences state
+        state.favoriteBrands = this.preferencesComponent.favoriteBrands;
+        state.blacklistedBrands = this.preferencesComponent.blacklistedBrands;
+        state.ignoredStationIds = this.preferencesComponent.ignoredStationIds;
+        state.brandFilterMode = this.preferencesComponent.brandFilterMode;
+
+        // Marker state
+        if (this.markerComponent) {
+            state.visiblePoiMarkers = this.markerComponent.visiblePoiMarkers;
+        }
+
+        // Station data
+        state.allStationData = this.stationDataComponent.allStationData;
+        state.allUniqueBrands = this.stationDataComponent.allUniqueBrands;
+    }
+
+    // ==================== Setup & Callbacks ====================
 
     /**
      * Sets up all callbacks between components
@@ -1036,9 +1118,13 @@ export class App {
         updateFilterIndicator();
 
         // Close InfoWindow if it's for this station
-        const infoWindowWithMethods = this.mapComponent.infoWindow as google.maps.InfoWindow & { getMap?: () => google.maps.Map | null; getAnchor?: () => ExtendedMarker | null };
-        if (this.mapComponent.infoWindow && infoWindowWithMethods.getMap?.() && infoWindowWithMethods.getAnchor?.()?.stationId === stationId) {
-            this.mapComponent.infoWindow.close();
+        type InfoWindowWithMethods = google.maps.InfoWindow & {
+            getMap?: () => google.maps.Map | null;
+            getAnchor?: () => ExtendedMarker | null;
+        };
+        const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
+        if (infoWindow?.getMap?.() && infoWindow.getAnchor?.()?.stationId === stationId) {
+            infoWindow.close();
             resetSelectedMarkerZIndex();
         }
 
@@ -1131,13 +1217,17 @@ export class App {
      * Handles map click
      */
     private handleMapClick(event: google.maps.MapMouseEvent): void {
-        if (this.mapComponent.infoWindow && (this.mapComponent.infoWindow as google.maps.InfoWindow & { getMap?: () => google.maps.Map | null }).getMap?.()) {
+        type InfoWindowWithMethods = google.maps.InfoWindow & {
+            getMap?: () => google.maps.Map | null;
+        };
+        const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
+        if (infoWindow?.getMap?.()) {
             console.log("Map click detected, closing InfoWindow.");
-            this.mapComponent.infoWindow.close();
+            infoWindow.close();
             resetSelectedMarkerZIndex();
         }
-        if (event.stop) event.stop();
-        else if (event.domEvent?.stopPropagation) event.domEvent.stopPropagation();
+        event.stop?.();
+        event.domEvent?.stopPropagation();
 
         if (state.routeWaypoints.length >= 2 && !(event as google.maps.MapMouseEvent & { placeId?: string }).placeId) {
             console.log("Route already set. Base map click ignored.");
@@ -1202,10 +1292,13 @@ export class App {
             let closedSomething = false;
             if (closeLanguageDropdown()) closedSomething = true;
 
-            const infoWindowWithMethods = this.mapComponent.infoWindow as google.maps.InfoWindow & { getMap?: () => google.maps.Map | null };
-            if (this.mapComponent.infoWindow && infoWindowWithMethods.getMap?.()) {
+            type InfoWindowWithMethods = google.maps.InfoWindow & {
+                getMap?: () => google.maps.Map | null;
+            };
+            const infoWindow = this.mapComponent.infoWindow as InfoWindowWithMethods;
+            if (infoWindow?.getMap?.()) {
                 console.log("Escape key pressed, closing InfoWindow.");
-                this.mapComponent.infoWindow.close();
+                infoWindow.close();
                 resetSelectedMarkerZIndex();
                 closedSomething = true;
             }
@@ -1256,19 +1349,14 @@ export class App {
      * Called when route changes
      */
     private onRouteChanged(): void {
-        // Sync with legacy state
-        state.isRouteActive = this.routeComponent.isRouteActive;
-        state.originalRouteDistance = this.routeComponent.originalRouteDistance;
-        state.originalRouteDuration = this.routeComponent.originalRouteDuration;
-        state.currentRoutePolylinePath = this.routeComponent.currentRoutePolylinePath;
+        this.syncLegacyState();
     }
 
     /**
      * Called when effective path changes
      */
     private onEffectivePathChanged(): void {
-        // Sync with legacy state
-        state.effectiveRoutePath = this.routeComponent.effectiveRoutePath;
+        this.syncLegacyState();
     }
 
     // ==================== Settings ====================

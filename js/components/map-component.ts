@@ -1,5 +1,8 @@
 import { defaultCenter, defaultZoom, DEFAULT_MAP_TYPE_ID } from '../config.js';
 import { getMapElement } from '../ui.js';
+import { createLogger } from '../logger.js';
+
+const logger = createLogger('map');
 
 /**
  * Manages the Google Maps instance and related services
@@ -69,7 +72,7 @@ export class MapComponent {
             });
 
             this.infoWindow.addListener('closeclick', () => {
-                console.log("InfoWindow closeclick triggered.");
+                logger.debug("InfoWindow closeclick triggered.");
                 if (this.map) {
                     this.map.setOptions({padding: {top: 0}} as google.maps.MapOptions);
                 }
@@ -79,7 +82,7 @@ export class MapComponent {
             });
 
             this.geocoder = new google.maps.Geocoder();
-            console.log("Map services initialized.");
+            logger.debug("Map services initialized.");
         } catch (error) {
             console.error("Error initializing map services:", error);
             throw error;

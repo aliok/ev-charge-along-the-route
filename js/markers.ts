@@ -1,7 +1,7 @@
 import state, { ExtendedMarker, StationData, DetourData, LiveSocketData, LiveSocketDataState } from './state.js';
 import { translate, currentLang } from './i18n.js';
 import { formatDistance, formatDuration, getFaviconUrlFromReportUrl, showTemporaryMessage } from './utils.js';
-import { 
+import {
     DEFAULT_POI_ZINDEX,
     HOVER_POI_ZINDEX,
     SELECTED_POI_ZINDEX,
@@ -16,10 +16,13 @@ import {
     IGNORE_ICON_SVG,
     translations
 } from './config.js';
-import { createElement, createBadge, createImageWithFallback } from './dom-utils.js';
+import { createElement, createBadge, createImageWithFallback, addClass } from './dom-utils.js';
 import { toLatLng, createGoogleMapsLink } from './geo-utils.js';
 import { analyzeStationSockets, getAvailabilityInfo, formatPower, getPowerEmoji } from './socket-utils.js';
 import { withRetry, fetchJson } from './async-utils.js';
+import { createLogger } from './logger.js';
+
+const logger = createLogger('marker');
 
 // Callbacks for business logic (set by main.js)
 let calculateAndDisplayDetourOnClickCallback: ((marker: ExtendedMarker, poiLocation: google.maps.LatLng, startLoc: google.maps.LatLng, endLoc: google.maps.LatLng, originalDist: number, originalDur: number) => void) | null = null;
@@ -142,20 +145,20 @@ export function createMarkerForStation(stationData: StationData): ExtendedMarker
         return marker;
 
     } catch (error) {
-        console.error(`Error creating AdvancedMarkerElement for Station ${stationData.id}:`, error);
+        logger.error(`Error creating AdvancedMarkerElement for Station ${stationData.id}:`, error);
         return null;
     }
 }
 
 export function updateMarker(type: 'start' | 'end', location: google.maps.LatLng, title: string): void {
     const contentDiv = document.createElement('div');
-    contentDiv.classList.add('custom-marker-content');
+    addClass(contentDiv, 'custom-marker-content');
     if (type === 'start') {
         contentDiv.textContent = translate('markerStart');
-        contentDiv.classList.add('start-marker-content');
+        addClass(contentDiv, 'start-marker-content');
     } else {
         contentDiv.textContent = translate('markerDest');
-        contentDiv.classList.add('dest-marker-content');
+        addClass(contentDiv, 'dest-marker-content');
     }
     const markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {
         position: location,
@@ -173,7 +176,7 @@ export function updateMarker(type: 'start' | 'end', location: google.maps.LatLng
             state.endMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions) as ExtendedMarker;
         }
     } catch (error) {
-        console.error(`Error creating AdvancedMarkerElement for ${type}:`, error);
+        logger.error(`Error creating AdvancedMarkerElement for ${type}:`, error);
         showTemporaryMessage(`Failed to create ${type} marker.`, true);
         if (type === 'start') state.startMarker = null;
         else if (type === 'end') state.endMarker = null;
@@ -184,7 +187,7 @@ export function updateMarker(type: 'start' | 'end', location: google.maps.LatLng
 export function resetSelectedMarkerZIndex(): void {
     if (state.selectedPoiMarker) {
         state.selectedPoiMarker.zIndex = DEFAULT_POI_ZINDEX;
-        console.log(`Reset zIndex for ${state.selectedPoiMarker.stationId}`);
+        logger.debug(`Reset zIndex for ${state.selectedPoiMarker.stationId}`);
     }
     state.selectedPoiMarker = null;
 }
@@ -229,7 +232,7 @@ export function updateInfoWindowIfVisible(marker: ExtendedMarker): void {
         return;
     }
 
-    console.log(`Updating visible IW for ${marker.stationId}`);
+    logger.debug(`Updating visible IW for ${marker.stationId}`);
     const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
     const detourHtml = getDetourHtmlFromData(marker.detourData);
     const finalContentString = buildInfoWindowHtml(marker, marker.poiData!, marker.liveSocketData ?? null, fetchStatus, detourHtml);
@@ -292,7 +295,7 @@ function buildDetourSectionHtml(detourHtml: string): string {
 function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveSocketsData: LiveSocketDataState, fetchStatus: 'loading' | 'error' | 'ok', detourHtml: string = ''): string {
     const poiLocation = marker.position;
     if (!poiLocation) {
-        console.error('Marker has no position');
+        logger.error('Marker has no position');
         return '';
     }
     const contentElement = marker.content as HTMLElement | null;
@@ -455,11 +458,11 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
     const stationId = poiData.id;
     const poiLocation = marker.position;
     if (!poiLocation) {
-        console.error("Clicked marker has no position.");
+        logger.error("Clicked marker has no position.");
         return;
     }
     if (state.ignoredStationIds.has(stationId)) {
-        console.log(`Station ${stationId} is ignored, not opening InfoWindow.`);
+        logger.debug(`Station ${stationId} is ignored, not opening InfoWindow.`);
         return;
     }
 
@@ -472,11 +475,11 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
         resetSelectedMarkerZIndex();
         marker.zIndex = SELECTED_POI_ZINDEX;
         state.selectedPoiMarker = marker;
-        console.log(`Set zIndex to ${SELECTED_POI_ZINDEX} for ${stationId}`);
+        logger.debug(`Set zIndex to ${SELECTED_POI_ZINDEX} for ${stationId}`);
     } else {
         if (marker.detourData) updateMarkerDetourText(marker, marker.detourData);
     }
-    console.log(`Fetching details for Station ID: ${stationId}`, `Suppress InfoWindow: ${suppressInfoWindowOpen}`);
+    logger.debug(`Fetching details for Station ID: ${stationId}`, `Suppress InfoWindow: ${suppressInfoWindowOpen}`);
 
     let triggerOnDemandCalc = false;
     let initialDetourHtml = '';
@@ -508,15 +511,15 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
             map: state.map,
             shouldFocus: false
         });
-        console.log(`Displayed initial InfoWindow for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
+        logger.debug(`Displayed initial InfoWindow for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
     } else if (suppressInfoWindowOpen) {
-        console.log(`fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`);
+        logger.debug(`fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`);
     }
 
     // Fetch sockets if not already loaded/loading or if forced by direct click
     if (marker.liveSocketData === null || (suppressInfoWindowOpen && marker.liveSocketData === false)) {
         const socketsUrl = STATION_SOCKETS_API_URL_TEMPLATE.replace('{id}', stationId);
-        console.log(`Starting socket fetch for ${stationId}...`);
+        logger.debug(`Starting socket fetch for ${stationId}...`);
         marker.liveSocketData = null;
 
         (async () => {
@@ -532,26 +535,26 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
                         retryDelay: SOCKET_API_RETRY_DELAY,
                         onRetry: (attempt, error) => {
                             const errorMessage = error instanceof Error ? error.message : String(error);
-                            console.warn(`Socket fetch ERROR for ${stationId} (Attempt ${attempt}/${MAX_API_RETRIES + 1}):`, errorMessage);
+                            logger.warn(`Socket fetch ERROR for ${stationId} (Attempt ${attempt}/${MAX_API_RETRIES + 1}):`, errorMessage);
                         }
                     }
                 );
-                console.log(`Socket fetch SUCCESS for ${stationId}`);
+                logger.debug(`Socket fetch SUCCESS for ${stationId}`);
                 marker.liveSocketData = liveSocketsStatus as LiveSocketDataState;
                 updateInfoWindowIfVisible(marker);
             } catch (error) {
-                console.error(`Final socket fetch attempt failed for ${stationId}.`);
+                logger.error(`Final socket fetch attempt failed for ${stationId}.`);
                 marker.liveSocketData = false;
                 updateInfoWindowIfVisible(marker);
             }
         })();
     } else {
-        console.log(`Skipping socket fetch for ${stationId} - data already exists or suppress=true.`);
+        logger.debug(`Skipping socket fetch for ${stationId} - data already exists or suppress=true.`);
         if (!suppressInfoWindowOpen) updateInfoWindowIfVisible(marker);
     }
 
     if (triggerOnDemandCalc && !suppressInfoWindowOpen && state.isRouteActive && state.startLocation && state.endLocation && state.originalRouteDistance !== null && state.originalRouteDuration !== null && marker.position) {
-        console.log(`Starting on-demand detour calculation for ${stationId}...`);
+        logger.debug(`Starting on-demand detour calculation for ${stationId}...`);
         if (calculateAndDisplayDetourOnClickCallback) {
             const position = toLatLng(marker.position);
             calculateAndDisplayDetourOnClickCallback(marker, position, state.startLocation, state.endLocation, state.originalRouteDistance, state.originalRouteDuration);

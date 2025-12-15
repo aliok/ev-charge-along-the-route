@@ -3,6 +3,11 @@ import {
     translations
 } from './config.js';
 import type { TranslationParams } from './types.js';
+import { getStorageItem, setStorageItem } from './storage-utils.js';
+import { createLogger } from './logger.js';
+
+// Create logger for i18n operations
+const logger = createLogger('i18n');
 
 // --- Internationalization (i18n) ---
 const DEFAULT_LANGUAGE = 'en';
@@ -27,37 +32,37 @@ function isLanguageSupported(lang: string): boolean {
 }
 
 export function loadLanguage(): void {
-    const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    
+    const savedLang = getStorageItem<string>(LANGUAGE_STORAGE_KEY);
+
     if (savedLang && isLanguageSupported(savedLang)) {
         currentLang = savedLang;
-        console.log(`Loaded language from localStorage: ${currentLang}`);
+        logger.info(`Loaded language from localStorage: ${currentLang}`);
     } else {
         // Try detecting browser language
         const browserLang = navigator.language ? extractLanguageCode(navigator.language) : DEFAULT_LANGUAGE;
-        
+
         if (isLanguageSupported(browserLang)) {
             currentLang = browserLang;
-            console.log(`Detected browser language: ${currentLang}. No preference saved yet.`);
+            logger.info(`Detected browser language: ${currentLang}. No preference saved yet.`);
         } else {
             currentLang = DEFAULT_LANGUAGE;
-            console.log(`Browser language (${browserLang}) not supported or undetectable, defaulting to: ${currentLang}`);
+            logger.info(`Browser language (${browserLang}) not supported or undetectable, defaulting to: ${currentLang}`);
         }
     }
-    
+
     document.documentElement.lang = currentLang;
 }
 
 function setLanguage(lang: string): void {
     if (lang && translations[lang] && lang !== currentLang) {
         currentLang = lang;
-        localStorage.setItem(LANGUAGE_STORAGE_KEY, currentLang);
-        console.log(`Language preference set to: ${currentLang}. Reloading page.`);
+        setStorageItem(LANGUAGE_STORAGE_KEY, currentLang);
+        logger.info(`Language preference set to: ${currentLang}. Reloading page.`);
         window.location.reload(); // Reload the page
     } else if (lang === currentLang) {
-        console.log(`Language already set to: ${lang}. No action needed.`);
+        logger.debug(`Language already set to: ${lang}. No action needed.`);
     } else {
-        console.warn(`Attempted to set invalid language: ${lang}`);
+        logger.warn(`Attempted to set invalid language: ${lang}`);
     }
 }
 
@@ -146,17 +151,17 @@ function handlePluralization(text: string, key: string, params: TranslationParam
 export function translate(key: string, params: TranslationParams = {}): string {
     const langDict = translations[currentLang] ?? translations[ENGLISH_LANG];
     const englishDict = translations[ENGLISH_LANG];
-    
+
     let text = langDict[key] ?? englishDict[key] ?? key;
 
     // Warn if translation is missing
     if (text === key && !(key in langDict) && !(key in englishDict)) {
-        console.warn(`Translation missing for key: ${key} in lang: ${currentLang}`);
+        logger.warn(`Translation missing for key: ${key} in lang: ${currentLang}`);
     }
 
     // Replace placeholders
     text = replacePlaceholders(text, params);
-    
+
     // Handle pluralization
     text = handlePluralization(text, key, params);
 

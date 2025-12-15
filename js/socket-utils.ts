@@ -168,7 +168,7 @@ export function hasMatchingPowerLevel(
  */
 const AVAILABILITY_STATUS = {
     FREE: { statusClass: 'status-free', statusKey: 'iwFree' },
-    IN_USE: { statusClass: 'status-occupied', statusKey: 'iwIn_use' },
+    IN_USE: { statusClass: 'status-occupied', statusKey: 'iwInUse' },
     OCCUPIED: { statusClass: 'status-occupied', statusKey: 'iwOccupied' },
     CHARGING: { statusClass: 'status-occupied', statusKey: 'iwCharging' },
     UNKNOWN: { statusClass: 'status-unknown', statusKey: 'iwUnknown' }

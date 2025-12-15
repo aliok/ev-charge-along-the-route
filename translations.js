@@ -382,7 +382,7 @@ export const translations = {
         iwLoading: "Yükleniyor...",
         iwUnknown: "Bilinmiyor",
         iwFree: "BOŞ",
-        iwInuse: "KULLANIMDA", // Key changed to match logic, translation updated
+        iwInUse: "KULLANIMDA", // Key changed to match logic, translation updated
         iwOccupied: "MEŞGUL",
         iwCharging: "ŞARJ OLUYOR",
         iwSocketStatusError: "Canlı durum yüklenemedi.",

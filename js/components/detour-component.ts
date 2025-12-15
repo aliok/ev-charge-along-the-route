@@ -4,6 +4,9 @@ import type { RouteComponent } from './route-component.js';
 import type { MarkerComponent } from './marker-component.js';
 import { toLatLng } from '../geo-utils.js';
 import { routePromise, withRetry } from '../async-utils.js';
+import { createLogger } from '../logger.js';
+
+const logger = createLogger('route');
 
 /**
  * Manages detour calculations for charging stations
@@ -107,14 +110,14 @@ export class DetourComponent {
             !this.routeComponent.startLocation || 
             !this.routeComponent.endLocation || 
             this.routeComponent.originalRouteDistance == null) {
-            console.log("Skipping pre-calc: Route not active or missing data.");
+            logger.debug("Skipping pre-calc: Route not active or missing data.");
             return;
         }
 
         const visibleCount = this.markerComponent.visiblePoiMarkers.size;
         const markersWithinLimit = visibleCount <= MAX_PRECALCULATE_DETOURS;
         
-        console.log(`Pre-processing check. Visible POIs: ${visibleCount}. Limit: ${MAX_PRECALCULATE_DETOURS}. Enabled: ${markersWithinLimit}`);
+        logger.debug(`Pre-processing check. Visible POIs: ${visibleCount}. Limit: ${MAX_PRECALCULATE_DETOURS}. Enabled: ${markersWithinLimit}`);
 
         if (markersWithinLimit) {
             let detoursToCalcCount = 0;
@@ -163,9 +166,9 @@ export class DetourComponent {
                 }
             });
 
-            console.log(`Initiated socket pre-fetch for ${socketsToFetchCount}, detour pre-calc for ${detoursToCalcCount} POIs.`);
+            logger.debug(`Initiated socket pre-fetch for ${socketsToFetchCount}, detour pre-calc for ${detoursToCalcCount} POIs.`);
         } else {
-            console.log(`More than ${MAX_PRECALCULATE_DETOURS} visible POIs. Skipping pre-calc.`);
+            logger.debug(`More than ${MAX_PRECALCULATE_DETOURS} visible POIs. Skipping pre-calc.`);
             this.markerComponent.visiblePoiMarkers.forEach(marker => {
                 if (marker.detourData?.status === 'Pending') {
                     marker.detourData = null;

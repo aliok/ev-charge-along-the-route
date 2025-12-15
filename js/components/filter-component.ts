@@ -1,8 +1,11 @@
-import { Filters, StationData } from '../state.js';
+import { Filters, StationData, Waypoint } from '../state.js';
 import { defaultFilters, DEFAULT_DISTANCE_THRESHOLD } from '../config.js';
 import type { PreferencesComponent } from './preferences-component.js';
 import { hasMatchingConnectorType, hasMatchingPowerLevel } from '../socket-utils.js';
 import { getSelectedRadioValue, getCheckedValues } from '../dom-utils.js';
+import { createLogger } from '../logger.js';
+
+const logger = createLogger('filter');
 
 /**
  * Manages filter state and station filtering logic
@@ -13,15 +16,15 @@ export class FilterComponent {
         powerLevels: [...defaultFilters.powerLevels],
         serviceTypes: [...defaultFilters.serviceTypes]
     };
-    
+
     public distanceThresholdKm: number = DEFAULT_DISTANCE_THRESHOLD;
 
     private readonly preferencesComponent: PreferencesComponent;
-    private readonly routeWaypoints: any[];
+    private readonly routeWaypoints: Waypoint[];
 
     constructor(options: {
         preferencesComponent: PreferencesComponent;
-        routeWaypoints: any[];
+        routeWaypoints: Waypoint[];
     }) {
         this.preferencesComponent = options.preferencesComponent;
         this.routeWaypoints = options.routeWaypoints;
@@ -37,7 +40,7 @@ export class FilterComponent {
         );
         this.currentFilters.powerLevels = getCheckedValues('#filter-power input[name="powerLevel"]:checked');
         this.currentFilters.serviceTypes = getCheckedValues('#filter-service-type input[name="serviceType"]:checked');
-        console.log('Updated Basic Filters:', JSON.parse(JSON.stringify(this.currentFilters)));
+        logger.debug('Updated Basic Filters:', JSON.parse(JSON.stringify(this.currentFilters)));
     }
 
     /**

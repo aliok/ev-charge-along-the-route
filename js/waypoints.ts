@@ -1,5 +1,8 @@
 import state, { type Waypoint, type ExtendedMarker } from './state.js';
 import type { TranslationParams } from './types.js';
+import { createLogger } from './logger.js';
+
+const logger = createLogger('route');
 
 // Callbacks for waypoint functions to call back to main.js
 interface WaypointCallbacks {
