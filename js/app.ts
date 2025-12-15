@@ -1229,8 +1229,11 @@ export class App {
         event.stop?.();
         event.domEvent?.stopPropagation();
 
-        if (state.routeWaypoints.length >= 2 && !(event as google.maps.MapMouseEvent & { placeId?: string }).placeId) {
-            console.log("Route already set. Base map click ignored.");
+        const hasStart = getStartWaypoint();
+        const hasDest = getDestinationWaypoint();
+
+        if (hasStart && hasDest) {
+            console.log("Route already set. Map click ignored.");
             return;
         }
 
