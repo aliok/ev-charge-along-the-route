@@ -1332,11 +1332,40 @@ export class App {
      */
     private clearAllInputsAndRoute(): void {
         console.log("Clearing all inputs and route via shortcut.");
+
+        // Clear input fields
         if (startInput) startInput.value = '';
         if (endInput) endInput.value = '';
         if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
         if (endInput && clearEndBtn) handleInputChange(endInput, clearEndBtn);
-        clearAllWaypoints();
+
+        // Clear all waypoints (including start and destination)
+        state.routeWaypoints = [];
+
+        // Clear markers
+        if (state.startMarker) {
+            state.startMarker.map = null;
+            state.startMarker = null;
+        }
+        if (state.endMarker) {
+            state.endMarker.map = null;
+            state.endMarker = null;
+        }
+        state.routeWaypointMarkers.forEach(marker => marker.map = null);
+        state.routeWaypointMarkers = [];
+
+        // Clear route state
+        this.routeComponent.startLocation = null;
+        this.routeComponent.endLocation = null;
+        state.startLocation = null;
+        state.endLocation = null;
+
+        // Clear route display and state
+        this.clearRouteDisplayAndState();
+
+        // Update UI
+        updateRouteBuilderUI();
+        updateGmapsButtonState();
     }
 
     // ==================== Callbacks ====================
