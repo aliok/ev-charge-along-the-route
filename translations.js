@@ -40,6 +40,8 @@ export const translations = {
         titleBrandModeAll: "Showing all (non-blacklisted, non-ignored) brands. Click to show only favorites.",
         titleBrandModeFavOnly: "Showing only favorite brands. Click to show all.",
         titleBrandModeDisabled: "Mark brands as favorite (⭐) to enable 'Favorites Only' mode",
+        tooltipBrandFilterAll: "Showing all brands",
+        tooltipBrandFilterFavoritesOnly: "Showing only favorite brands",
 
         // --- NEW: Route Builder ---
         ariaToggleRouteBuilder: "Toggle Route Builder Panel",
@@ -92,10 +94,12 @@ export const translations = {
         filterIgnoreHint: "Use the 👁️‍🗨️🚫 icon in station popups to ignore.",
         filterStatusNoBrands: "No brand data available.",
         filterStatusNoIgnored: "No stations ignored.",
+        filterStatusNoIgnoredStations: "No stations ignored.",
         filterStatusNoBrandsView: "No brands match this view.",
         tooltipFavorite: "Favorite",
         tooltipBlacklist: "Blacklist",
         buttonUnignore: "Un-ignore",
+        unignoreStationAction: "Un-ignore this Station",
         titleOpenMap: "Open on Map",
         // Offset Controls
         offsetStart: "Start:",
@@ -124,10 +128,12 @@ export const translations = {
         messageGeoPermissionDenied: "Location permission denied. Showing default map.",
         messageGeoUnavailable: "Location information unavailable. Showing default map.",
         messageGeoTimeout: "Location request timed out. Showing default map.",
+        messageOutsideTurkey: "Your location is outside Turkey. Showing default map.",
         messageErrorGmapsLoad: "Error: Google Maps components failed to load.",
         messageErrorMapCreate: "Error creating the map.",
         messageErrorMapServices: "Error initializing map services.",
         messageErrorAutocomplete: "Error setting up Autocomplete.",
+        messageAutocomplete: "Error setting up Autocomplete.",
         messageAutocompleteUnavailable: "Autocomplete unavailable",
         messageInvalidLocation: "Please select a valid location from the list.",
         messageProcessingLocation: "Processing {parsedType}...",
@@ -136,6 +142,7 @@ export const translations = {
         messageNotInTurkey: "Location ({parsedType}) is not in Turkey.",
         messageSetLocation: "Set {type} location from {parsedType}.", // {type} = start/end
         messageCalculatingRoute: "Calculating route...",
+        messageRouteCalcFailed: "Route calculation failed.",
         messageRouteCalcFailedDisplay: "Route calculated, but could not display it.",
         messageDirectionsFailed: "Directions request failed: {status}",
         messageRouteCalculated: "Route calculated. {count} station(s) found matching initial criteria.", // Plural handled in translate()
@@ -180,7 +187,7 @@ export const translations = {
         iwLoading: "Loading...",
         iwUnknown: "Unknown",
         iwFree: "FREE",
-        iwInuse: "IN USE", // Key changed to match logic
+        iwInUse: "IN USE",
         iwOccupied: "OCCUPIED",
         iwCharging: "CHARGING",
         iwSocketStatusError: "Could not load live status.",
@@ -242,6 +249,8 @@ export const translations = {
         titleBrandModeAll: "Tüm (kara listeye alınmamış, yok sayılmamış) markalar gösteriliyor. Sadece favorileri göstermek için tıklayın.",
         titleBrandModeFavOnly: "Sadece favori markalar gösteriliyor. Tümünü göstermek için tıklayın.",
         titleBrandModeDisabled: "'Sadece Favoriler' modunu etkinleştirmek için markaları favori (⭐) olarak işaretleyin.",
+        tooltipBrandFilterAll: "Tüm markalar gösteriliyor",
+        tooltipBrandFilterFavoritesOnly: "Sadece favori markalar gösteriliyor",
 
         // --- NEW: Route Builder ---
         ariaToggleRouteBuilder: "Rota Planlayıcı Panelini Aç/Kapat",
@@ -294,10 +303,12 @@ export const translations = {
         filterIgnoreHint: "Yok saymak için istasyon açılır pencerelerindeki 👁️‍🗨️🚫 simgesini kullanın.",
         filterStatusNoBrands: "Marka verisi mevcut değil.",
         filterStatusNoIgnored: "Yok sayılan istasyon yok.",
+        filterStatusNoIgnoredStations: "Yok sayılan istasyon yok.",
         filterStatusNoBrandsView: "Bu görünüme uyan marka yok.",
         tooltipFavorite: "Favori",
         tooltipBlacklist: "Kara Liste",
         buttonUnignore: "Yok Saymayı Kaldır",
+        unignoreStationAction: "Bu İstasyonun Yok Sayılmasını Kaldır",
         titleOpenMap: "Haritada Aç",
         // Offset Controls
         offsetStart: "Başl:",
@@ -326,10 +337,12 @@ export const translations = {
         messageGeoPermissionDenied: "Konum izni reddedildi. Varsayılan harita gösteriliyor.",
         messageGeoUnavailable: "Konum bilgisi mevcut değil. Varsayılan harita gösteriliyor.",
         messageGeoTimeout: "Konum isteği zaman aşımına uğradı. Varsayılan harita gösteriliyor.",
+        messageOutsideTurkey: "Konumunuz Türkiye dışında. Varsayılan harita gösteriliyor.",
         messageErrorGmapsLoad: "Hata: Google Haritalar bileşenleri yüklenemedi.",
         messageErrorMapCreate: "Harita oluşturulurken hata oluştu.",
         messageErrorMapServices: "Harita servisleri başlatılırken hata oluştu.",
         messageErrorAutocomplete: "Otomatik tamamlama ayarlanırken hata oluştu.",
+        messageAutocomplete: "Otomatik tamamlama ayarlanırken hata oluştu.",
         messageAutocompleteUnavailable: "Otomatik tamamlama kullanılamıyor",
         messageInvalidLocation: "Lütfen listeden geçerli bir konum seçin.",
         messageProcessingLocation: "{parsedType} işleniyor...", // Parsed type will be translated via its key
@@ -338,6 +351,7 @@ export const translations = {
         messageNotInTurkey: "Konum ({parsedType}) Türkiye'de değil.", // Parsed type will be translated via key
         messageSetLocation: "{type} konumu, {parsedType} kaynağından ayarlandı.", // {type} = başlangıç/varış, parsedType translated via key
         messageCalculatingRoute: "Rota hesaplanıyor...",
+        messageRouteCalcFailed: "Rota hesaplama başarısız.",
         messageRouteCalcFailedDisplay: "Rota hesaplandı, ancak görüntülenemedi.",
         messageDirectionsFailed: "Yol tarifi isteği başarısız: {status}",
         messageRouteCalculated: "Rota hesaplandı. Başlangıç kriterlerine uyan {count} istasyon bulundu.", // Plural handled in translate()
