@@ -62,15 +62,27 @@ export function initializeStationInfoPanel(): void {
     // Add swipe gesture support for mobile
     if (stationInfoPanel) {
         let touchStartY = 0;
+        let touchStartX = 0;
         let touchCurrentY = 0;
         let isDragging = false;
+        let initialScrollTop = 0;
 
         stationInfoPanel.addEventListener('touchstart', (e) => {
-            // Only handle swipe on the panel itself, not on scrollable content
-            const target = e.target as HTMLElement;
-            if (target === stationInfoPanel || target.closest('#close-station-info-btn')) {
-                touchStartY = e.touches[0].clientY;
+            // Only enable swipe on mobile
+            if (window.innerWidth > 768) return;
+
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+
+            // Get panel's bounding rect to check if touch is in top area
+            const panelRect = stationInfoPanel!.getBoundingClientRect();
+            const touchY = e.touches[0].clientY;
+            const relativeY = touchY - panelRect.top;
+
+            // Only enable drag if touching within top 60px (handle area)
+            if (relativeY <= 60) {
                 isDragging = true;
+                initialScrollTop = stationInfoContent?.scrollTop || 0;
             }
         }, { passive: true });
 
@@ -79,24 +91,34 @@ export function initializeStationInfoPanel(): void {
 
             touchCurrentY = e.touches[0].clientY;
             const deltaY = touchCurrentY - touchStartY;
+            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
 
-            // Only allow downward swipe on mobile
-            if (deltaY > 0 && window.innerWidth <= 768) {
+            // Check if this is more vertical than horizontal movement
+            const isVerticalSwipe = Math.abs(deltaY) > deltaX;
+
+            // Only allow downward swipe
+            if (deltaY > 0 && isVerticalSwipe) {
+                e.preventDefault(); // Prevent scrolling while swiping
+                stationInfoPanel.classList.add('dragging');
                 stationInfoPanel.style.transform = `translateY(${deltaY}px)`;
             }
-        }, { passive: true });
+        }, { passive: false }); // passive: false to allow preventDefault
 
         stationInfoPanel.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
 
+            if (stationInfoPanel) {
+                stationInfoPanel.classList.remove('dragging');
+            }
+
             const deltaY = touchCurrentY - touchStartY;
 
             // If swiped down more than 100px, close the panel
-            if (deltaY > 100 && window.innerWidth <= 768) {
+            if (deltaY > 100) {
                 closeStationInfoPanel();
             } else {
-                // Reset position
+                // Reset position with smooth transition
                 if (stationInfoPanel) {
                     stationInfoPanel.style.transform = '';
                 }
@@ -104,6 +126,7 @@ export function initializeStationInfoPanel(): void {
 
             touchStartY = 0;
             touchCurrentY = 0;
+            touchStartX = 0;
         }, { passive: true });
     }
 
@@ -118,6 +141,16 @@ export function openStationInfoPanel(content: string): void {
 
     stationInfoContent.innerHTML = content;
     stationInfoPanel.classList.add('open');
+
+    // Add selected class to the marker
+    if (state.selectedPoiMarker?.content) {
+        const contentElement = state.selectedPoiMarker.content as HTMLElement;
+        const container = contentElement.querySelector('.poi-marker-content-container');
+        if (container) {
+            container.classList.add('selected');
+        }
+    }
+
     logger.debug('Station info panel opened');
 }
 
@@ -304,6 +337,16 @@ export function updateMarker(type: 'start' | 'end', location: google.maps.LatLng
 export function resetSelectedMarkerZIndex(): void {
     if (state.selectedPoiMarker) {
         state.selectedPoiMarker.zIndex = DEFAULT_POI_ZINDEX;
+
+        // Remove selected class from marker
+        if (state.selectedPoiMarker.content) {
+            const contentElement = state.selectedPoiMarker.content as HTMLElement;
+            const container = contentElement.querySelector('.poi-marker-content-container');
+            if (container) {
+                container.classList.remove('selected');
+            }
+        }
+
         logger.debug(`Reset zIndex for ${state.selectedPoiMarker.stationId}`);
     }
     state.selectedPoiMarker = null;
@@ -621,14 +664,56 @@ export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationDa
     if (!suppressInfoWindowOpen && state.map && marker.position) {
         // Pan to marker (adjust padding based on screen size)
         const isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-            // On mobile, no top padding needed (panel comes from bottom)
-            (state.map as any).setOptions({ padding: { bottom: window.innerHeight * 0.6 } });
+
+        // Calculate offset to position marker in visible area (not behind panel)
+        const projection = state.map.getProjection();
+        if (projection) {
+            const markerLatLng = marker.position;
+
+            if (isMobile) {
+                // Mobile: Position marker in upper portion of screen (above 60vh bottom sheet)
+                const scale = Math.pow(2, state.map.getZoom() || 10);
+                const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
+
+                if (worldCoordinate) {
+                    const pixelOffsetY = (window.innerHeight * 0.25) / scale; // Move marker well above the panel
+
+                    const newWorldCoordinate = new google.maps.Point(
+                        worldCoordinate.x,
+                        worldCoordinate.y + pixelOffsetY
+                    );
+
+                    const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
+                    if (newCenter) {
+                        state.map.panTo(newCenter);
+                    }
+                }
+            } else {
+                // Desktop: Position marker in center-right area (to the right of left panel)
+                const scale = Math.pow(2, state.map.getZoom() || 10);
+                const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
+
+                if (worldCoordinate) {
+                    // Offset to move marker right (account for 418px left panel)
+                    // Position marker at approximately 60% from left edge of visible area
+                    const visibleWidth = window.innerWidth - 418;
+                    const pixelOffsetX = -(visibleWidth * 0.1) / scale; // Slight offset from center of visible area
+
+                    const newWorldCoordinate = new google.maps.Point(
+                        worldCoordinate.x + pixelOffsetX,
+                        worldCoordinate.y
+                    );
+
+                    const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
+                    if (newCenter) {
+                        state.map.panTo(newCenter);
+                    }
+                }
+            }
         } else {
-            // On desktop, add left padding for the side panel
-            (state.map as any).setOptions({ padding: { left: 418 } });
+            // Fallback if projection is not available
+            state.map.panTo(marker.position);
         }
-        state.map.panTo(marker.position);
 
         const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
         openStationInfoPanel(initialContent);
