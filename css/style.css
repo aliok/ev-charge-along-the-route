@@ -444,26 +444,29 @@ html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-ser
 
 
 #filter-panel {
-    position: absolute; top: 0; left: 0; width: 280px; height: 100%; background-color: white;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 10; padding: 1.5rem 1rem 1rem 1rem;
+    position: absolute; top: 0; left: 0; width: 418px; height: 100%; background-color: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 10; padding: 3rem 1rem 1rem 1rem;
     transform: translateX(-100%); transition: transform 0.3s ease-in-out; overflow-y: auto;
     display: flex; flex-direction: column;
+    border-top: 3px solid #3b82f6; /* Blue accent line at top */
 }
 #filter-panel.open { transform: translateX(0); }
-#filter-panel h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #1f2937; }
-#filter-panel .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+#filter-panel h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.75rem; color: #1f2937; }
+#filter-panel .filter-header { display: flex; flex-direction: column; align-items: stretch; margin-bottom: 1rem; }
 #filter-panel #reset-filters-btn {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: #4b5563;
     background-color: #f3f4f6;
     border: 1px solid #d1d5db;
-    border-radius: 4px;
-    padding: 3px 8px;
+    border-radius: 6px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: background-color 0.1s, border-color 0.1s;
+    width: 100%; /* Full width */
+    text-align: center;
 }
-#filter-panel #reset-filters-btn:hover { background-color: #e5e7eb; }
+#filter-panel #reset-filters-btn:hover { background-color: #e5e7eb; border-color: #9ca3af; }
 
 #filter-panel .filter-section { margin-bottom: 1.25rem; }
 #filter-panel .filter-section h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #4b5563; }
@@ -482,10 +485,13 @@ html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-ser
 #filter-panel .power-label .label-text { flex-grow: 1; /* Allow text to take remaining space */ }
 
 #filter-panel #close-filter-btn {
-    position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer; padding: 4px;
+    position: absolute; top: 8px; right: 8px; background: none; border: none; cursor: pointer;
+    padding: 8px; /* Larger click area */
+    display: flex; align-items: center; justify-content: center;
 }
-#filter-panel #close-filter-btn svg { width: 18px; height: 18px; fill: #6b7280; }
+#filter-panel #close-filter-btn svg { width: 24px; height: 24px; fill: #6b7280; }
 #filter-panel #close-filter-btn:hover svg { fill: #1f2937; }
+#filter-panel #close-filter-btn:hover { background-color: #f3f4f6; border-radius: 4px; }
 
 /* Brand Filter Styles */
 #brand-list-view-controls { display: flex; gap: 8px; margin-bottom: 0.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb;}
@@ -688,12 +694,13 @@ input.input-loading {
     position: absolute;
     top: 0;
     right: 0;
-    width: 280px;
+    width: 418px;
     height: 100%;
     background-color: white;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    border-top: 3px solid #3b82f6; /* Blue accent line at top */
     z-index: 10;
-    padding: 1.5rem 1rem 1rem 1rem;
+    padding: 3rem 1rem 1rem 1rem;
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
@@ -787,17 +794,25 @@ input.input-loading {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 8px; /* Larger click area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #route-builder-panel #close-route-builder-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     fill: #6b7280;
 }
 
 #route-builder-panel #close-route-builder-btn:hover svg {
     fill: #1f2937;
+}
+
+#route-builder-panel #close-route-builder-btn:hover {
+    background-color: #f3f4f6;
+    border-radius: 4px;
 }
 
 /* Waypoints List */
@@ -949,18 +964,26 @@ input.input-loading {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
+    padding: 8px; /* Larger click area */
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #station-info-panel #close-station-info-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     fill: #6b7280;
 }
 
 #station-info-panel #close-station-info-btn:hover svg {
     fill: #1f2937;
+}
+
+#station-info-panel #close-station-info-btn:hover {
+    background-color: #f3f4f6;
+    border-radius: 4px;
 }
 
 #station-info-content {
