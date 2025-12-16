@@ -1065,10 +1065,14 @@ export class App {
 
         this.saveSettings();
         updateFilterIndicator();
-        showTemporaryMessage(translate('messageFiltersReset'), false);
 
+        // Apply filters to refresh visible markers
+        const count = this.applyFilters();
         if (this.routeComponent.isRouteActive) {
+            showTemporaryMessage(translate('messageStationsFound', { count }), false);
             this.triggerDetourPrecalculation();
+        } else {
+            showTemporaryMessage(translate('messageFiltersReset'), false);
         }
     }
 
