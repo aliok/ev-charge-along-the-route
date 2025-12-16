@@ -787,6 +787,9 @@ export class App {
                     updateOffsetControlsVisibility();
                     this.resetOffsets();
 
+                    // Update route builder UI with directions result to show leg info
+                    updateRouteBuilderUI(response);
+
                     const count = this.applyFilters();
                     showTemporaryMessage(translate('messageStationsFound', { count }), false);
                     this.triggerDetourPrecalculation();
@@ -965,9 +968,17 @@ export class App {
             }
         }
 
+        // Get IDs of stations that are in the route - these should always stay visible
+        const stationsInRoute = new Set(
+            state.routeWaypoints
+                .filter(wp => wp.type === 'station')
+                .map(wp => wp.id)
+        );
+
         // Remove markers that shouldn't be visible
         for (const [stationId, marker] of this.markerComponent.visiblePoiMarkers.entries()) {
-            if (!stationsThatShouldBeVisible.has(stationId)) {
+            // Don't remove markers that are part of the route
+            if (!stationsThatShouldBeVisible.has(stationId) && !stationsInRoute.has(stationId)) {
                 marker.map = null;
                 this.markerComponent.visiblePoiMarkers.delete(stationId);
             }
@@ -983,7 +994,8 @@ export class App {
                 if (stationData) {
                     const newMarker = createMarkerForStation(stationData);
                     if (newMarker) {
-                        if (!this.arePoisVisible) {
+                        // Only hide if pois are not visible AND this station is NOT in the route
+                        if (!this.arePoisVisible && !stationsInRoute.has(stationId)) {
                             newMarker.map = null;
                         }
                         this.markerComponent.visiblePoiMarkers.set(stationId, newMarker);

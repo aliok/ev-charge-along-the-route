@@ -112,6 +112,7 @@ export function handleAddStationToRoute(stationId: string | number): void {
     callbacks.updateRouteBuilderUI?.();
     callbacks.calculateRoute?.(true);
     callbacks.updateGmapsButtonState?.();
+    callbacks.updatePoiVisibilityButtonUI?.();
     
     // Update the currently open infowindow to disable the 'Add' button
     const infoWindowWithMethods = state.infoWindow as google.maps.InfoWindow & { getMap?: () => google.maps.Map | null; getAnchor?: () => ExtendedMarker | null } | null;
@@ -150,6 +151,7 @@ export function handleWaypointAction(event: MouseEvent): void {
         callbacks.updateRouteBuilderUI?.();
         callbacks.calculateRoute?.(false); // do NOT optimize on manual up/down/remove
         callbacks.updateGmapsButtonState?.();
+        callbacks.updatePoiVisibilityButtonUI?.();
     }
 }
 

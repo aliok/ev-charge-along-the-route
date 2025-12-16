@@ -444,7 +444,7 @@ html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-ser
 
 
 #filter-panel {
-    position: absolute; top: 0; left: 0; width: 418px; height: 100%; background-color: white;
+    position: absolute; top: 0; left: 0; width: 480px; height: 100%; background-color: white;
     box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 10; padding: 3rem 1rem 1rem 1rem;
     transform: translateX(-100%); transition: transform 0.3s ease-in-out; overflow-y: auto;
     display: flex; flex-direction: column;
@@ -721,7 +721,7 @@ input.input-loading {
     position: absolute;
     top: 0;
     right: 0;
-    width: 418px;
+    width: 480px;
     height: 100%;
     background-color: white;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
@@ -740,78 +740,100 @@ input.input-loading {
 }
 
 #route-builder-panel .route-builder-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 1rem;
-}
-/* NEW: Style for the new wrapper div */
-#route-builder-panel .route-builder-header > div {
-    display: flex;
-    gap: 8px;
-    align-items: center; /* Vertically align buttons */
-}
-
-/* NEW: Style for the Optimize button */
-#route-builder-panel #optimize-route-btn {
-    font-size: 0.75rem; font-weight: 500; color: #1d4ed8; background: none; border: 1px solid #93c5fd;
-    border-radius: 4px; padding: 3px 8px; cursor: pointer;
-}
-#route-builder-panel #optimize-route-btn:hover { background-color: #dbeafe; }
-#route-builder-panel #optimize-route-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
-    color: #6b7280;
-}
-
-/* Style for the POI visibility and Open in Maps toggle buttons */
-#route-builder-panel #toggle-poi-visibility-btn,
-#route-builder-panel #open-route-in-gmaps-btn {
-    padding: 4px;
-    width: 26px;
-    height: 26px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    background-color: #f9fafb;
-    cursor: pointer;
-}
-#route-builder-panel #toggle-poi-visibility-btn:hover:not(:disabled),
-#route-builder-panel #open-route-in-gmaps-btn:hover:not(:disabled) {
-    background-color: #f3f4f6;
-}
-#route-builder-panel #toggle-poi-visibility-btn:disabled,
-#route-builder-panel #open-route-in-gmaps-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #f3f4f6;
-    border-color: #d1d5db;
-}
-#route-builder-panel #toggle-poi-visibility-btn svg,
-#route-builder-panel #open-route-in-gmaps-btn svg {
-    width: 16px;
-    height: 16px;
-    fill: #4b5563;
-}
-
-/* Adjust the existing Clear button style */
-#route-builder-panel #clear-waypoints-btn {
-    font-size: 0.75rem; font-weight: 500; color: #ef4444; background: none; border: 1px solid #fca5a5;
-    border-radius: 4px; padding: 3px 8px; cursor: pointer;
 }
 
 #route-builder-panel h3 {
     font-size: 1.1rem;
     font-weight: 600;
     color: #1f2937;
+    margin-bottom: 0;
 }
 
-#route-builder-panel #clear-waypoints-btn:hover {
+/* Route Sections - Consistent with filter-section */
+#route-builder-panel .route-section {
+    margin-bottom: 1.25rem;
+}
+
+#route-builder-panel .route-section h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#route-builder-panel .route-section h4 .section-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Route Action Buttons Container */
+#route-builder-panel .route-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Action Button Base Styles */
+#route-builder-panel .route-action-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    width: 100%;
+}
+
+#route-builder-panel .route-action-buttons button svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+#route-builder-panel .route-action-buttons button:hover:not(:disabled) {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+#route-builder-panel .route-action-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f9fafb;
+}
+
+/* Specific button styles */
+#route-builder-panel #optimize-route-btn {
+    border-color: #93c5fd;
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+#route-builder-panel #optimize-route-btn:hover:not(:disabled) {
+    background-color: #bfdbfe;
+    border-color: #60a5fa;
+}
+
+#route-builder-panel #clear-waypoints-btn {
+    border-color: #fca5a5;
     background-color: #fee2e2;
+    color: #dc2626;
+}
+
+#route-builder-panel #clear-waypoints-btn:hover:not(:disabled) {
+    background-color: #fecaca;
+    border-color: #f87171;
 }
 
 #route-builder-panel #close-route-builder-btn {
@@ -848,19 +870,111 @@ input.input-loading {
     background-color: #f9fafb; flex-grow: 1; overflow-y: auto;
 }
 .waypoint-item {
-    display: flex; align-items: center; padding: 0.5rem; border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: flex-start;
+    padding: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
 }
 .waypoint-item:last-child { border-bottom: none; }
-.waypoint-icon { font-size: 1rem; margin-right: 0.75rem; flex-shrink: 0; }
-.waypoint-name { font-size: 0.85rem; color: #1f2937; flex-grow: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.waypoint-controls { display: flex; gap: 4px; flex-shrink: 0; }
-.waypoint-controls button {
-    background: none; border: 1px solid #d1d5db; border-radius: 50%;
-    padding: 2px; cursor: pointer; width: 22px; height: 22px;
-    display: flex; justify-content: center; align-items: center;
+
+.waypoint-icon {
+    font-size: 1rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    display: inline-block;
+    margin-top: 2px;
 }
-.waypoint-controls button:hover { background-color: #f3f4f6; }
-.waypoint-controls button svg { width: 14px; height: 14px; stroke: #6b7280; }
+
+.waypoint-icon-logo {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 2px solid #16A34A;
+    vertical-align: middle;
+    font-size: 0;
+    line-height: 0;
+    padding: 0;
+}
+
+.waypoint-icon-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.waypoint-icon-logo svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Two-line layout for stations */
+.waypoint-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.waypoint-line-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.waypoint-line-2 {
+    font-size: 0.8rem;
+    color: #6b7280;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 0.5rem;
+}
+
+.waypoint-brand {
+    font-size: 0.85rem;
+    color: #374151;
+    font-weight: 600;
+    flex-grow: 1;
+    margin-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.waypoint-station-name {
+    display: block;
+}
+
+/* Single-line layout for start/destination */
+.waypoint-label {
+    font-size: 0.85rem;
+    color: #1f2937;
+    flex-grow: 1;
+    margin-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.waypoint-controls { display: flex; gap: 6px; flex-shrink: 0; }
+.waypoint-controls button {
+    background: none; border: 1px solid #d1d5db; border-radius: 6px;
+    padding: 4px; cursor: pointer; width: 32px; height: 32px;
+    display: flex; justify-content: center; align-items: center;
+    transition: background-color 0.15s ease;
+}
+.waypoint-controls button:hover:not(:disabled) { background-color: #f3f4f6; }
+.waypoint-controls button svg { width: 18px; height: 18px; stroke: #6b7280; }
 .waypoint-controls button.remove-waypoint-btn svg { stroke: #ef4444; }
 .waypoint-controls button:disabled { opacity: 0.4; cursor: not-allowed; background-color: transparent; }
 .waypoint-placeholder {
@@ -871,18 +985,51 @@ input.input-loading {
     /* A container for a waypoint and the leg info that follows it */
 }
 .leg-info {
-    font-size: 0.8rem;
-    color: #4b5563; /* gray-600 */
-    padding: 0 0.5rem 0.75rem 2.25rem; /* T, R, B, L -- Indent past where the icon is */
+    font-size: 0.75rem;
+    color: #6b7280; /* gray-500 */
+    background-color: #f9fafb;
+    padding: 0.5rem 0.75rem;
+    margin: 0 0.5rem 0.5rem 3rem; /* Indent past the icon */
+    border-left: 2px solid #e5e7eb;
+    border-radius: 4px;
+}
+.leg-info span {
+    font-weight: 500;
 }
 
 /* Route Summary */
 #route-summary {
-    margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;
-    font-size: 0.9rem; color: #374151;
+    font-size: 0.85rem;
+    color: #374151;
 }
-#route-summary div { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
-#route-summary span:first-child { font-weight: 600; }
+#route-summary div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    background-color: #f9fafb;
+    border-radius: 4px;
+}
+#route-summary div:last-child {
+    margin-bottom: 0;
+}
+#route-summary span:first-child {
+    font-weight: 600;
+    color: #4b5563;
+}
+#route-summary span:last-child {
+    color: #1f2937;
+    font-weight: 500;
+}
+
+/* Waypoints list placeholder */
+.waypoint-placeholder {
+    font-size: 0.8rem;
+    text-align: center;
+    color: #6b7280;
+    padding: 1.5rem 1rem;
+    font-style: italic;
+}
 
 /* InfoWindow "Add to Route" button */
 .add-to-route-btn {
@@ -965,7 +1112,7 @@ input.input-loading {
     position: absolute;
     top: 0;
     left: 0;
-    width: 418px; /* 10% wider than original 380px */
+    width: 480px; /* Consistent with other panels */
     max-width: 90vw;
     height: 100%;
     background-color: white;

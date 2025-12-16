@@ -1,14 +1,16 @@
 import state from './state.js';
 import { translate } from './i18n.js';
 import { formatDistance, formatDuration } from './utils.js';
-import { 
-    defaultFilters, 
-    DEFAULT_DISTANCE_THRESHOLD, 
+import {
+    defaultFilters,
+    DEFAULT_DISTANCE_THRESHOLD,
     OFFSET_INCREMENT_KM,
     IGNORE_ICON_SVG,
     EYE_ICON_SVG_ROUTE_PANEL,
-    EYE_SLASH_ICON_SVG_ROUTE_PANEL
+    EYE_SLASH_ICON_SVG_ROUTE_PANEL,
+    DEFAULT_EV_SVG_ICON
 } from './config.js';
+import { getFaviconUrlFromReportUrl } from './utils.js';
 import { createElement, createButton, clearChildren, setButtonDisabled } from './dom-utils.js';
 
 // --- UI Element References ---
@@ -157,19 +159,6 @@ export function updateRouteBuilderUI(directionsResult: google.maps.DirectionsRes
         const itemDiv = document.createElement('div');
         itemDiv.className = 'waypoint-item';
 
-        let icon = '';
-        let name = wp.name || `Waypoint ${index + 1}`;
-
-        if (wp.type === 'start') {
-            icon = '📍';
-            name = `<strong>${translate('labelStart')}:</strong> ${name}`;
-        } else if (wp.type === 'destination') {
-            icon = '🏁';
-            name = `<strong>${translate('labelDestination')}:</strong> ${name}`;
-        } else if (wp.type === 'station') {
-            icon = '🔌';
-        }
-
         const isFirst = index === 0;
         const isLast = index >= state.routeWaypoints.length - 1;
         const isStation = wp.type === 'station';
@@ -178,21 +167,71 @@ export function updateRouteBuilderUI(directionsResult: google.maps.DirectionsRes
         const disableDown = isLast || !isStation || state.routeWaypoints[index + 1]?.type === 'destination';
         const disableRemove = !isStation;
 
-        itemDiv.innerHTML = `
-                <span class="waypoint-icon">${icon}</span>
-                <span class="waypoint-name" title="${wp.name}">${name}</span>
-                <div class="waypoint-controls" data-index="${index}">
-                    <button class="move-waypoint-up-btn" title="${translate('tooltipMoveUp')}" ${disableUp ? 'disabled' : ''}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
-                    </button>
-                    <button class="move-waypoint-down-btn" title="${translate('tooltipMoveDown')}" ${disableDown ? 'disabled' : ''}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                    </button>
-                    <button class="remove-waypoint-btn" title="${translate('tooltipRemoveWaypoint')}" ${disableRemove ? 'disabled' : ''}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
+        let iconHTML = '';
+        let line1Content = '';
+        let line2Content = '';
+
+        if (wp.type === 'start') {
+            iconHTML = '<span class="waypoint-icon">📍</span>';
+            line1Content = `<span class="waypoint-label">${wp.name}</span>`;
+        } else if (wp.type === 'destination') {
+            iconHTML = '<span class="waypoint-icon">🏁</span>';
+            line1Content = `<span class="waypoint-label">${wp.name}</span>`;
+        } else if (wp.type === 'station') {
+            // Find station data to get brand logo and details
+            const stationData = state.allStationData.find(s => String(s.id) === String(wp.id));
+            if (stationData) {
+                const faviconUrl = getFaviconUrlFromReportUrl(stationData.reportUrl);
+                if (faviconUrl) {
+                    iconHTML = `<span class="waypoint-icon waypoint-icon-logo"><img src="${faviconUrl}" alt="${stationData.brand || wp.name}" onerror="this.parentElement.innerHTML='${DEFAULT_EV_SVG_ICON}'" /></span>`;
+                } else {
+                    iconHTML = `<span class="waypoint-icon waypoint-icon-logo">${DEFAULT_EV_SVG_ICON}</span>`;
+                }
+                line1Content = `<span class="waypoint-brand">${stationData.brand || translate('unknownBrand')}</span>`;
+                line2Content = `<span class="waypoint-station-name" title="${stationData.title || wp.name}">${stationData.title || wp.name}</span>`;
+            } else {
+                iconHTML = `<span class="waypoint-icon waypoint-icon-logo">${DEFAULT_EV_SVG_ICON}</span>`;
+                line1Content = `<span class="waypoint-brand">${wp.name}</span>`;
+            }
+        }
+
+        const controlsHTML = `
+            <div class="waypoint-controls" data-index="${index}">
+                <button class="move-waypoint-up-btn" title="${translate('tooltipMoveUp')}" ${disableUp ? 'disabled' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" /></svg>
+                </button>
+                <button class="move-waypoint-down-btn" title="${translate('tooltipMoveDown')}" ${disableDown ? 'disabled' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </button>
+                <button class="remove-waypoint-btn" title="${translate('tooltipRemoveWaypoint')}" ${disableRemove ? 'disabled' : ''}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        `;
+
+        if (isStation && line2Content) {
+            // Two-line layout for stations
+            itemDiv.innerHTML = `
+                ${iconHTML}
+                <div class="waypoint-content">
+                    <div class="waypoint-line-1">
+                        ${line1Content}
+                        ${controlsHTML}
+                    </div>
+                    <div class="waypoint-line-2">
+                        ${line2Content}
+                    </div>
                 </div>
             `;
+        } else {
+            // Single-line layout for start/destination
+            itemDiv.innerHTML = `
+                ${iconHTML}
+                ${line1Content}
+                ${controlsHTML}
+            `;
+        }
+
         wrapper.appendChild(itemDiv);
 
         if (legs && index < legs.length) {
@@ -214,15 +253,26 @@ export function updateRouteBuilderUI(directionsResult: google.maps.DirectionsRes
 export function updatePoiVisibilityButtonUI(): void {
     if (!togglePoiVisibilityBtn) return;
 
-    if (state.isRouteActive) {
+    // Enable button if we have at least start and destination waypoints (minimum for a route)
+    const hasMinimumWaypoints = state.routeWaypoints.length >= 2 &&
+                                state.routeWaypoints.some(wp => wp.type === 'start') &&
+                                state.routeWaypoints.some(wp => wp.type === 'destination');
+
+    if (hasMinimumWaypoints) {
         togglePoiVisibilityBtn.disabled = false;
-        togglePoiVisibilityBtn.innerHTML = state.arePoisVisible ? EYE_SLASH_ICON_SVG_ROUTE_PANEL : EYE_ICON_SVG_ROUTE_PANEL;
+        const iconSvg = state.arePoisVisible ? EYE_SLASH_ICON_SVG_ROUTE_PANEL : EYE_ICON_SVG_ROUTE_PANEL;
+        const labelKey = state.arePoisVisible ? 'buttonHideStations' : 'buttonShowStations';
+        const labelText = translate(labelKey);
+        togglePoiVisibilityBtn.innerHTML = `${iconSvg}<span>${labelText}</span>`;
+
         const titleKey = state.arePoisVisible ? 'titleHidePois' : 'titleShowPois';
         const titleText = translate(titleKey);
         togglePoiVisibilityBtn.setAttribute('title', titleText);
         togglePoiVisibilityBtn.setAttribute('aria-label', titleText);
     } else {
         togglePoiVisibilityBtn.disabled = true;
+        // When disabled, show icon with "Show Stations" label (but grayed out)
+        togglePoiVisibilityBtn.innerHTML = `${EYE_ICON_SVG_ROUTE_PANEL}<span>${translate('buttonShowStations')}</span>`;
         const titleText = translate('titlePoisHiddenNoRoute');
         togglePoiVisibilityBtn.setAttribute('title', titleText);
         togglePoiVisibilityBtn.setAttribute('aria-label', titleText);
@@ -381,12 +431,27 @@ export function toggleFilterPanel(): void {
 }
 
 export function togglePoiVisibility(): void {
-    if (!state.isRouteActive) return;
+    const hasMinimumWaypoints = state.routeWaypoints.length >= 2 &&
+                                state.routeWaypoints.some(wp => wp.type === 'start') &&
+                                state.routeWaypoints.some(wp => wp.type === 'destination');
+    if (!hasMinimumWaypoints) return;
+
     state.arePoisVisible = !state.arePoisVisible;
     console.log(`Toggling POI visibility to: ${state.arePoisVisible}`);
 
-    for (const marker of state.visiblePoiMarkers.values()) {
-        marker.map = state.arePoisVisible ? state.map : null;
+    // Get IDs of stations that are in the route
+    const stationsInRoute = new Set(
+        state.routeWaypoints
+            .filter(wp => wp.type === 'station')
+            .map(wp => wp.id)
+    );
+
+    // Toggle visibility for POI markers, but keep waypoint markers visible
+    for (const [stationId, marker] of state.visiblePoiMarkers.entries()) {
+        // Don't hide markers that are part of the route
+        if (!stationsInRoute.has(stationId)) {
+            marker.map = state.arePoisVisible ? state.map : null;
+        }
     }
 
     updatePoiVisibilityButtonUI();
@@ -395,14 +460,27 @@ export function togglePoiVisibility(): void {
 export function hideAllPois(resetSelectedMarkerZIndexCallback: (() => void) | null = null): void {
     console.log("Hiding all currently visible POIs...");
 
-    for (const marker of state.visiblePoiMarkers.values()) {
-        marker.map = null;
+    // Get IDs of stations that are in the route - these should stay visible
+    const stationsInRoute = new Set(
+        state.routeWaypoints
+            .filter(wp => wp.type === 'station')
+            .map(wp => wp.id)
+    );
+
+    const markersToRemove: string[] = [];
+    for (const [stationId, marker] of state.visiblePoiMarkers.entries()) {
+        // Only hide markers that are NOT part of the route
+        if (!stationsInRoute.has(stationId)) {
+            marker.map = null;
+            markersToRemove.push(stationId);
+        }
     }
 
-    state.visiblePoiMarkers.clear();
+    // Remove hidden markers from the map
+    markersToRemove.forEach(id => state.visiblePoiMarkers.delete(id));
 
     if (state.infoWindow) state.infoWindow.close();
-    
+
     if (resetSelectedMarkerZIndexCallback) {
         resetSelectedMarkerZIndexCallback();
     }

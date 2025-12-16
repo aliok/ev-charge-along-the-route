@@ -277,37 +277,75 @@
                       clip-rule="evenodd"/>
             </svg>
         </button>
+
         <div class="route-builder-header">
             <h3 data-i18n-key="routeBuilderHeader">Route Plan</h3>
-            <div> <!-- NEW: Wrapper div for buttons -->
-                <button id="open-route-in-gmaps-btn"
-                        data-i18n-key="[title]titleOpenRouteInGmaps;[aria-label]ariaOpenRouteInGmaps"
-                        title="Open Route in Google Maps"
-                        aria-label="Open Route in Google Maps">
+        </div>
+
+        <!-- Route Actions Section -->
+        <div class="route-section route-actions">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="section-icon">
+                    <path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75Zm7 10.5a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
+                </svg>
+                <span data-i18n-key="routeActionsHeader">Actions</span>
+            </h4>
+            <div class="route-action-buttons">
+                <button id="optimize-route-btn" data-i18n-key="[title]titleOptimizeRoute" title="Find the most efficient order for stops">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17H4.25A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M6.194 6.194a.75.75 0 0 1 1.06 0L15.5 14.439V10.5a.75.75 0 0 1 1.5 0v5.25a.75.75 0 0 1-.75.75H10.5a.75.75 0 0 1 0-1.5h3.94l-8.246-8.246a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10.362 1.093a.75.75 0 0 0-.724 0L2.523 5.018 10 9.143l7.477-4.125-7.115-3.925ZM18 6.443l-7.25 4v8.25l6.862-3.786A.75.75 0 0 0 18 14.25V6.443ZM9.25 18.693v-8.25l-7.25-4v7.807a.75.75 0 0 0 .388.657l6.862 3.786Z" clip-rule="evenodd" />
                     </svg>
+                    <span data-i18n-key="buttonOptimize">Optimize</span>
                 </button>
                 <button id="toggle-poi-visibility-btn"
                         data-i18n-key="[title]titleHidePois;[aria-label]titleHidePois"
                         title="Hide Stations on Map"
                         aria-label="Hide Stations on Map">
                     <!-- Icon will be set by JS -->
+                    <span class="poi-visibility-label"></span>
                 </button>
-                <button id="optimize-route-btn" data-i18n-key="[title]titleOptimizeRoute" title="Find the most efficient order for stops">
-                    <span data-i18n-key="buttonOptimize">Optimize</span>
+                <button id="open-route-in-gmaps-btn"
+                        data-i18n-key="[title]titleOpenRouteInGmaps;[aria-label]ariaOpenRouteInGmaps"
+                        title="Open Route in Google Maps"
+                        aria-label="Open Route in Google Maps">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.157 2.175a1.5 1.5 0 0 0-1.147 0l-4.084 1.69A1.5 1.5 0 0 0 2 5.251v10.877a1.5 1.5 0 0 0 2.074 1.386l3.51-1.453 4.26 1.763a1.5 1.5 0 0 0 1.146 0l4.083-1.69A1.5 1.5 0 0 0 18 14.748V3.873a1.5 1.5 0 0 0-2.073-1.386l-3.51 1.452-4.26-1.764ZM7.58 5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-1.5 0v-6.5A.75.75 0 0 1 7.58 5Zm5.59 2.75a.75.75 0 0 0-1.5 0v6.5a.75.75 0 0 0 1.5 0v-6.5Z" clip-rule="evenodd" />
+                    </svg>
+                    <span data-i18n-key="openInMaps">Open in Google Maps</span>
                 </button>
                 <button id="clear-waypoints-btn" data-i18n-key="[title]titleClearRoutePlan" title="Clear all waypoints">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clip-rule="evenodd" />
+                    </svg>
                     <span data-i18n-key="buttonClearRoute">Clear</span>
                 </button>
             </div>
         </div>
-        <div id="route-waypoints-list-container">
-            <!-- Waypoints will be populated by JS -->
+
+        <!-- Waypoints Section -->
+        <div class="route-section route-waypoints">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="section-icon">
+                    <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 1 0 3 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 0 0 2.273 1.765 11.842 11.842 0 0 0 .976.544l.062.029.018.008.006.003ZM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" />
+                </svg>
+                <span data-i18n-key="waypointsHeader">Waypoints</span>
+            </h4>
+            <div id="route-waypoints-list-container">
+                <!-- Waypoints will be populated by JS -->
+            </div>
         </div>
-        <div id="route-summary">
-            <!-- Summary like Total Distance/Time populated by JS -->
+
+        <!-- Summary Section -->
+        <div class="route-section route-summary-section">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="section-icon">
+                    <path d="M15.98 1.804a1 1 0 0 0-1.96 0l-.24 1.192a1 1 0 0 1-.784.785l-1.192.238a1 1 0 0 0 0 1.962l1.192.238a1 1 0 0 1 .785.785l.238 1.192a1 1 0 0 0 1.962 0l.238-1.192a1 1 0 0 1 .785-.785l1.192-.238a1 1 0 0 0 0-1.962l-1.192-.238a1 1 0 0 1-.785-.785l-.238-1.192ZM6.949 5.684a1 1 0 0 0-1.898 0l-.683 2.051a1 1 0 0 1-.633.633l-2.051.683a1 1 0 0 0 0 1.898l2.051.684a1 1 0 0 1 .633.632l.683 2.051a1 1 0 0 0 1.898 0l.683-2.051a1 1 0 0 1 .633-.633l2.051-.683a1 1 0 0 0 0-1.898l-2.051-.683a1 1 0 0 1-.633-.633L6.95 5.684ZM13.949 13.684a1 1 0 0 0-1.898 0l-.184.551a1 1 0 0 1-.632.633l-.551.183a1 1 0 0 0 0 1.898l.551.183a1 1 0 0 1 .633.633l.183.551a1 1 0 0 0 1.898 0l.184-.551a1 1 0 0 1 .632-.633l.551-.183a1 1 0 0 0 0-1.898l-.551-.184a1 1 0 0 1-.633-.632l-.183-.551Z" />
+                </svg>
+                <span data-i18n-key="summaryHeader">Summary</span>
+            </h4>
+            <div id="route-summary">
+                <!-- Summary like Total Distance/Time populated by JS -->
+            </div>
         </div>
     </div>
 
