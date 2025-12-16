@@ -501,7 +501,7 @@ export function populateIgnoredStationsList(): void {
     }
 
     state.ignoredStationIds.forEach(stationId => {
-        const station = state.allStationData.find(s => s.id === String(stationId));
+        const station = state.allStationData.find(s => String(s.id) === String(stationId));
         if (!station) return;
 
         const displayName = station.brand || station.title || stationId;
