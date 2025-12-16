@@ -504,28 +504,58 @@ export function populateIgnoredStationsList(): void {
         const station = state.allStationData.find(s => String(s.id) === String(stationId));
         if (!station) return;
 
-        const displayName = station.brand || station.title || stationId;
+        const brandName = station.brand || translate('iwNA');
+        const stationTitle = station.title || '';
 
         const itemDiv = createElement('div', {
-            className: 'ignored-station-item',
+            className: 'ignored-item',
             attributes: { 'data-station-id': stationId }
         });
 
-        const nameSpan = createElement('span', {
-            className: 'ignored-station-name',
-            textContent: displayName,
-            title: displayName
+        // Line 1: Brand name + buttons
+        const line1Div = createElement('div', { className: 'ignored-line-1' });
+
+        const brandSpan = createElement('span', {
+            className: 'ignored-brand',
+            textContent: brandName,
+            title: brandName
         });
-        itemDiv.appendChild(nameSpan);
+        line1Div.appendChild(brandSpan);
+
+        const controlsDiv = createElement('div', { className: 'ignored-controls' });
 
         const unignoreButton = createButton({
-            className: 'unignore-station-btn',
+            className: 'unignore-btn',
             title: translate('unignoreStationAction'),
-            innerHTML: IGNORE_ICON_SVG,
-            onClick: () => handleUnignoreStationClickCallback?.(stationId)
+            textContent: translate('buttonUnignore'),
+            attributes: { 'data-station-id': stationId }
         });
-        itemDiv.appendChild(unignoreButton);
-        
+        controlsDiv.appendChild(unignoreButton);
+
+        const mapButton = createButton({
+            className: 'map-btn',
+            title: translate('titleOpenMap'),
+            innerHTML: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>`,
+            attributes: {
+                'data-lat': String(station.lat),
+                'data-lng': String(station.lng)
+            }
+        });
+        controlsDiv.appendChild(mapButton);
+
+        line1Div.appendChild(controlsDiv);
+        itemDiv.appendChild(line1Div);
+
+        // Line 2: Station title (if different from brand)
+        if (stationTitle && stationTitle !== brandName) {
+            const line2Div = createElement('div', {
+                className: 'ignored-line-2',
+                textContent: stationTitle,
+                title: stationTitle
+            });
+            itemDiv.appendChild(line2Div);
+        }
+
         ignoredStationsListContainer?.appendChild(itemDiv);
     });
 }

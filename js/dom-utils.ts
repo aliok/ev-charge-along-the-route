@@ -72,23 +72,25 @@ export function createButton(options: {
     innerHTML?: string;
     textContent?: string;
     disabled?: boolean;
+    attributes?: Record<string, string>;
     onClick?: (e: MouseEvent) => void;
 }): HTMLButtonElement {
     const button = createElement('button', {
         className: options.className,
         title: options.title,
         innerHTML: options.innerHTML,
-        textContent: options.textContent
+        textContent: options.textContent,
+        attributes: options.attributes
     });
-    
+
     if (options.disabled) {
         button.disabled = true;
     }
-    
+
     if (options.onClick) {
         button.addEventListener('click', options.onClick);
     }
-    
+
     return button;
 }
 

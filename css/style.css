@@ -547,10 +547,37 @@ html, body { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-ser
 
 /* Ignored Stations Filter Styles */
 #filter-ignored-stations .ignored-list { max-height: 120px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 4px; padding: 0.25rem; background-color: #f9fafb; margin-top: 0.5rem;}
-#filter-ignored-stations .ignored-item { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0.5rem; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem;}
+#filter-ignored-stations .ignored-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.85rem;
+}
 #filter-ignored-stations .ignored-item:last-child { border-bottom: none; }
-#filter-ignored-stations .ignored-name { flex-grow: 1; margin-right: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #374151; }
-#filter-ignored-stations .ignored-id { font-size: 0.75rem; color: #6b7280; margin-left: 4px; }
+#filter-ignored-stations .ignored-line-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#filter-ignored-stations .ignored-brand {
+    flex-grow: 1;
+    margin-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #374151;
+    font-weight: 600;
+}
+#filter-ignored-stations .ignored-line-2 {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+    margin-left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 #filter-ignored-stations .ignored-controls { display: flex; gap: 6px; flex-shrink: 0; }
 #filter-ignored-stations .ignored-controls button {
     font-size: 0.75rem; font-weight: 500; color: #1d4ed8; background: none; border: none;
@@ -993,6 +1020,18 @@ input.input-loading {
 
 /* Mobile: Bottom Sheet */
 @media (max-width: 768px) {
+    /* Filter Panel - Full width on mobile */
+    #filter-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Route Builder Panel - Full width on mobile */
+    #route-builder-panel {
+        width: 100%;
+        max-width: 100%;
+    }
+
     #station-info-panel {
         top: auto;
         bottom: 0;
