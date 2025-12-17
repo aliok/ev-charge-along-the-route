@@ -28,11 +28,13 @@ The frontend and functions are served from the same domain, eliminating the need
 
 ## Technology Stack
 
-*   [Node.js](https://nodejs.org/) (v18+ recommended for native fetch)
+*   [Node.js](https://nodejs.org/) (v20 required for E2E tests, v18+ for other features)
 *   [Netlify](https://www.netlify.com/) (Platform for Hosting, Build, Functions)
 *   Netlify Functions
 *   Static HTML, CSS, TypeScript (compiled to JavaScript)
 *   [TypeScript](https://www.typescriptlang.org/) (for type-safe JavaScript)
+*   [Vitest](https://vitest.dev/) (for unit testing)
+*   [Playwright](https://playwright.dev/) (for UI/E2E testing)
 *   [ESLint](https://eslint.org/) (for code linting and quality checks)
 *   [Prettier](https://prettier.io/) (for code formatting)
 *   [Knip](https://knip.dev/) (for unused code detection)
@@ -53,14 +55,21 @@ The frontend and functions are served from the same domain, eliminating the need
 ├── eslint.config.mjs # ESLint configuration
 ├── knip.json # Knip configuration for unused code detection
 ├── .jscpd.json # jscpd configuration for duplicate code detection
+├── vitest.config.ts # Vitest configuration for unit tests
+├── playwright.config.cjs # Playwright configuration for E2E tests
 ├── scripts/
 │ └── build-html.mjs # Node.js script to build index.html from template
 ├── css/ # Example directory for static CSS
 │ └── style.css
 ├── js/ # TypeScript source files for client-side code
 │ ├── *.ts # TypeScript source files
+│ ├── *.test.ts # Unit test files
 │ ├── *.js # Compiled JavaScript files (generated)
 │ └── global.d.ts # Global type declarations
+├── test/
+│ ├── unit/ # Unit tests directory
+│ └── ui/ # E2E/UI tests directory (Playwright)
+│   └── app.spec.ts # Main UI test suite
 ├── tsconfig.json # TypeScript configuration
 ├── netlify/
 │ └── functions/ # Directory for Netlify Function source code
@@ -78,9 +87,10 @@ The frontend and functions are served from the same domain, eliminating the need
 
 **Prerequisites:**
 
-*   Node.js (v18 or later recommended)
+*   Node.js v20 (required for E2E tests, see `.nvmrc`)
+    *   Use `nvm use 20` to switch to the correct version
 *   npm or yarn
-*   [Netlify CLI](https://docs.netlify.com/cli/get-started/): `npm install netlify-cli -g`
+*   Netlify CLI (installed as dev dependency, no global install needed)
 
 **Steps:**
 
@@ -354,6 +364,83 @@ Coverage reports are generated using V8 provider and output in multiple formats:
 - Use `npm run test:watch` during development for instant feedback
 - Review coverage reports periodically to identify untested code paths
 - Add tests when fixing bugs to prevent regression
+
+## UI Testing (E2E)
+
+This project uses Playwright for end-to-end browser testing to ensure the UI works correctly.
+
+**Prerequisites:**
+
+- Node.js v20 (specified in `.nvmrc`)
+- Run `nvm use 20` before running E2E tests
+
+**Available Scripts:**
+
+*   **`npm run test:e2e`** - Run all UI tests in headless mode
+    ```bash
+    npm run test:e2e
+    ```
+*   **`npm run test:e2e:ui`** - Open Playwright UI mode (recommended for development)
+    ```bash
+    npm run test:e2e:ui
+    ```
+*   **`npm run test:e2e:headed`** - Run tests with visible browser
+    ```bash
+    npm run test:e2e:headed
+    ```
+*   **`npm run test:e2e:debug`** - Run tests in debug mode with inspector
+    ```bash
+    npm run test:e2e:debug
+    ```
+*   **`npm run test:e2e:report`** - View test results report
+    ```bash
+    npm run test:e2e:report
+    ```
+
+**Configuration Files:**
+
+*   **`playwright.config.cjs`** - Playwright configuration (browser settings, test directories)
+
+**What These Tests Cover:**
+
+**Important Notes:**
+
+- E2E tests automatically start the dev server (`netlify dev`)
+- Make sure to run `npm run build` first if you've made changes to TypeScript or templates
+- Tests run in Chromium by default
+- Screenshots are captured on test failures in `test-results/`
+- HTML reports are generated in `playwright-report/`
+- Some tests access `window.appState` and other global variables - adjust based on your implementation
+- Tests that interact with Google Maps API may need API keys to work fully
+
+**Adjusting Tests to Your Implementation:**
+
+Some tests make assumptions about implementation details and may need adjustment:
+
+1. **Global State Variables**: Tests access `window.appState`, `window.markers`, etc.
+   - Update tests to match your actual global variable names
+   - Or expose these from your app for testing purposes
+
+2. **Filter Implementation**: Tests check if `window.appState.visibleStations` changes
+   - Adjust to match how your app tracks filtered stations
+   - Ensure filters actually modify the visible station list
+
+3. **Event Handlers**: Tests call handlers like `window.handleMapClick()`
+   - Expose necessary handlers globally for testing
+   - Or use DOM events to trigger functionality
+
+4. **Geolocation & API Mocking**: Some tests require API responses
+   - Consider mocking external APIs for consistent testing
+   - Or use Playwright's route interception features
+
+**Recommended Usage:**
+
+- Run `npm run test:e2e` before refactoring to ensure UI behavior is preserved
+- Use `npm run test:e2e:ui` during development for visual feedback and debugging
+- Add new tests when implementing new UI features
+- Update failing tests to match your actual implementation
+- Run tests in CI/CD pipeline to catch regressions
+- Use `npm run test:e2e:report` to view detailed test results with screenshots
 
 ## Configuration
 

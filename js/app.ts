@@ -1613,6 +1613,68 @@ if (window._initMapReady) {
   window._initMapImpl = initMapImpl;
 }
 
+// Expose state and app for testing
+if (typeof window !== 'undefined') {
+  (window as any).appState = state;
+  (window as any).getApp = getApp;
+  // Helper to get visible markers from the marker component
+  (window as any).getVisibleMarkers = () => {
+    const app = getApp();
+    return app.markerComponent ? app.markerComponent.visiblePoiMarkers : new Map();
+  };
+  (window as any).getAllMarkers = () => {
+    const app = getApp();
+    return app.markerComponent ? app.markerComponent.allPoiMarkers : [];
+  };
+  // Test helper to create a route with coordinates
+  (window as any).createTestRoute = async (
+    startLat: number,
+    startLng: number,
+    endLat: number,
+    endLng: number
+  ) => {
+    const app = getApp();
+    const startLocation = new google.maps.LatLng(startLat, startLng);
+    const endLocation = new google.maps.LatLng(endLat, endLng);
+
+    setStartWaypoint(startLocation, 'Test Start');
+    setDestinationWaypoint(endLocation, 'Test End');
+    updateRouteBuilderUI();
+
+    // Calculate route and wait for it to complete
+    await app.calculateRoute();
+
+    // Wait a bit for markers to be created
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    return {
+      isRouteActive: app.routeComponent.isRouteActive,
+      markerCount: app.markerComponent?.visiblePoiMarkers.size || 0,
+    };
+  };
+
+  // Test helper to set a single location (for autocomplete tests)
+  (window as any).setTestLocation = (
+    type: 'start' | 'end',
+    lat: number,
+    lng: number,
+    name: string
+  ) => {
+    const app = getApp();
+    const location = new google.maps.LatLng(lat, lng);
+    if (type === 'start') {
+      setStartWaypoint(location, name);
+      app.routeComponent.startLocation = location;
+      state.startLocation = location;
+    } else {
+      setDestinationWaypoint(location, name);
+      app.routeComponent.endLocation = location;
+      state.endLocation = location;
+    }
+    updateRouteBuilderUI();
+  };
+}
+
 window.handleAddStationToRoute = handleAddStationToRoute;
 window.handleInfoWindowBrandAction = (brandName: string, action: BrandAction) => {
   getApp().handleInfoWindowBrandAction(brandName, action);

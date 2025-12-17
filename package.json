@@ -38,7 +38,13 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "// UI testing with Playwright": "",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report"
   },
   "keywords": [
     "netlify",
@@ -52,6 +58,7 @@
   "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.57.0",
     "@types/google.maps": "^3.55.0",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
@@ -64,6 +71,7 @@
     "happy-dom": "^20.0.11",
     "jscpd": "^4.0.5",
     "knip": "^5.74.0",
+    "netlify-cli": "^23.12.3",
     "prettier": "^3.7.4",
     "ts-prune": "^0.10.3",
     "typescript": "^5.3.3",

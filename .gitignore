@@ -3,3 +3,8 @@
 node_modules
 dist/
 reports/
+
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
