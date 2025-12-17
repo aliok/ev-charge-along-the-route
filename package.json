@@ -34,7 +34,11 @@
     "audit": "npm audit --omit=dev",
     "audit:fix": "npm audit fix",
     "security": "npm run audit && npm run lint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "// Unit testing with Vitest": "",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "netlify",
@@ -51,15 +55,18 @@
     "@types/google.maps": "^3.55.0",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
+    "@vitest/ui": "^4.0.16",
     "dotenv": "^16.4.5",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-security": "^3.0.1",
+    "happy-dom": "^20.0.11",
     "jscpd": "^4.0.5",
     "knip": "^5.74.0",
     "prettier": "^3.7.4",
     "ts-prune": "^0.10.3",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^4.0.16"
   }
 }

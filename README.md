@@ -300,6 +300,61 @@ The following security patterns are detected:
 - Review security warnings carefully - some may be false positives
 - Use `npm audit fix` to auto-update vulnerable dependencies
 
+## Testing
+
+This project uses Vitest for fast, modern unit testing of TypeScript utility functions.
+
+**Available Scripts:**
+
+*   **`npm test`** - Run all tests once
+    ```bash
+    npm test
+    ```
+*   **`npm run test:watch`** - Run tests in watch mode (re-run on file changes)
+    ```bash
+    npm run test:watch
+    ```
+*   **`npm run test:ui`** - Open Vitest UI for interactive test exploration
+    ```bash
+    npm run test:ui
+    ```
+*   **`npm run test:coverage`** - Generate test coverage report
+    ```bash
+    npm run test:coverage
+    ```
+
+**Configuration Files:**
+
+*   **`vitest.config.ts`** - Vitest configuration (test environment, coverage settings)
+
+**Test Structure:**
+
+All test files follow the pattern `*.test.ts` and are located alongside their corresponding source files in the `js/` directory:
+- `js/validation-utils.test.ts` - Tests for number validation functions
+- `js/storage-utils.test.ts` - Tests for localStorage utilities
+- `js/async-utils.test.ts` - Tests for async/retry utilities with mocking
+- `js/geo-utils.test.ts` - Tests for geographic utilities
+
+**Current Status:**
+
+- **Test Files**: 4
+- **Total Tests**: 40
+- **Status**: All passing ✅
+
+**Coverage Reporting:**
+
+Coverage reports are generated using V8 provider and output in multiple formats:
+- Text output to console
+- HTML report in `coverage/` directory
+- LCOV format for CI integration
+
+**Recommended Usage:**
+
+- Run `npm test` before committing changes
+- Use `npm run test:watch` during development for instant feedback
+- Review coverage reports periodically to identify untested code paths
+- Add tests when fixing bugs to prevent regression
+
 ## Configuration
 
 Configuration relies on environment variables set either locally via `.env` (for `npm run build`) or, crucially, via the Netlify UI for deployments.
