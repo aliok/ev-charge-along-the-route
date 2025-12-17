@@ -5,4 +5,3 @@ export { PreferencesComponent } from './preferences-component.js';
 export { MarkerComponent } from './marker-component.js';
 export { DetourComponent } from './detour-component.js';
 export { StationDataComponent } from './station-data-component.js';
-

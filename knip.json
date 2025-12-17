@@ -1,0 +1,20 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": ["js/app.ts"],
+  "project": ["js/**/*.ts"],
+  "ignore": [
+    "dist/**",
+    "node_modules/**",
+    ".netlify/**",
+    "netlify/functions/**",
+    "utils/**",
+    "scripts/**"
+  ],
+  "ignoreDependencies": [
+    "@types/google.maps",
+    "ts-prune",
+    "knip"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "ignoreBinaries": ["netlify"]
+}

@@ -5,15 +5,15 @@
 /**
  * Custom error class for fetch operations
  */
-export class FetchError extends Error {
-    constructor(
-        public readonly status: number,
-        public readonly statusText: string,
-        message?: string
-    ) {
-        super(message || `HTTP error! Status: ${status} ${statusText}`);
-        this.name = 'FetchError';
-    }
+class FetchError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly statusText: string,
+    message?: string
+  ) {
+    super(message || `HTTP error! Status: ${status} ${statusText}`);
+    this.name = 'FetchError';
+  }
 }
 
 /**
@@ -25,16 +25,16 @@ export class FetchError extends Error {
  * @private
  */
 function delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
  * Options for retry logic.
  */
-export interface RetryOptions {
-    maxRetries: number;
-    retryDelay: number;
-    onRetry?: (attempt: number, error: unknown) => void;
+interface RetryOptions {
+  maxRetries: number;
+  retryDelay: number;
+  onRetry?: (attempt: number, error: unknown) => void;
 }
 
 /**
@@ -57,26 +57,23 @@ export interface RetryOptions {
  *   }
  * );
  */
-export async function withRetry<T>(
-    fn: () => Promise<T>,
-    options: RetryOptions
-): Promise<T> {
-    let lastError: unknown;
-    
-    for (let attempt = 0; attempt <= options.maxRetries; attempt++) {
-        try {
-            return await fn();
-        } catch (error) {
-            lastError = error;
-            
-            if (attempt < options.maxRetries) {
-                options.onRetry?.(attempt + 1, error);
-                await delay(options.retryDelay);
-            }
-        }
+export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions): Promise<T> {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= options.maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < options.maxRetries) {
+        options.onRetry?.(attempt + 1, error);
+        await delay(options.retryDelay);
+      }
     }
-    
-    throw lastError;
+  }
+
+  throw lastError;
 }
 
 /**
@@ -84,22 +81,19 @@ export async function withRetry<T>(
  * @throws {FetchError} When the HTTP request fails
  * @throws {Error} When the response is not JSON
  */
-export async function fetchJson<T>(
-    url: string,
-    options?: RequestInit
-): Promise<T> {
-    const response = await fetch(url, options);
+export async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(url, options);
 
-    if (!response.ok) {
-        throw new FetchError(response.status, response.statusText);
-    }
+  if (!response.ok) {
+    throw new FetchError(response.status, response.statusText);
+  }
 
-    const contentType = response.headers.get('content-type');
-    if (contentType && !contentType.includes('application/json')) {
-        throw new Error(`Expected JSON but got ${contentType}`);
-    }
+  const contentType = response.headers.get('content-type');
+  if (contentType && !contentType.includes('application/json')) {
+    throw new Error(`Expected JSON but got ${contentType}`);
+  }
 
-    return response.json();
+  return response.json();
 }
 
 /**
@@ -122,12 +116,12 @@ export async function fetchJson<T>(
  * }
  */
 export function routePromise(
-    directionsService: google.maps.DirectionsService,
-    request: google.maps.DirectionsRequest
+  directionsService: google.maps.DirectionsService,
+  request: google.maps.DirectionsRequest
 ): Promise<{ result: google.maps.DirectionsResult | null; status: google.maps.DirectionsStatus }> {
-    return new Promise((resolve) => {
-        directionsService.route(request, (result, status) => {
-            resolve({ result, status });
-        });
+  return new Promise(resolve => {
+    directionsService.route(request, (result, status) => {
+      resolve({ result, status });
     });
+  });
 }

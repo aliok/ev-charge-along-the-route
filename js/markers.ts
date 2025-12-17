@@ -1,24 +1,39 @@
-import state, { ExtendedMarker, StationData, DetourData, LiveSocketData, LiveSocketDataState } from './state.js';
-import { translate, currentLang } from './i18n.js';
-import { formatDistance, formatDuration, getFaviconUrlFromReportUrl, showTemporaryMessage } from './utils.js';
+import state, {
+  ExtendedMarker,
+  StationData,
+  DetourData,
+  LiveSocketData,
+  LiveSocketDataState,
+} from './state.js';
+import { translate } from './i18n.js';
 import {
-    DEFAULT_POI_ZINDEX,
-    HOVER_POI_ZINDEX,
-    SELECTED_POI_ZINDEX,
-    DEFAULT_EV_SVG_ICON,
-    DEFAULT_EV_SVG_DATA_URI,
-    DETOUR_ERROR_KEY,
-    DETOUR_LOADING_KEY,
-    STATION_SOCKETS_API_URL_TEMPLATE,
-    API_HEADERS,
-    MAX_API_RETRIES,
-    SOCKET_API_RETRY_DELAY,
-    IGNORE_ICON_SVG,
-    translations
+  formatDistance,
+  formatDuration,
+  getFaviconUrlFromReportUrl,
+  showTemporaryMessage,
+} from './utils.js';
+import {
+  DEFAULT_POI_ZINDEX,
+  HOVER_POI_ZINDEX,
+  SELECTED_POI_ZINDEX,
+  DEFAULT_EV_SVG_ICON,
+  DEFAULT_EV_SVG_DATA_URI,
+  DETOUR_ERROR_KEY,
+  DETOUR_LOADING_KEY,
+  STATION_SOCKETS_API_URL_TEMPLATE,
+  API_HEADERS,
+  MAX_API_RETRIES,
+  SOCKET_API_RETRY_DELAY,
+  IGNORE_ICON_SVG,
 } from './config.js';
 import { createElement, createBadge, createImageWithFallback, addClass } from './dom-utils.js';
 import { toLatLng, createGoogleMapsLink } from './geo-utils.js';
-import { analyzeStationSockets, getAvailabilityInfo, formatPower, getPowerEmoji } from './socket-utils.js';
+import {
+  analyzeStationSockets,
+  getAvailabilityInfo,
+  formatPower,
+  getPowerEmoji,
+} from './socket-utils.js';
 import { withRetry, fetchJson } from './async-utils.js';
 import { createLogger } from './logger.js';
 
@@ -30,563 +45,641 @@ let stationInfoContent: HTMLElement | null = null;
 let closeStationInfoBtn: HTMLElement | null = null;
 
 // Callbacks for business logic (set by main.js)
-let calculateAndDisplayDetourOnClickCallback: ((marker: ExtendedMarker, poiLocation: google.maps.LatLng, startLoc: google.maps.LatLng, endLoc: google.maps.LatLng, originalDist: number, originalDur: number) => void) | null = null;
+let calculateAndDisplayDetourOnClickCallback:
+  | ((
+      marker: ExtendedMarker,
+      poiLocation: google.maps.LatLng,
+      startLoc: google.maps.LatLng,
+      endLoc: google.maps.LatLng,
+      originalDist: number,
+      originalDur: number
+    ) => void)
+  | null = null;
 
 interface MarkerCallbacks {
-    calculateAndDisplayDetourOnClick?: (marker: ExtendedMarker, poiLocation: google.maps.LatLng, startLoc: google.maps.LatLng, endLoc: google.maps.LatLng, originalDist: number, originalDur: number) => void;
+  calculateAndDisplayDetourOnClick?: (
+    marker: ExtendedMarker,
+    poiLocation: google.maps.LatLng,
+    startLoc: google.maps.LatLng,
+    endLoc: google.maps.LatLng,
+    originalDist: number,
+    originalDur: number
+  ) => void;
 }
 
 export function setupMarkerCallbacks(callbacks: MarkerCallbacks): void {
-    if (callbacks.calculateAndDisplayDetourOnClick) {
-        calculateAndDisplayDetourOnClickCallback = callbacks.calculateAndDisplayDetourOnClick;
-    }
+  if (callbacks.calculateAndDisplayDetourOnClick) {
+    calculateAndDisplayDetourOnClickCallback = callbacks.calculateAndDisplayDetourOnClick;
+  }
 }
 
 // --- Station Info Panel Management ---
 export function initializeStationInfoPanel(): void {
-    stationInfoPanel = document.getElementById('station-info-panel');
-    stationInfoContent = document.getElementById('station-info-content');
-    closeStationInfoBtn = document.getElementById('close-station-info-btn');
+  stationInfoPanel = document.getElementById('station-info-panel');
+  stationInfoContent = document.getElementById('station-info-content');
+  closeStationInfoBtn = document.getElementById('close-station-info-btn');
 
-    if (closeStationInfoBtn) {
-        closeStationInfoBtn.addEventListener('click', closeStationInfoPanel);
+  if (closeStationInfoBtn) {
+    closeStationInfoBtn.addEventListener('click', closeStationInfoPanel);
+  }
+
+  // Close panel when clicking outside on desktop or ESC key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && stationInfoPanel?.classList.contains('open')) {
+      closeStationInfoPanel();
     }
+  });
 
-    // Close panel when clicking outside on desktop or ESC key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && stationInfoPanel?.classList.contains('open')) {
-            closeStationInfoPanel();
+  // Add swipe gesture support for mobile
+  if (stationInfoPanel) {
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchCurrentY = 0;
+    let isDragging = false;
+
+    stationInfoPanel.addEventListener(
+      'touchstart',
+      e => {
+        // Only enable swipe on mobile
+        if (window.innerWidth > 768) return;
+
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+
+        // Get panel's bounding rect to check if touch is in top area
+        const panelRect = stationInfoPanel!.getBoundingClientRect();
+        const touchY = e.touches[0].clientY;
+        const relativeY = touchY - panelRect.top;
+
+        // Only enable drag if touching within top 60px (handle area)
+        if (relativeY <= 60) {
+          isDragging = true;
         }
-    });
+      },
+      { passive: true }
+    );
 
-    // Add swipe gesture support for mobile
-    if (stationInfoPanel) {
-        let touchStartY = 0;
-        let touchStartX = 0;
-        let touchCurrentY = 0;
-        let isDragging = false;
-        let initialScrollTop = 0;
+    stationInfoPanel.addEventListener(
+      'touchmove',
+      e => {
+        if (!isDragging || !stationInfoPanel) return;
 
-        stationInfoPanel.addEventListener('touchstart', (e) => {
-            // Only enable swipe on mobile
-            if (window.innerWidth > 768) return;
+        touchCurrentY = e.touches[0].clientY;
+        const deltaY = touchCurrentY - touchStartY;
+        const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
 
-            touchStartY = e.touches[0].clientY;
-            touchStartX = e.touches[0].clientX;
+        // Check if this is more vertical than horizontal movement
+        const isVerticalSwipe = Math.abs(deltaY) > deltaX;
 
-            // Get panel's bounding rect to check if touch is in top area
-            const panelRect = stationInfoPanel!.getBoundingClientRect();
-            const touchY = e.touches[0].clientY;
-            const relativeY = touchY - panelRect.top;
+        // Only allow downward swipe
+        if (deltaY > 0 && isVerticalSwipe) {
+          e.preventDefault(); // Prevent scrolling while swiping
+          stationInfoPanel.classList.add('dragging');
+          stationInfoPanel.style.transform = `translateY(${deltaY}px)`;
+        }
+      },
+      { passive: false }
+    ); // passive: false to allow preventDefault
 
-            // Only enable drag if touching within top 60px (handle area)
-            if (relativeY <= 60) {
-                isDragging = true;
-                initialScrollTop = stationInfoContent?.scrollTop || 0;
-            }
-        }, { passive: true });
+    stationInfoPanel.addEventListener(
+      'touchend',
+      () => {
+        if (!isDragging) return;
+        isDragging = false;
 
-        stationInfoPanel.addEventListener('touchmove', (e) => {
-            if (!isDragging || !stationInfoPanel) return;
+        if (stationInfoPanel) {
+          stationInfoPanel.classList.remove('dragging');
+        }
 
-            touchCurrentY = e.touches[0].clientY;
-            const deltaY = touchCurrentY - touchStartY;
-            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+        const deltaY = touchCurrentY - touchStartY;
 
-            // Check if this is more vertical than horizontal movement
-            const isVerticalSwipe = Math.abs(deltaY) > deltaX;
+        // If swiped down more than 100px, close the panel
+        if (deltaY > 100) {
+          closeStationInfoPanel();
+        } else {
+          // Reset position with smooth transition
+          if (stationInfoPanel) {
+            stationInfoPanel.style.transform = '';
+          }
+        }
 
-            // Only allow downward swipe
-            if (deltaY > 0 && isVerticalSwipe) {
-                e.preventDefault(); // Prevent scrolling while swiping
-                stationInfoPanel.classList.add('dragging');
-                stationInfoPanel.style.transform = `translateY(${deltaY}px)`;
-            }
-        }, { passive: false }); // passive: false to allow preventDefault
+        touchStartY = 0;
+        touchCurrentY = 0;
+        touchStartX = 0;
+      },
+      { passive: true }
+    );
+  }
 
-        stationInfoPanel.addEventListener('touchend', () => {
-            if (!isDragging) return;
-            isDragging = false;
-
-            if (stationInfoPanel) {
-                stationInfoPanel.classList.remove('dragging');
-            }
-
-            const deltaY = touchCurrentY - touchStartY;
-
-            // If swiped down more than 100px, close the panel
-            if (deltaY > 100) {
-                closeStationInfoPanel();
-            } else {
-                // Reset position with smooth transition
-                if (stationInfoPanel) {
-                    stationInfoPanel.style.transform = '';
-                }
-            }
-
-            touchStartY = 0;
-            touchCurrentY = 0;
-            touchStartX = 0;
-        }, { passive: true });
-    }
-
-    logger.debug('Station info panel initialized');
+  logger.debug('Station info panel initialized');
 }
 
 export function openStationInfoPanel(content: string): void {
-    if (!stationInfoPanel || !stationInfoContent) {
-        logger.error('Station info panel not initialized');
-        return;
+  if (!stationInfoPanel || !stationInfoContent) {
+    logger.error('Station info panel not initialized');
+    return;
+  }
+
+  stationInfoContent.innerHTML = content;
+  stationInfoPanel.classList.add('open');
+
+  // Add selected class to the marker
+  if (state.selectedPoiMarker?.content) {
+    const contentElement = state.selectedPoiMarker.content as HTMLElement;
+    const container = contentElement.querySelector('.poi-marker-content-container');
+    if (container) {
+      container.classList.add('selected');
     }
+  }
 
-    stationInfoContent.innerHTML = content;
-    stationInfoPanel.classList.add('open');
-
-    // Add selected class to the marker
-    if (state.selectedPoiMarker?.content) {
-        const contentElement = state.selectedPoiMarker.content as HTMLElement;
-        const container = contentElement.querySelector('.poi-marker-content-container');
-        if (container) {
-            container.classList.add('selected');
-        }
-    }
-
-    logger.debug('Station info panel opened');
+  logger.debug('Station info panel opened');
 }
 
 export function closeStationInfoPanel(): void {
-    if (!stationInfoPanel) {
-        logger.error('Station info panel not initialized');
-        return;
-    }
+  if (!stationInfoPanel) {
+    logger.error('Station info panel not initialized');
+    return;
+  }
 
-    stationInfoPanel.classList.remove('open');
-    // Reset any inline transform from swipe gesture
-    stationInfoPanel.style.transform = '';
-    resetSelectedMarkerZIndex();
+  stationInfoPanel.classList.remove('open');
+  // Reset any inline transform from swipe gesture
+  stationInfoPanel.style.transform = '';
+  resetSelectedMarkerZIndex();
 
-    // Reset map padding
-    if (state.map) {
-        (state.map as any).setOptions({ padding: { top: 0, left: 0, bottom: 0, right: 0 } });
-    }
+  // Reset map padding
+  if (state.map) {
+    (state.map as any).setOptions({ padding: { top: 0, left: 0, bottom: 0, right: 0 } });
+  }
 
-    logger.debug('Station info panel closed');
+  logger.debug('Station info panel closed');
 }
 
 export function updateStationInfoPanel(content: string): void {
-    if (!stationInfoContent) {
-        logger.error('Station info panel content not initialized');
-        return;
-    }
+  if (!stationInfoContent) {
+    logger.error('Station info panel content not initialized');
+    return;
+  }
 
-    stationInfoContent.innerHTML = content;
-    logger.debug('Station info panel updated');
+  stationInfoContent.innerHTML = content;
+  logger.debug('Station info panel updated');
 }
 
 export function isStationInfoPanelOpen(): boolean {
-    return stationInfoPanel?.classList.contains('open') || false;
+  return stationInfoPanel?.classList.contains('open') || false;
 }
 
 // --- Marker Creation ---
 export function createMarkerForStation(stationData: StationData): ExtendedMarker | null {
-    try {
-        const brandName = stationData.brand;
-        const stationIdString = stationData.id;
-        const iconContainerId = `poi-icon-container-${stationIdString}`;
+  try {
+    const brandName = stationData.brand;
+    const stationIdString = stationData.id;
+    const iconContainerId = `poi-icon-container-${stationIdString}`;
 
-        // Build marker DOM structure using utilities
-        const markerWrapper = createElement('div', { className: 'marker-pin-wrapper' });
-        const container = createElement('div', { className: 'poi-marker-content-container' });
+    // Build marker DOM structure using utilities
+    const markerWrapper = createElement('div', { className: 'marker-pin-wrapper' });
+    const container = createElement('div', { className: 'poi-marker-content-container' });
 
-        // Icon container with favicon or fallback
-        const iconContainer = createElement('div', { 
-            className: 'poi-icon-container',
-            id: iconContainerId 
-        });
-        
-        const googleFaviconUrl = getFaviconUrlFromReportUrl(stationData.reportUrl);
-        const altText = translate('markerLogoAlt', {
-            name: brandName || stationData.title || stationIdString
-        });
-        
-        if (googleFaviconUrl) {
-            const img = createImageWithFallback(
-                googleFaviconUrl, 
-                altText, 
-                'poi-marker-img', 
-                DEFAULT_EV_SVG_ICON,
-                iconContainerId
-            );
-            iconContainer.appendChild(img);
-        } else {
-            iconContainer.innerHTML = DEFAULT_EV_SVG_ICON;
-        }
-        container.appendChild(iconContainer);
+    // Icon container with favicon or fallback
+    const iconContainer = createElement('div', {
+      className: 'poi-icon-container',
+      id: iconContainerId,
+    });
 
-        // Analyze sockets and create badges using utilities
-        const socketAnalysis = analyzeStationSockets(stationData.sockets);
-        
-        const badgeContainer = createElement('div', { className: 'marker-badges' });
-        if (socketAnalysis.hasAC) {
-            badgeContainer.appendChild(createBadge('AC', 'badge-ac'));
-        }
-        if (socketAnalysis.hasDC) {
-            badgeContainer.appendChild(createBadge('DC', 'badge-dc'));
-        }
-        if (socketAnalysis.powerCategory > 0) {
-            badgeContainer.appendChild(
-                createBadge('⚡'.repeat(socketAnalysis.powerCategory), `badge-power-${socketAnalysis.powerCategory}`)
-            );
-        }
-        if (badgeContainer.hasChildNodes()) {
-            container.appendChild(badgeContainer);
-        }
+    const googleFaviconUrl = getFaviconUrlFromReportUrl(stationData.reportUrl);
+    const altText = translate('markerLogoAlt', {
+      name: brandName || stationData.title || stationIdString,
+    });
 
-        // Detour text element
-        const detourText = createElement('span', {
-            className: 'poi-marker-detour-text',
-            id: `poi-marker-detour-${stationIdString}`
-        });
-        container.appendChild(detourText);
-
-        // Favorite badge
-        const favBadge = createElement('span', {
-            className: 'marker-fav-badge',
-            textContent: '⭐',
-            id: `poi-marker-fav-${stationIdString}`
-        });
-        container.appendChild(favBadge);
-
-        markerWrapper.appendChild(container);
-
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-            position: { lat: stationData.lat, lng: stationData.lng },
-            map: state.map,
-            title: brandName || stationData.title || `Station ${stationIdString}`,
-            content: markerWrapper,
-            zIndex: DEFAULT_POI_ZINDEX
-        }) as ExtendedMarker;
-
-        // Attach data and listeners
-        marker.poiData = stationData;
-        marker.stationId = stationIdString;
-        marker.detourData = null;
-        marker.liveSocketData = null;
-        marker.cachedInfoWindowContent = null;
-        
-        marker.addListener('click', () => {
-            if (marker.map != null) {
-                fetchPoiDetails(marker, marker.poiData!, false);
-            }
-        });
-        
-        container.addEventListener('mouseover', () => {
-            if (marker !== state.selectedPoiMarker) {
-                marker.zIndex = HOVER_POI_ZINDEX;
-            }
-        });
-        
-        container.addEventListener('mouseout', () => {
-            if (marker !== state.selectedPoiMarker) {
-                marker.zIndex = DEFAULT_POI_ZINDEX;
-            }
-        });
-
-        return marker;
-
-    } catch (error) {
-        logger.error(`Error creating AdvancedMarkerElement for Station ${stationData.id}:`, error);
-        return null;
+    if (googleFaviconUrl) {
+      const img = createImageWithFallback(
+        googleFaviconUrl,
+        altText,
+        'poi-marker-img',
+        DEFAULT_EV_SVG_ICON,
+        iconContainerId
+      );
+      iconContainer.appendChild(img);
+    } else {
+      iconContainer.innerHTML = DEFAULT_EV_SVG_ICON;
     }
+    container.appendChild(iconContainer);
+
+    // Analyze sockets and create badges using utilities
+    const socketAnalysis = analyzeStationSockets(stationData.sockets);
+
+    const badgeContainer = createElement('div', { className: 'marker-badges' });
+    if (socketAnalysis.hasAC) {
+      badgeContainer.appendChild(createBadge('AC', 'badge-ac'));
+    }
+    if (socketAnalysis.hasDC) {
+      badgeContainer.appendChild(createBadge('DC', 'badge-dc'));
+    }
+    if (socketAnalysis.powerCategory > 0) {
+      badgeContainer.appendChild(
+        createBadge(
+          '⚡'.repeat(socketAnalysis.powerCategory),
+          `badge-power-${socketAnalysis.powerCategory}`
+        )
+      );
+    }
+    if (badgeContainer.hasChildNodes()) {
+      container.appendChild(badgeContainer);
+    }
+
+    // Detour text element
+    const detourText = createElement('span', {
+      className: 'poi-marker-detour-text',
+      id: `poi-marker-detour-${stationIdString}`,
+    });
+    container.appendChild(detourText);
+
+    // Favorite badge
+    const favBadge = createElement('span', {
+      className: 'marker-fav-badge',
+      textContent: '⭐',
+      id: `poi-marker-fav-${stationIdString}`,
+    });
+    container.appendChild(favBadge);
+
+    markerWrapper.appendChild(container);
+
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+      position: { lat: stationData.lat, lng: stationData.lng },
+      map: state.map,
+      title: brandName || stationData.title || `Station ${stationIdString}`,
+      content: markerWrapper,
+      zIndex: DEFAULT_POI_ZINDEX,
+    }) as ExtendedMarker;
+
+    // Attach data and listeners
+    marker.poiData = stationData;
+    marker.stationId = stationIdString;
+    marker.detourData = null;
+    marker.liveSocketData = null;
+    marker.cachedInfoWindowContent = null;
+
+    marker.addListener('click', () => {
+      if (marker.map != null) {
+        fetchPoiDetails(marker, marker.poiData!, false);
+      }
+    });
+
+    container.addEventListener('mouseover', () => {
+      if (marker !== state.selectedPoiMarker) {
+        marker.zIndex = HOVER_POI_ZINDEX;
+      }
+    });
+
+    container.addEventListener('mouseout', () => {
+      if (marker !== state.selectedPoiMarker) {
+        marker.zIndex = DEFAULT_POI_ZINDEX;
+      }
+    });
+
+    return marker;
+  } catch (error) {
+    logger.error(`Error creating AdvancedMarkerElement for Station ${stationData.id}:`, error);
+    return null;
+  }
 }
 
-export function updateMarker(type: 'start' | 'end', location: google.maps.LatLng, title: string): void {
-    const contentDiv = document.createElement('div');
-    addClass(contentDiv, 'custom-marker-content');
+export function updateMarker(
+  type: 'start' | 'end',
+  location: google.maps.LatLng,
+  title: string
+): void {
+  const contentDiv = document.createElement('div');
+  addClass(contentDiv, 'custom-marker-content');
+  if (type === 'start') {
+    contentDiv.textContent = translate('markerStart');
+    addClass(contentDiv, 'start-marker-content');
+  } else {
+    contentDiv.textContent = translate('markerDest');
+    addClass(contentDiv, 'dest-marker-content');
+  }
+  const markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {
+    position: location,
+    map: state.map,
+    title: title,
+    content: contentDiv,
+    zIndex: 100,
+  };
+  try {
     if (type === 'start') {
-        contentDiv.textContent = translate('markerStart');
-        addClass(contentDiv, 'start-marker-content');
-    } else {
-        contentDiv.textContent = translate('markerDest');
-        addClass(contentDiv, 'dest-marker-content');
+      if (state.startMarker) state.startMarker.map = null;
+      state.startMarker = new google.maps.marker.AdvancedMarkerElement(
+        markerOptions
+      ) as ExtendedMarker;
+    } else if (type === 'end') {
+      if (state.endMarker) state.endMarker.map = null;
+      state.endMarker = new google.maps.marker.AdvancedMarkerElement(
+        markerOptions
+      ) as ExtendedMarker;
     }
-    const markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {
-        position: location,
-        map: state.map,
-        title: title,
-        content: contentDiv,
-        zIndex: 100
-    };
-    try {
-        if (type === 'start') {
-            if (state.startMarker) state.startMarker.map = null;
-            state.startMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions) as ExtendedMarker;
-        } else if (type === 'end') {
-            if (state.endMarker) state.endMarker.map = null;
-            state.endMarker = new google.maps.marker.AdvancedMarkerElement(markerOptions) as ExtendedMarker;
-        }
-    } catch (error) {
-        logger.error(`Error creating AdvancedMarkerElement for ${type}:`, error);
-        showTemporaryMessage(`Failed to create ${type} marker.`, true);
-        if (type === 'start') state.startMarker = null;
-        else if (type === 'end') state.endMarker = null;
-    }
+  } catch (error) {
+    logger.error(`Error creating AdvancedMarkerElement for ${type}:`, error);
+    showTemporaryMessage(`Failed to create ${type} marker.`, true);
+    if (type === 'start') state.startMarker = null;
+    else if (type === 'end') state.endMarker = null;
+  }
 }
 
 // --- Marker State Management ---
 export function resetSelectedMarkerZIndex(): void {
-    if (state.selectedPoiMarker) {
-        state.selectedPoiMarker.zIndex = DEFAULT_POI_ZINDEX;
+  if (state.selectedPoiMarker) {
+    state.selectedPoiMarker.zIndex = DEFAULT_POI_ZINDEX;
 
-        // Remove selected class from marker
-        if (state.selectedPoiMarker.content) {
-            const contentElement = state.selectedPoiMarker.content as HTMLElement;
-            const container = contentElement.querySelector('.poi-marker-content-container');
-            if (container) {
-                container.classList.remove('selected');
-            }
-        }
-
-        logger.debug(`Reset zIndex for ${state.selectedPoiMarker.stationId}`);
+    // Remove selected class from marker
+    if (state.selectedPoiMarker.content) {
+      const contentElement = state.selectedPoiMarker.content as HTMLElement;
+      const container = contentElement.querySelector('.poi-marker-content-container');
+      if (container) {
+        container.classList.remove('selected');
+      }
     }
-    state.selectedPoiMarker = null;
+
+    logger.debug(`Reset zIndex for ${state.selectedPoiMarker.stationId}`);
+  }
+  state.selectedPoiMarker = null;
 }
 
-export function updateMarkerDetourText(marker: ExtendedMarker, detourData: DetourData | null): void {
-    if (!marker || !marker.content) return;
-    const contentElement = marker.content as HTMLElement;
-    const detourEl = contentElement.querySelector('.poi-marker-detour-text') as HTMLElement | null;
-    if (!detourEl) {
-        return;
-    }
-    let text = '';
-    if (detourData && detourData.status === 'OK') {
-        const distKm = (detourData.extraDist || 0) / 1000;
-        const timeMin = Math.round((detourData.extraTime || 0) / 60);
-        if (Math.abs(distKm) >= 0.1 || Math.abs(timeMin) >= 1) {
-            text = `${distKm >= 0 ? '+' : ''}${distKm.toFixed(1)}${translate('unitKm')}`;
-        } else {
-            text = '';
-        }
-    } else if (detourData && detourData.status === 'Error') {
-        text = translate('markerDetourError');
+export function updateMarkerDetourText(
+  marker: ExtendedMarker,
+  detourData: DetourData | null
+): void {
+  if (!marker || !marker.content) return;
+  const contentElement = marker.content as HTMLElement;
+  const detourEl = contentElement.querySelector('.poi-marker-detour-text') as HTMLElement | null;
+  if (!detourEl) {
+    return;
+  }
+  let text = '';
+  if (detourData && detourData.status === 'OK') {
+    const distKm = (detourData.extraDist || 0) / 1000;
+    const timeMin = Math.round((detourData.extraTime || 0) / 60);
+    if (Math.abs(distKm) >= 0.1 || Math.abs(timeMin) >= 1) {
+      text = `${distKm >= 0 ? '+' : ''}${distKm.toFixed(1)}${translate('unitKm')}`;
     } else {
-        text = '';
+      text = '';
     }
-    detourEl.textContent = text;
+  } else if (detourData && detourData.status === 'Error') {
+    text = translate('markerDetourError');
+  } else {
+    text = '';
+  }
+  detourEl.textContent = text;
 }
 
 // --- Info Panel Management ---
 export function updateInfoWindowIfVisible(marker: ExtendedMarker): void {
-    if (!marker) return;
+  if (!marker) return;
 
-    // Check if this marker's info is currently displayed in the panel
-    const isPanelOpenForThisMarker = state.selectedPoiMarker === marker && isStationInfoPanelOpen();
+  // Check if this marker's info is currently displayed in the panel
+  const isPanelOpenForThisMarker = state.selectedPoiMarker === marker && isStationInfoPanelOpen();
 
-    if (!isPanelOpenForThisMarker) {
-        if (marker) {
-            // Update cache even if not visible, in case it becomes visible later
-            const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
-            const detourHtml = getDetourHtmlFromData(marker.detourData);
-            marker.cachedInfoWindowContent = buildInfoWindowHtml(marker, marker.poiData!, marker.liveSocketData ?? null, fetchStatus, detourHtml);
-        }
-        return;
+  if (!isPanelOpenForThisMarker) {
+    if (marker) {
+      // Update cache even if not visible, in case it becomes visible later
+      const fetchStatus =
+        marker.liveSocketData === null
+          ? 'loading'
+          : marker.liveSocketData === false
+            ? 'error'
+            : 'ok';
+      const detourHtml = getDetourHtmlFromData(marker.detourData);
+      marker.cachedInfoWindowContent = buildInfoWindowHtml(
+        marker,
+        marker.poiData!,
+        marker.liveSocketData ?? null,
+        fetchStatus,
+        detourHtml
+      );
     }
+    return;
+  }
 
-    logger.debug(`Updating visible panel for ${marker.stationId}`);
-    const fetchStatus = marker.liveSocketData === null ? 'loading' : (marker.liveSocketData === false ? 'error' : 'ok');
-    const detourHtml = getDetourHtmlFromData(marker.detourData);
-    const finalContentString = buildInfoWindowHtml(marker, marker.poiData!, marker.liveSocketData ?? null, fetchStatus, detourHtml);
-    marker.cachedInfoWindowContent = finalContentString;
-    updateStationInfoPanel(finalContentString);
+  logger.debug(`Updating visible panel for ${marker.stationId}`);
+  const fetchStatus =
+    marker.liveSocketData === null ? 'loading' : marker.liveSocketData === false ? 'error' : 'ok';
+  const detourHtml = getDetourHtmlFromData(marker.detourData);
+  const finalContentString = buildInfoWindowHtml(
+    marker,
+    marker.poiData!,
+    marker.liveSocketData ?? null,
+    fetchStatus,
+    detourHtml
+  );
+  marker.cachedInfoWindowContent = finalContentString;
+  updateStationInfoPanel(finalContentString);
 }
 
 function getDetourHtmlFromData(detourData: DetourData | null | undefined): string {
-    if (!state.isRouteActive) return '';
-    if (!detourData || detourData.status === 'Pending') {
-        return translate(DETOUR_LOADING_KEY);
-    }
+  if (!state.isRouteActive) return '';
+  if (!detourData || detourData.status === 'Pending') {
+    return translate(DETOUR_LOADING_KEY);
+  }
 
-    switch (detourData.status) {
-        case 'OK':
-            const extraDistStr = (detourData.extraDist || 0) > 0 ? `+${formatDistance(detourData.extraDist || 0, translate)}` : `${formatDistance(detourData.extraDist || 0, translate)}`;
-            const extraDurStr = (detourData.extraTime || 0) >= 0 ? `+${formatDuration(detourData.extraTime || 0, translate)}` : `${formatDuration(detourData.extraTime || 0, translate)}`;
-            const isNegligible = Math.abs(detourData.extraDist || 0) < 50 && Math.abs(detourData.extraTime || 0) < 10;
+  switch (detourData.status) {
+    case 'OK':
+      const extraDistStr =
+        (detourData.extraDist || 0) > 0
+          ? `+${formatDistance(detourData.extraDist || 0, translate)}`
+          : `${formatDistance(detourData.extraDist || 0, translate)}`;
+      const extraDurStr =
+        (detourData.extraTime || 0) >= 0
+          ? `+${formatDuration(detourData.extraTime || 0, translate)}`
+          : `${formatDuration(detourData.extraTime || 0, translate)}`;
+      const isNegligible =
+        Math.abs(detourData.extraDist || 0) < 50 && Math.abs(detourData.extraTime || 0) < 10;
 
-            let detourSummaryHtml = isNegligible ?
-                `<span>${translate('iwDetourNegligible')}</span>` :
-                `<span>${translate('iwDetourInfo', {extraDistStr: extraDistStr, extraDurStr: extraDurStr})}</span>`;
+      let detourSummaryHtml = isNegligible
+        ? `<span>${translate('iwDetourNegligible')}</span>`
+        : `<span>${translate('iwDetourInfo', { extraDistStr: extraDistStr, extraDurStr: extraDurStr })}</span>`;
 
-            let detailHtml = '';
-            if (detourData.distFromStart !== undefined && detourData.timeFromStart !== undefined && detourData.distToEnd !== undefined && detourData.timeToEnd !== undefined) {
-                const distFromStartStr = formatDistance(detourData.distFromStart, translate);
-                const timeFromStartStr = formatDuration(detourData.timeFromStart, translate);
-                const distToEndStr = formatDistance(detourData.distToEnd, translate);
-                const timeToEndStr = formatDuration(detourData.timeToEnd, translate);
+      let detailHtml = '';
+      if (
+        detourData.distFromStart !== undefined &&
+        detourData.timeFromStart !== undefined &&
+        detourData.distToEnd !== undefined &&
+        detourData.timeToEnd !== undefined
+      ) {
+        const distFromStartStr = formatDistance(detourData.distFromStart, translate);
+        const timeFromStartStr = formatDuration(detourData.timeFromStart, translate);
+        const distToEndStr = formatDistance(detourData.distToEnd, translate);
+        const timeToEndStr = formatDuration(detourData.timeToEnd, translate);
 
-                detailHtml = `
+        detailHtml = `
                         <div class="detour-breakdown">
                             <span>${translate('iwFromStart')}</span> ${distFromStartStr}, ${timeFromStartStr}<br>
                             <span>${translate('iwToDest')}</span> ${distToEndStr}, ${timeToEndStr}
                         </div>
                     `;
-            }
+      }
 
-            return `${detourSummaryHtml}${detailHtml}`;
+      return `${detourSummaryHtml}${detailHtml}`;
 
-        case 'Error':
-            const infoWindowWithMethods = state.infoWindow as google.maps.InfoWindow & { getAnchor?: () => ExtendedMarker | null } | null;
-            const anchorMarker = infoWindowWithMethods?.getAnchor?.();
-            const stationId = anchorMarker?.stationId;
-            const retryButtonHtml = stationId ?
-                `<button onclick='retryDetourCalculation(${JSON.stringify(stationId)})' class='retry-button'>${translate('iwRetry')}</button>` :
-                '';
-            return `<span class="text-red-600">${translate(DETOUR_ERROR_KEY)}</span> ${retryButtonHtml}`;
-        default:
-            return translate(DETOUR_LOADING_KEY);
-    }
+    case 'Error':
+      const infoWindowWithMethods = state.infoWindow as
+        | (google.maps.InfoWindow & { getAnchor?: () => ExtendedMarker | null })
+        | null;
+      const anchorMarker = infoWindowWithMethods?.getAnchor?.();
+      const stationId = anchorMarker?.stationId;
+      const retryButtonHtml = stationId
+        ? `<button onclick='retryDetourCalculation(${JSON.stringify(stationId)})' class='retry-button'>${translate('iwRetry')}</button>`
+        : '';
+      return `<span class="text-red-600">${translate(DETOUR_ERROR_KEY)}</span> ${retryButtonHtml}`;
+    default:
+      return translate(DETOUR_LOADING_KEY);
+  }
 }
 
 function buildDetourSectionHtml(detourHtml: string): string {
-    if (!state.isRouteActive) return '';
-    const content = `<div class="detour-info">${detourHtml || translate(DETOUR_LOADING_KEY)}</div>`;
-    return `<div class="info-section">${content}</div>`;
+  if (!state.isRouteActive) return '';
+  const content = `<div class="detour-info">${detourHtml || translate(DETOUR_LOADING_KEY)}</div>`;
+  return `<div class="info-section">${content}</div>`;
 }
 
-function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveSocketsData: LiveSocketDataState, fetchStatus: 'loading' | 'error' | 'ok', detourHtml: string = ''): string {
-    const poiLocation = marker.position;
-    if (!poiLocation) {
-        logger.error('Marker has no position');
-        return '';
-    }
-    const contentElement = marker.content as HTMLElement | null;
-    const iconContainer = contentElement?.querySelector('.poi-icon-container');
-    let logoSrc = DEFAULT_EV_SVG_DATA_URI;
-    if (iconContainer?.firstElementChild?.tagName === 'IMG') {
-        logoSrc = (iconContainer.firstElementChild as HTMLImageElement).src;
-    }
+function buildInfoWindowHtml(
+  marker: ExtendedMarker,
+  poiData: StationData,
+  liveSocketsData: LiveSocketDataState,
+  fetchStatus: 'loading' | 'error' | 'ok',
+  detourHtml: string = ''
+): string {
+  const poiLocation = marker.position;
+  if (!poiLocation) {
+    logger.error('Marker has no position');
+    return '';
+  }
+  const contentElement = marker.content as HTMLElement | null;
+  const iconContainer = contentElement?.querySelector('.poi-icon-container');
+  let logoSrc = DEFAULT_EV_SVG_DATA_URI;
+  if (iconContainer?.firstElementChild?.tagName === 'IMG') {
+    logoSrc = (iconContainer.firstElementChild as HTMLImageElement).src;
+  }
 
-    let mainTitle = poiData.brand || poiData.title || `Station ${poiData.id}`;
-    const currentBrand = poiData.brand;
-    const stationId = poiData.id;
-    const isFav = currentBrand && state.favoriteBrands.has(currentBrand);
-    const isBlk = currentBrand && state.blacklistedBrands.has(currentBrand);
-    const isIgnored = state.ignoredStationIds.has(stationId);
+  let mainTitle = poiData.brand || poiData.title || `Station ${poiData.id}`;
+  const currentBrand = poiData.brand;
+  const stationId = poiData.id;
+  const isFav = currentBrand && state.favoriteBrands.has(currentBrand);
+  const isBlk = currentBrand && state.blacklistedBrands.has(currentBrand);
+  const isIgnored = state.ignoredStationIds.has(stationId);
 
-    let titlePrefix = '';
-    if (isFav) titlePrefix = '⭐ ';
-    else if (isBlk) titlePrefix = '🚫 ';
-    mainTitle = titlePrefix + mainTitle;
+  let titlePrefix = '';
+  if (isFav) titlePrefix = '⭐ ';
+  else if (isBlk) titlePrefix = '🚫 ';
+  mainTitle = titlePrefix + mainTitle;
 
-    let subTitle = '';
-    if (poiData.brand && poiData.title && poiData.brand !== poiData.title) {
-        subTitle = `<p class="info-subtitle">${poiData.title}</p>`;
-    }
+  let subTitle = '';
+  if (poiData.brand && poiData.title && poiData.brand !== poiData.title) {
+    subTitle = `<p class="info-subtitle">${poiData.title}</p>`;
+  }
 
-    let infoActionsHtml = '';
-    if (!isIgnored) {
-        infoActionsHtml = `<div class="info-actions">`;
+  let infoActionsHtml = '';
+  if (!isIgnored) {
+    infoActionsHtml = `<div class="info-actions">`;
 
-        // Brand actions group
-        if (currentBrand) {
-            const escapedBrand = JSON.stringify(currentBrand);
-            infoActionsHtml += `<div class="action-group brand-actions">`;
-            infoActionsHtml += `<span class="action-group-label">${translate('brandActions')}</span>`;
-            infoActionsHtml += `<div class="action-buttons">`;
-            infoActionsHtml += `<button class="action-btn brand-fav ${isFav ? 'active-fav' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "favorite")'>⭐ ${isFav ? translate('unfavorite') : translate('favorite')}</button>`;
-            infoActionsHtml += `<button class="action-btn brand-blk ${isBlk ? 'active-blk' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "blacklist")'>🚫 ${isBlk ? translate('unblock') : translate('block')}</button>`;
-            infoActionsHtml += `</div></div>`;
-        }
-
-        // Station action group
-        const escapedStationId = JSON.stringify(stationId);
-        infoActionsHtml += `<div class="action-group station-actions">`;
-        infoActionsHtml += `<span class="action-group-label">${translate('stationActions')}</span>`;
-        infoActionsHtml += `<div class="action-buttons">`;
-        infoActionsHtml += `<button class="action-btn ignore-station" onclick='handleIgnoreStationClick(${escapedStationId})'>${IGNORE_ICON_SVG} ${translate('ignore')}</button>`;
-        infoActionsHtml += `</div></div>`;
-
-        infoActionsHtml += `</div>`;
-    } else {
-        infoActionsHtml = `<div class="text-xs text-gray-500 ml-2">${translate('iwIgnored')}</div>`;
+    // Brand actions group
+    if (currentBrand) {
+      const escapedBrand = JSON.stringify(currentBrand);
+      infoActionsHtml += `<div class="action-group brand-actions">`;
+      infoActionsHtml += `<span class="action-group-label">${translate('brandActions')}</span>`;
+      infoActionsHtml += `<div class="action-buttons">`;
+      infoActionsHtml += `<button class="action-btn brand-fav ${isFav ? 'active-fav' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "favorite")'>⭐ ${isFav ? translate('unfavorite') : translate('favorite')}</button>`;
+      infoActionsHtml += `<button class="action-btn brand-blk ${isBlk ? 'active-blk' : ''}" onclick='handleInfoWindowBrandAction(${escapedBrand}, "blacklist")'>🚫 ${isBlk ? translate('unblock') : translate('block')}</button>`;
+      infoActionsHtml += `</div></div>`;
     }
 
-    const operatorTitle = poiData.operatorTitle || translate('iwNA');
-    const address = poiData.address || translate('iwNA');
-    const phoneRaw = poiData.phone;
-    const phoneHtml = phoneRaw ? `<a href="tel:${phoneRaw}">${phoneRaw}</a>` : translate('iwNA');
-    const websiteUrl = poiData.reportUrl;
+    // Station action group
+    const escapedStationId = JSON.stringify(stationId);
+    infoActionsHtml += `<div class="action-group station-actions">`;
+    infoActionsHtml += `<span class="action-group-label">${translate('stationActions')}</span>`;
+    infoActionsHtml += `<div class="action-buttons">`;
+    infoActionsHtml += `<button class="action-btn ignore-station" onclick='handleIgnoreStationClick(${escapedStationId})'>${IGNORE_ICON_SVG} ${translate('ignore')}</button>`;
+    infoActionsHtml += `</div></div>`;
 
-    const gmapsLink = createGoogleMapsLink(poiLocation);
+    infoActionsHtml += `</div>`;
+  } else {
+    infoActionsHtml = `<div class="text-xs text-gray-500 ml-2">${translate('iwIgnored')}</div>`;
+  }
 
-    const detourSection = buildDetourSectionHtml(detourHtml);
+  const operatorTitle = poiData.operatorTitle || translate('iwNA');
+  const address = poiData.address || translate('iwNA');
+  const phoneRaw = poiData.phone;
+  const phoneHtml = phoneRaw ? `<a href="tel:${phoneRaw}">${phoneRaw}</a>` : translate('iwNA');
+  const websiteUrl = poiData.reportUrl;
 
-    let socketsHtml = '';
-    const baseSockets = poiData.sockets;
-    if (!baseSockets || baseSockets.length === 0) {
-        socketsHtml = `<p class="text-sm text-gray-600">${translate('iwNoSockets')}</p>`;
-    } else {
-        socketsHtml = '<ul class="socket-list">';
-        baseSockets.forEach(baseSocket => {
-            const socketId = baseSocket.id;
-            const liveInfo = (fetchStatus === 'ok' && Array.isArray(liveSocketsData)) 
-                ? liveSocketsData.find(liveSock => liveSock.id === socketId) 
-                : null;
+  const gmapsLink = createGoogleMapsLink(poiLocation);
 
-            // Determine status using socket-utils
-            let statusClass: string;
-            let statusTextKey: string;
-            
-            if (fetchStatus === 'loading') {
-                statusClass = 'status-loading';
-                statusTextKey = 'iwLoading';
-            } else if (fetchStatus === 'error' || !liveInfo?.availability) {
-                statusClass = 'status-unknown';
-                statusTextKey = 'iwUnknown';
-            } else {
-                const availInfo = getAvailabilityInfo(liveInfo.availability);
-                statusClass = availInfo.statusClass;
-                statusTextKey = availInfo.statusKey;
-            }
-            
-            const statusText = translate(statusTextKey);
+  const detourSection = buildDetourSectionHtml(detourHtml);
 
-            // Price display
-            let priceDisplay: string;
-            if (fetchStatus === 'loading') {
-                priceDisplay = `<span class="status-loading">${translate('iwLoading')}</span>`;
-            } else if (fetchStatus === 'ok' && liveInfo && typeof liveInfo.price === 'number') {
-                priceDisplay = `₺${liveInfo.price.toFixed(2)}`;
-            } else {
-                priceDisplay = `<span class="status-unknown">${translate('iwNA')}</span>`;
-            }
+  let socketsHtml = '';
+  const baseSockets = poiData.sockets;
+  if (!baseSockets || baseSockets.length === 0) {
+    socketsHtml = `<p class="text-sm text-gray-600">${translate('iwNoSockets')}</p>`;
+  } else {
+    socketsHtml = '<ul class="socket-list">';
+    baseSockets.forEach(baseSocket => {
+      const socketId = baseSocket.id;
+      const liveInfo =
+        fetchStatus === 'ok' && Array.isArray(liveSocketsData)
+          ? liveSocketsData.find(liveSock => liveSock.id === socketId)
+          : null;
 
-            // Socket type, power display using socket-utils
-            const socketTypeDisplay = baseSocket.type ? baseSocket.type.toUpperCase() : '?';
-            const powerDisplay = formatPower(baseSocket.power);
-            const powerEmoji = getPowerEmoji(baseSocket.power);
+      // Determine status using socket-utils
+      let statusClass: string;
+      let statusTextKey: string;
 
-            socketsHtml += `<li class="socket-item">
+      if (fetchStatus === 'loading') {
+        statusClass = 'status-loading';
+        statusTextKey = 'iwLoading';
+      } else if (fetchStatus === 'error' || !liveInfo?.availability) {
+        statusClass = 'status-unknown';
+        statusTextKey = 'iwUnknown';
+      } else {
+        const availInfo = getAvailabilityInfo(liveInfo.availability);
+        statusClass = availInfo.statusClass;
+        statusTextKey = availInfo.statusKey;
+      }
+
+      const statusText = translate(statusTextKey);
+
+      // Price display
+      let priceDisplay: string;
+      if (fetchStatus === 'loading') {
+        priceDisplay = `<span class="status-loading">${translate('iwLoading')}</span>`;
+      } else if (fetchStatus === 'ok' && liveInfo && typeof liveInfo.price === 'number') {
+        priceDisplay = `₺${liveInfo.price.toFixed(2)}`;
+      } else {
+        priceDisplay = `<span class="status-unknown">${translate('iwNA')}</span>`;
+      }
+
+      // Socket type, power display using socket-utils
+      const socketTypeDisplay = baseSocket.type ? baseSocket.type.toUpperCase() : '?';
+      const powerDisplay = formatPower(baseSocket.power);
+      const powerEmoji = getPowerEmoji(baseSocket.power);
+
+      socketsHtml += `<li class="socket-item">
                                     <div class="socket-details">
                                         <div class="socket-type-power"><span class="socket-type">${socketTypeDisplay}</span><span class="socket-power">${powerDisplay}</span><span class="socket-power-emoji">${powerEmoji}</span></div>
                                         <span class="socket-price">${priceDisplay}</span>
                                     </div>
                                     <span class="socket-status ${statusClass}">${statusText}</span>
                                 </li>`;
-        });
-        socketsHtml += '</ul>';
-    }
+    });
+    socketsHtml += '</ul>';
+  }
 
-    const disclaimerText = `<p class="status-disclaimer">${translate('iwDisclaimer')}</p>`;
-    const socketsSection = `
+  const disclaimerText = `<p class="status-disclaimer">${translate('iwDisclaimer')}</p>`;
+  const socketsSection = `
             <div class="info-section">
                 <h4>${translate('iwSockets')}</h4>
                 ${socketsHtml}
                 ${fetchStatus === 'error' ? `<p class="text-xs text-red-500 mt-1">${translate('iwSocketStatusError')}</p>` : ''}
-                ${(baseSockets && baseSockets.length > 0) ? disclaimerText : ''}
+                ${baseSockets && baseSockets.length > 0 ? disclaimerText : ''}
             </div>`;
 
-    const linksStaticInfoSection = `
+  const linksStaticInfoSection = `
             <div class="info-section links-static-info-section">
                  <a href="${gmapsLink}" target="_blank" class="map-link block mb-2">${translate('iwOpenMap')}</a>
                  ${websiteUrl ? `<p class="mb-1"><a href="${websiteUrl}" target="_blank">${translate('iwVisitWebsite')}</a></p>` : ''}
@@ -595,25 +688,29 @@ function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveS
                  <p class="hidden md:block"><strong>${translate('iwPhone')}</strong> ${phoneHtml}</p>
             </div>`;
 
-    const escHintHtml = `<span class="esc-hint hidden sm:inline">${translate('iwEscHint')}</span>`;
+  const escHintHtml = `<span class="esc-hint hidden sm:inline">${translate('iwEscHint')}</span>`;
 
-    let addToRouteButtonHtml = '';
-    const canAddToRoute = state.routeWaypoints.some(wp => wp.type === 'start') && state.routeWaypoints.some(wp => wp.type === 'destination');
-    const isAlreadyInRoute = state.routeWaypoints.some(wp => wp.type === 'station' && wp.id === String(poiData.id));
+  let addToRouteButtonHtml = '';
+  const canAddToRoute =
+    state.routeWaypoints.some(wp => wp.type === 'start') &&
+    state.routeWaypoints.some(wp => wp.type === 'destination');
+  const isAlreadyInRoute = state.routeWaypoints.some(
+    wp => wp.type === 'station' && wp.id === String(poiData.id)
+  );
 
-    if (canAddToRoute) {
-        addToRouteButtonHtml = `
+  if (canAddToRoute) {
+    addToRouteButtonHtml = `
                 <button class="add-to-route-btn"
                         onclick="handleAddStationToRoute('${poiData.id}')"
                         ${isAlreadyInRoute ? 'disabled' : ''}>
                     ${isAlreadyInRoute ? translate('buttonInRoute') : translate('buttonAddToRoute')}
                 </button>
              `;
-    }
+  }
 
-    return `
+  return `
             <div class="poi-info-window">
-                 <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', {name: poiData.brand || poiData.title || poiData.id})}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
+                 <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', { name: poiData.brand || poiData.title || poiData.id })}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
                  <div class="title-area">
                      <h3>${mainTitle}${addToRouteButtonHtml}</h3>
                  </div>
@@ -627,157 +724,190 @@ function buildInfoWindowHtml(marker: ExtendedMarker, poiData: StationData, liveS
 }
 
 // --- POI Details Fetching ---
-export async function fetchPoiDetails(marker: ExtendedMarker, poiData: StationData, suppressInfoWindowOpen: boolean = false): Promise<void> {
-    if (!marker || !poiData || !poiData.id) return;
-    const stationId = poiData.id;
-    const poiLocation = marker.position;
-    if (!poiLocation) {
-        logger.error("Clicked marker has no position.");
-        return;
-    }
-    if (state.ignoredStationIds.has(stationId)) {
-        logger.debug(`Station ${stationId} is ignored, not opening InfoWindow.`);
-        return;
-    }
+export async function fetchPoiDetails(
+  marker: ExtendedMarker,
+  poiData: StationData,
+  suppressInfoWindowOpen: boolean = false
+): Promise<void> {
+  if (!marker || !poiData || !poiData.id) return;
+  const stationId = poiData.id;
+  const poiLocation = marker.position;
+  if (!poiLocation) {
+    logger.error('Clicked marker has no position.');
+    return;
+  }
+  if (state.ignoredStationIds.has(stationId)) {
+    logger.debug(`Station ${stationId} is ignored, not opening InfoWindow.`);
+    return;
+  }
 
-    if (!suppressInfoWindowOpen) {
-        marker.liveSocketData = null;
-        marker.cachedInfoWindowContent = null;
-        if (!marker.detourData || marker.detourData.status !== 'Pending') {
-            marker.detourData = null;
-        }
-        resetSelectedMarkerZIndex();
-        marker.zIndex = SELECTED_POI_ZINDEX;
-        state.selectedPoiMarker = marker;
-        logger.debug(`Set zIndex to ${SELECTED_POI_ZINDEX} for ${stationId}`);
+  if (!suppressInfoWindowOpen) {
+    marker.liveSocketData = null;
+    marker.cachedInfoWindowContent = null;
+    if (!marker.detourData || marker.detourData.status !== 'Pending') {
+      marker.detourData = null;
+    }
+    resetSelectedMarkerZIndex();
+    marker.zIndex = SELECTED_POI_ZINDEX;
+    state.selectedPoiMarker = marker;
+    logger.debug(`Set zIndex to ${SELECTED_POI_ZINDEX} for ${stationId}`);
+  } else {
+    if (marker.detourData) updateMarkerDetourText(marker, marker.detourData);
+  }
+  logger.debug(
+    `Fetching details for Station ID: ${stationId}`,
+    `Suppress InfoWindow: ${suppressInfoWindowOpen}`
+  );
+
+  let triggerOnDemandCalc = false;
+  let initialDetourHtml = '';
+  if (state.isRouteActive && state.originalRouteDistance !== null) {
+    if (!marker.detourData || marker.detourData.status === 'Pending') {
+      initialDetourHtml = translate(DETOUR_LOADING_KEY);
+      if (!suppressInfoWindowOpen) triggerOnDemandCalc = true;
+      updateMarkerDetourText(marker, null);
     } else {
-        if (marker.detourData) updateMarkerDetourText(marker, marker.detourData);
+      initialDetourHtml = getDetourHtmlFromData(marker.detourData);
+      updateMarkerDetourText(marker, marker.detourData);
+      if (marker.detourData.status === 'Error' && !suppressInfoWindowOpen) {
+        triggerOnDemandCalc = true;
+      }
     }
-    logger.debug(`Fetching details for Station ID: ${stationId}`, `Suppress InfoWindow: ${suppressInfoWindowOpen}`);
+  } else {
+    initialDetourHtml = '';
+    updateMarkerDetourText(marker, null);
+  }
 
-    let triggerOnDemandCalc = false;
-    let initialDetourHtml = '';
-    if (state.isRouteActive && state.originalRouteDistance !== null) {
-        if (!marker.detourData || marker.detourData.status === 'Pending') {
-            initialDetourHtml = translate(DETOUR_LOADING_KEY);
-            if (!suppressInfoWindowOpen) triggerOnDemandCalc = true;
-            updateMarkerDetourText(marker, null);
-        } else {
-            initialDetourHtml = getDetourHtmlFromData(marker.detourData);
-            updateMarkerDetourText(marker, marker.detourData);
-            if (marker.detourData.status === 'Error' && !suppressInfoWindowOpen) {
-                triggerOnDemandCalc = true;
-            }
+  if (!suppressInfoWindowOpen && state.map && marker.position) {
+    // Pan to marker (adjust padding based on screen size)
+    const isMobile = window.innerWidth <= 768;
+
+    // Calculate offset to position marker in visible area (not behind panel)
+    const projection = state.map.getProjection();
+    if (projection) {
+      const markerLatLng = marker.position;
+
+      if (isMobile) {
+        // Mobile: Position marker in upper portion of screen (above 60vh bottom sheet)
+        const scale = Math.pow(2, state.map.getZoom() || 10);
+        const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
+
+        if (worldCoordinate) {
+          const pixelOffsetY = (window.innerHeight * 0.25) / scale; // Move marker well above the panel
+
+          const newWorldCoordinate = new google.maps.Point(
+            worldCoordinate.x,
+            worldCoordinate.y + pixelOffsetY
+          );
+
+          const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
+          if (newCenter) {
+            state.map.panTo(newCenter);
+          }
         }
+      } else {
+        // Desktop: Position marker in center-right area (to the right of left panel)
+        const scale = Math.pow(2, state.map.getZoom() || 10);
+        const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
+
+        if (worldCoordinate) {
+          // Offset to move marker right (account for 418px left panel)
+          // Position marker at approximately 60% from left edge of visible area
+          const visibleWidth = window.innerWidth - 418;
+          const pixelOffsetX = -(visibleWidth * 0.1) / scale; // Slight offset from center of visible area
+
+          const newWorldCoordinate = new google.maps.Point(
+            worldCoordinate.x + pixelOffsetX,
+            worldCoordinate.y
+          );
+
+          const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
+          if (newCenter) {
+            state.map.panTo(newCenter);
+          }
+        }
+      }
     } else {
-        initialDetourHtml = '';
-        updateMarkerDetourText(marker, null);
+      // Fallback if projection is not available
+      state.map.panTo(marker.position);
     }
 
-    if (!suppressInfoWindowOpen && state.map && marker.position) {
-        // Pan to marker (adjust padding based on screen size)
-        const isMobile = window.innerWidth <= 768;
+    const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
+    openStationInfoPanel(initialContent);
+    logger.debug(
+      `Displayed initial panel for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`
+    );
+  } else if (suppressInfoWindowOpen) {
+    logger.debug(
+      `fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`
+    );
+  }
 
-        // Calculate offset to position marker in visible area (not behind panel)
-        const projection = state.map.getProjection();
-        if (projection) {
-            const markerLatLng = marker.position;
+  // Fetch sockets if not already loaded/loading or if forced by direct click
+  if (
+    marker.liveSocketData === null ||
+    (suppressInfoWindowOpen && marker.liveSocketData === false)
+  ) {
+    const socketsUrl = STATION_SOCKETS_API_URL_TEMPLATE.replace('{id}', stationId);
+    logger.debug(`Starting socket fetch for ${stationId}...`);
+    marker.liveSocketData = null;
 
-            if (isMobile) {
-                // Mobile: Position marker in upper portion of screen (above 60vh bottom sheet)
-                const scale = Math.pow(2, state.map.getZoom() || 10);
-                const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
+    (async () => {
+      try {
+        const liveSocketsStatus = await withRetry<LiveSocketData[]>(
+          () =>
+            fetchJson<LiveSocketData[]>(socketsUrl, {
+              method: 'GET',
+              headers: API_HEADERS,
+              cache: 'reload',
+            }),
+          {
+            maxRetries: MAX_API_RETRIES,
+            retryDelay: SOCKET_API_RETRY_DELAY,
+            onRetry: (attempt, error) => {
+              const errorMessage = error instanceof Error ? error.message : String(error);
+              logger.warn(
+                `Socket fetch ERROR for ${stationId} (Attempt ${attempt}/${MAX_API_RETRIES + 1}):`,
+                errorMessage
+              );
+            },
+          }
+        );
+        logger.debug(`Socket fetch SUCCESS for ${stationId}`);
+        marker.liveSocketData = liveSocketsStatus as LiveSocketDataState;
+        updateInfoWindowIfVisible(marker);
+      } catch (error) {
+        logger.error(`Final socket fetch attempt failed for ${stationId}.`);
+        marker.liveSocketData = false;
+        updateInfoWindowIfVisible(marker);
+      }
+    })();
+  } else {
+    logger.debug(`Skipping socket fetch for ${stationId} - data already exists or suppress=true.`);
+    if (!suppressInfoWindowOpen) updateInfoWindowIfVisible(marker);
+  }
 
-                if (worldCoordinate) {
-                    const pixelOffsetY = (window.innerHeight * 0.25) / scale; // Move marker well above the panel
-
-                    const newWorldCoordinate = new google.maps.Point(
-                        worldCoordinate.x,
-                        worldCoordinate.y + pixelOffsetY
-                    );
-
-                    const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
-                    if (newCenter) {
-                        state.map.panTo(newCenter);
-                    }
-                }
-            } else {
-                // Desktop: Position marker in center-right area (to the right of left panel)
-                const scale = Math.pow(2, state.map.getZoom() || 10);
-                const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
-
-                if (worldCoordinate) {
-                    // Offset to move marker right (account for 418px left panel)
-                    // Position marker at approximately 60% from left edge of visible area
-                    const visibleWidth = window.innerWidth - 418;
-                    const pixelOffsetX = -(visibleWidth * 0.1) / scale; // Slight offset from center of visible area
-
-                    const newWorldCoordinate = new google.maps.Point(
-                        worldCoordinate.x + pixelOffsetX,
-                        worldCoordinate.y
-                    );
-
-                    const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
-                    if (newCenter) {
-                        state.map.panTo(newCenter);
-                    }
-                }
-            }
-        } else {
-            // Fallback if projection is not available
-            state.map.panTo(marker.position);
-        }
-
-        const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
-        openStationInfoPanel(initialContent);
-        logger.debug(`Displayed initial panel for ${stationId} with socket: loading, detour: "${initialDetourHtml}"`);
-    } else if (suppressInfoWindowOpen) {
-        logger.debug(`fetchPoiDetails called for POI ${stationId} with suppressInfoWindowOpen=true (pre-fetch)`);
+  if (
+    triggerOnDemandCalc &&
+    !suppressInfoWindowOpen &&
+    state.isRouteActive &&
+    state.startLocation &&
+    state.endLocation &&
+    state.originalRouteDistance !== null &&
+    state.originalRouteDuration !== null &&
+    marker.position
+  ) {
+    logger.debug(`Starting on-demand detour calculation for ${stationId}...`);
+    if (calculateAndDisplayDetourOnClickCallback) {
+      const position = toLatLng(marker.position);
+      calculateAndDisplayDetourOnClickCallback(
+        marker,
+        position,
+        state.startLocation,
+        state.endLocation,
+        state.originalRouteDistance,
+        state.originalRouteDuration
+      );
     }
-
-    // Fetch sockets if not already loaded/loading or if forced by direct click
-    if (marker.liveSocketData === null || (suppressInfoWindowOpen && marker.liveSocketData === false)) {
-        const socketsUrl = STATION_SOCKETS_API_URL_TEMPLATE.replace('{id}', stationId);
-        logger.debug(`Starting socket fetch for ${stationId}...`);
-        marker.liveSocketData = null;
-
-        (async () => {
-            try {
-                const liveSocketsStatus = await withRetry<LiveSocketData[]>(
-                    () => fetchJson<LiveSocketData[]>(socketsUrl, {
-                        method: 'GET',
-                        headers: API_HEADERS,
-                        cache: 'reload'
-                    }),
-                    {
-                        maxRetries: MAX_API_RETRIES,
-                        retryDelay: SOCKET_API_RETRY_DELAY,
-                        onRetry: (attempt, error) => {
-                            const errorMessage = error instanceof Error ? error.message : String(error);
-                            logger.warn(`Socket fetch ERROR for ${stationId} (Attempt ${attempt}/${MAX_API_RETRIES + 1}):`, errorMessage);
-                        }
-                    }
-                );
-                logger.debug(`Socket fetch SUCCESS for ${stationId}`);
-                marker.liveSocketData = liveSocketsStatus as LiveSocketDataState;
-                updateInfoWindowIfVisible(marker);
-            } catch (error) {
-                logger.error(`Final socket fetch attempt failed for ${stationId}.`);
-                marker.liveSocketData = false;
-                updateInfoWindowIfVisible(marker);
-            }
-        })();
-    } else {
-        logger.debug(`Skipping socket fetch for ${stationId} - data already exists or suppress=true.`);
-        if (!suppressInfoWindowOpen) updateInfoWindowIfVisible(marker);
-    }
-
-    if (triggerOnDemandCalc && !suppressInfoWindowOpen && state.isRouteActive && state.startLocation && state.endLocation && state.originalRouteDistance !== null && state.originalRouteDuration !== null && marker.position) {
-        logger.debug(`Starting on-demand detour calculation for ${stationId}...`);
-        if (calculateAndDisplayDetourOnClickCallback) {
-            const position = toLatLng(marker.position);
-            calculateAndDisplayDetourOnClickCallback(marker, position, state.startLocation, state.endLocation, state.originalRouteDistance, state.originalRouteDuration);
-        }
-    }
+  }
 }
-

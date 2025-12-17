@@ -1,0 +1,17 @@
+{
+  "threshold": 1,
+  "reporters": ["console", "html"],
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    ".netlify/**",
+    "**/*.json",
+    "**/*.md"
+  ],
+  "format": ["typescript"],
+  "minLines": 5,
+  "minTokens": 50,
+  "output": "./reports/jscpd",
+  "absolute": true,
+  "gitignore": true
+}

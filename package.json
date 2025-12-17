@@ -15,6 +15,25 @@
     "// Reminder: Run 'npm run build' manually once before 'npm run dev' to generate ./dist": "",
     "// TypeScript compilation": "",
     "tsc": "tsc",
+    "// Linting and formatting": "",
+    "lint": "eslint js/**/*.ts",
+    "lint:fix": "eslint js/**/*.ts --fix",
+    "format": "prettier --write \"js/**/*.ts\"",
+    "format:check": "prettier --check \"js/**/*.ts\"",
+    "// Check code quality (lint + format check + type check)": "",
+    "check": "npm run lint && npm run format:check && npm run tsc",
+    "// Unused code detection": "",
+    "knip": "knip",
+    "knip:production": "knip --production",
+    "ts-prune": "ts-prune",
+    "find:unused": "npm run knip",
+    "// Duplicate code detection": "",
+    "jscpd": "jscpd js/",
+    "find:duplicates": "npm run jscpd",
+    "// Security and complexity analysis": "",
+    "audit": "npm audit --omit=dev",
+    "audit:fix": "npm audit fix",
+    "security": "npm run audit && npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -28,8 +47,19 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@types/google.maps": "^3.55.0",
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
     "dotenv": "^16.4.5",
-    "typescript": "^5.3.3",
-    "@types/google.maps": "^3.55.0"
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-security": "^3.0.1",
+    "jscpd": "^4.0.5",
+    "knip": "^5.74.0",
+    "prettier": "^3.7.4",
+    "ts-prune": "^0.10.3",
+    "typescript": "^5.3.3"
   }
 }
