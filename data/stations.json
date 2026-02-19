@@ -10797,31 +10797,6 @@
     ]
   },
   {
-    "id": 14552203,
-    "lat": 39.596777,
-    "lng": 26.966804,
-    "title": "Metro Market Edremit",
-    "address": "Edremit Balıkesir Yolu 3  Edremit/Balıkesir",
-    "phone": "0850 339 99 37",
-    "reportUrl": "https://zes.net/anasayfa",
-    "reservationUrl": "https://zes.net/anasayfa",
-    "operatorId": "919287",
-    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "zes",
-    "cityId": "10",
-    "districtId": "133",
-    "sockets": [
-      {
-        "id": 353519,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/10385",
-        "power": 60
-      }
-    ]
-  },
-  {
     "id": 14552205,
     "lat": 40.437091,
     "lng": 27.765088,
@@ -22708,7 +22683,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "50",
@@ -22733,7 +22708,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "54",
@@ -22758,7 +22733,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "52",
@@ -22783,7 +22758,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "20",
@@ -22808,7 +22783,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -22833,7 +22808,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "8",
@@ -22858,7 +22833,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -22883,7 +22858,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -22908,7 +22883,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "55",
@@ -22933,7 +22908,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -22958,7 +22933,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "1",
@@ -22983,7 +22958,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -23008,7 +22983,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -23033,7 +23008,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -23058,7 +23033,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "23",
@@ -23104,7 +23079,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -23129,7 +23104,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "11",
@@ -23154,7 +23129,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "39",
@@ -23179,7 +23154,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -23204,7 +23179,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -23229,7 +23204,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -23254,7 +23229,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -23286,7 +23261,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -23318,7 +23293,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -23343,7 +23318,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "6",
@@ -23368,7 +23343,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "3",
@@ -23400,7 +23375,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "37",
@@ -23425,7 +23400,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "59",
@@ -23457,7 +23432,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -23482,7 +23457,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -23507,7 +23482,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "67",
@@ -23532,7 +23507,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -23557,7 +23532,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -23582,7 +23557,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -23607,7 +23582,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "18",
@@ -23639,7 +23614,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "60",
@@ -23664,7 +23639,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -23689,7 +23664,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -23714,7 +23689,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -23739,7 +23714,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -23764,7 +23739,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "17",
@@ -23789,7 +23764,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "59",
@@ -23814,7 +23789,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -23839,7 +23814,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -23892,7 +23867,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "9",
@@ -23917,7 +23892,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "59",
@@ -23942,7 +23917,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "6",
@@ -23967,7 +23942,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "52",
@@ -23992,7 +23967,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "55",
@@ -24017,7 +23992,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -24042,7 +24017,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -24067,7 +24042,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -24092,7 +24067,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "61",
@@ -24117,7 +24092,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -24142,7 +24117,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -24167,7 +24142,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -24192,7 +24167,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -24217,7 +24192,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -24242,7 +24217,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -24274,7 +24249,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -24299,7 +24274,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -24324,7 +24299,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -24356,7 +24331,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -24381,7 +24356,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -24406,7 +24381,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -24431,7 +24406,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -24456,7 +24431,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -24481,7 +24456,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -24506,7 +24481,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "26",
@@ -24538,7 +24513,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -30676,38 +30651,6 @@
     ]
   },
   {
-    "id": 14579195,
-    "lat": 40.760358,
-    "lng": 29.972974,
-    "title": "Otojet Görpet",
-    "address": "Ovacık D-100 Karoyolu 14  Başiskele/Kocaeli",
-    "phone": "05423949999",
-    "reportUrl": "https://totalenergiesistasyonlari.com.tr/musteri-hizmetleri/",
-    "reservationUrl": "http://www.oto-jet.com.tr/",
-    "operatorId": "5533",
-    "operatorTitle": "Otojet Enerji Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Otojet",
-    "cityId": "41",
-    "districtId": "544",
-    "sockets": [
-      {
-        "id": 411012,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/6085",
-        "power": 80
-      },
-      {
-        "id": 411013,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/6086",
-        "power": 80
-      }
-    ]
-  },
-  {
     "id": 14579196,
     "lat": 41.120334,
     "lng": 29.048492,
@@ -34876,66 +34819,6 @@
         "subType": "acType2",
         "socketNumber": "SKT/13529",
         "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14584860,
-    "lat": 39.9099,
-    "lng": 32.77596,
-    "title": "Astorşarj Kentpark Avm Elektrikli Araç Şarj İstasyonu",
-    "address": "Mustafa Kemal Eskişehir Yolu 7.km 164  Çankaya/Ankara",
-    "phone": "05067272177",
-    "reportUrl": "https://astorsarj.com.tr/",
-    "reservationUrl": "https://astorsarj.com.tr/",
-    "operatorId": "919121",
-    "operatorTitle": "Astor Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "ASTOR",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 422148,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4212",
-        "power": 160
-      },
-      {
-        "id": 422149,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4213",
-        "power": 160
-      },
-      {
-        "id": 422150,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4214",
-        "power": 160
-      },
-      {
-        "id": 422151,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4544",
-        "power": 160
-      },
-      {
-        "id": 422152,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4545",
-        "power": 160
-      },
-      {
-        "id": 422153,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/4546",
-        "power": 160
       }
     ]
   },
@@ -39346,38 +39229,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/4719",
         "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14585458,
-    "lat": 41.040901,
-    "lng": 29.005075,
-    "title": "Shangri-la Bosphorus Hotel, İstanbul",
-    "address": "Sinanpaşa Hayrettin İskelesi 1  Beşiktaş/İstanbul",
-    "phone": "444 83 03",
-    "reportUrl": "https://esarj.com/",
-    "reservationUrl": null,
-    "operatorId": "930848",
-    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "eşarj",
-    "cityId": "34",
-    "districtId": "428",
-    "sockets": [
-      {
-        "id": 423448,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/41",
-        "power": 22
-      },
-      {
-        "id": 423449,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/42",
-        "power": 22
       }
     ]
   },
@@ -53886,7 +53737,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "1",
@@ -53911,7 +53762,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "38",
@@ -53936,7 +53787,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -53961,7 +53812,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "6",
@@ -53986,7 +53837,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "42",
@@ -54011,7 +53862,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -54036,7 +53887,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -54061,7 +53912,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "26",
@@ -54086,7 +53937,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "20",
@@ -54111,7 +53962,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "20",
@@ -54136,7 +53987,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -54161,7 +54012,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -54186,7 +54037,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "62",
@@ -54211,7 +54062,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -54807,7 +54658,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -54832,7 +54683,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "19",
@@ -54857,7 +54708,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -57492,7 +57343,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "81",
@@ -61374,7 +61225,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "53",
@@ -65093,7 +64944,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "37",
@@ -65118,7 +64969,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -65143,7 +64994,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -65175,7 +65026,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "22",
@@ -65200,7 +65051,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -65374,7 +65225,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "77",
@@ -65399,7 +65250,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -65783,7 +65634,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "59",
@@ -65918,7 +65769,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "28",
@@ -65943,7 +65794,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -66057,7 +65908,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -66082,7 +65933,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "47",
@@ -66203,7 +66054,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -89214,38 +89065,6 @@
     ]
   },
   {
-    "id": 14607113,
-    "lat": 36.265489,
-    "lng": 36.159971,
-    "title": "Toroslar Edaş, Hatay Lhm",
-    "address": "Kuzeytepe Hürriyet  Antakya/Hatay",
-    "phone": "444 83 03",
-    "reportUrl": "https://esarj.com/",
-    "reservationUrl": null,
-    "operatorId": "930848",
-    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "eşarj",
-    "cityId": "31",
-    "districtId": "979",
-    "sockets": [
-      {
-        "id": 433159,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/19834",
-        "power": 120
-      },
-      {
-        "id": 433160,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/19835",
-        "power": 120
-      }
-    ]
-  },
-  {
     "id": 14607114,
     "lat": 41.026611,
     "lng": 29.232528,
@@ -95711,7 +95530,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "6",
@@ -95736,7 +95555,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -95761,7 +95580,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -95786,7 +95605,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -95811,7 +95630,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -95836,7 +95655,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "32",
@@ -95861,7 +95680,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -95886,7 +95705,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -95911,7 +95730,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -95936,7 +95755,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -95961,7 +95780,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -95986,7 +95805,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -96011,7 +95830,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "39",
@@ -96036,7 +95855,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -96061,7 +95880,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "42",
@@ -96086,7 +95905,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -96111,7 +95930,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -96136,7 +95955,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -96521,7 +96340,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -96546,7 +96365,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -96571,7 +96390,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "77",
@@ -96596,7 +96415,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "52",
@@ -101666,7 +101485,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "51",
@@ -102382,7 +102201,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -102588,7 +102407,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "74",
@@ -102645,7 +102464,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -102670,7 +102489,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -103012,7 +102831,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "41",
@@ -103037,7 +102856,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "27",
@@ -106660,7 +106479,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -113115,7 +112934,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -113140,7 +112959,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -113165,7 +112984,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "23",
@@ -113190,7 +113009,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "42",
@@ -115344,7 +115163,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -115401,7 +115220,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -115529,7 +115348,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -120579,7 +120398,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -123950,7 +123769,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "31",
@@ -123982,7 +123801,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "52",
@@ -124089,7 +123908,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "14",
@@ -124121,7 +123940,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "81",
@@ -124405,7 +124224,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -126104,7 +125923,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -131053,7 +130872,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "81",
@@ -136571,7 +136390,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -137043,7 +136862,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -137082,7 +136901,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -137292,7 +137111,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -137331,7 +137150,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -145234,52 +145053,6 @@
     ]
   },
   {
-    "id": 14624979,
-    "lat": 41.067406,
-    "lng": 28.674772,
-    "title": "Referans Bahçeşehir",
-    "address": "Bahçeşehir 2.kısım Yenibahar  Başakşehir/İstanbul",
-    "phone": "08504500537",
-    "reportUrl": "http://kessarj.com/geribildirim",
-    "reservationUrl": null,
-    "operatorId": "1106130",
-    "operatorTitle": "Klr Enerji Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "KES",
-    "cityId": "34",
-    "districtId": "424",
-    "sockets": [
-      {
-        "id": 447037,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28347",
-        "power": 7.5
-      },
-      {
-        "id": 447038,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28768",
-        "power": 7.5
-      },
-      {
-        "id": 447039,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28769",
-        "power": 7.5
-      },
-      {
-        "id": 447040,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/28770",
-        "power": 7.5
-      }
-    ]
-  },
-  {
     "id": 14624983,
     "lat": 40.72165,
     "lng": 30.40174,
@@ -145465,7 +145238,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -145529,7 +145302,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -150692,7 +150465,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "8",
@@ -155071,7 +154844,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "14",
@@ -156031,7 +155804,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "9",
@@ -160487,7 +160260,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "9",
@@ -161065,7 +160838,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -164141,52 +163914,6 @@
         "subType": "acType2",
         "socketNumber": "SKT/31619",
         "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14627024,
-    "lat": 39.437496,
-    "lng": 31.559413,
-    "title": "Tşof Sivrihisar Dc",
-    "address": "Kurşunlu  Sivrihisar/Eskişehir",
-    "phone": "0850 339 99 37",
-    "reportUrl": "https://zes.net/bize-ulasin",
-    "reservationUrl": null,
-    "operatorId": "919287",
-    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "zes",
-    "cityId": "26",
-    "districtId": "339",
-    "sockets": [
-      {
-        "id": 451151,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31637",
-        "power": 180
-      },
-      {
-        "id": 451152,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31638",
-        "power": 180
-      },
-      {
-        "id": 451153,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31639",
-        "power": 180
-      },
-      {
-        "id": 451154,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/31640",
-        "power": 180
       }
     ]
   },
@@ -177157,7 +176884,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -178143,7 +177870,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "67",
@@ -179636,7 +179363,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "52",
@@ -179661,7 +179388,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "8",
@@ -180492,7 +180219,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -190137,7 +189864,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -192525,7 +192252,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "61",
@@ -192550,7 +192277,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -192575,7 +192302,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "16",
@@ -195295,7 +195022,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "54",
@@ -195320,7 +195047,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "5",
@@ -198182,7 +197909,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "18",
@@ -205980,38 +205707,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/37338",
         "power": 80
-      }
-    ]
-  },
-  {
-    "id": 14662042,
-    "lat": 39.916481,
-    "lng": 28.159853,
-    "title": "Örgün Petrol Fatih",
-    "address": "Fatih Bursa Yalova 9  Orhangazi/Bursa",
-    "phone": "08504746011",
-    "reportUrl": "https://ovolt.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1108533",
-    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "ovolt",
-    "cityId": "16",
-    "districtId": "200",
-    "sockets": [
-      {
-        "id": 470026,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/37339",
-        "power": 60
-      },
-      {
-        "id": 470027,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/37340",
-        "power": 60
       }
     ]
   },
@@ -263511,31 +263206,6 @@
     ]
   },
   {
-    "id": 14707842,
-    "lat": 40.642,
-    "lng": 29.238,
-    "title": "Güven Oto Elektrik",
-    "address": "Gündoğdu 3024 4-f  Gönen/Balıkesir",
-    "phone": "08507778658",
-    "reportUrl": "https://www.voltrun.com/",
-    "reservationUrl": null,
-    "operatorId": "1093161",
-    "operatorTitle": "Voltrun Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "VOLTRUN",
-    "cityId": "10",
-    "districtId": "136",
-    "sockets": [
-      {
-        "id": 520534,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/42037",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14707844,
     "lat": 40.895478,
     "lng": 29.229614,
@@ -266231,31 +265901,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/42350",
         "power": 60
-      }
-    ]
-  },
-  {
-    "id": 14708101,
-    "lat": 41.183,
-    "lng": 29.0774,
-    "title": "Kahraman Balık",
-    "address": "Rumeli Kavağı Merkez 15  Sarıyer/İstanbul",
-    "phone": "5333800436",
-    "reportUrl": "https://ctgelektrik.com/#iletisim",
-    "reservationUrl": null,
-    "operatorId": "1052133",
-    "operatorTitle": "Ctg Elektrik Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "CTG ELEKTRİK ANONİM ŞİRKETİ",
-    "cityId": "34",
-    "districtId": "443",
-    "sockets": [
-      {
-        "id": 521012,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/42351",
-        "power": 22
       }
     ]
   },
@@ -284564,38 +284209,6 @@
     ]
   },
   {
-    "id": 14719684,
-    "lat": 38.436333,
-    "lng": 27.210333,
-    "title": "Has Otomotiv, Bornova, İzmir",
-    "address": "Karacaoğlan 6244. 113  Bornova/İzmir",
-    "phone": "4448303",
-    "reportUrl": "https://esarj.com/",
-    "reservationUrl": null,
-    "operatorId": "930848",
-    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "eşarj",
-    "cityId": "35",
-    "districtId": "461",
-    "sockets": [
-      {
-        "id": 533957,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44224",
-        "power": 50
-      },
-      {
-        "id": 533958,
-        "type": "dc",
-        "subType": "dcChademo",
-        "socketNumber": "SKT/44225",
-        "power": 50
-      }
-    ]
-  },
-  {
     "id": 14719685,
     "lat": 37.379511,
     "lng": 29.429331,
@@ -289661,7 +289274,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -289693,7 +289306,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "55",
@@ -289725,7 +289338,7 @@
     "reportUrl": "https://sharz.net/iletisim",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "18",
@@ -289903,38 +289516,6 @@
         "type": "dc",
         "subType": "dcCcs",
         "socketNumber": "SKT/44811",
-        "power": 120
-      }
-    ]
-  },
-  {
-    "id": 14720139,
-    "lat": 41.027039,
-    "lng": 28.984405,
-    "title": "Galataport Avm - Dc",
-    "address": "Kılıçali Paşa Mah. Meclis-i Mebusan Cad. 8  Beyoğlu/İstanbul",
-    "phone": "444 98 77",
-    "reportUrl": "https://dcharge.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1092971",
-    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "D-Charge",
-    "cityId": "34",
-    "districtId": "427",
-    "sockets": [
-      {
-        "id": 534737,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44812",
-        "power": 120
-      },
-      {
-        "id": 534738,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/44813",
         "power": 120
       }
     ]
@@ -303432,7 +303013,7 @@
     "reportUrl": "https://www.sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "14",
@@ -303464,7 +303045,7 @@
     "reportUrl": "https://www.sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "3",
@@ -303496,7 +303077,7 @@
     "reportUrl": "https://www.sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -303528,7 +303109,7 @@
     "reportUrl": "https://www.sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "35",
@@ -304754,31 +304335,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/46503",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14751540,
-    "lat": 41.026946,
-    "lng": 28.984515,
-    "title": "Galataport Avm - Ac",
-    "address": "Kılıçali Paşa Meclis-i Mebusan 8 İç Kapı No: 102  Beyoğlu/İstanbul",
-    "phone": "444 98 77",
-    "reportUrl": "https://dcharge.com.tr/",
-    "reservationUrl": null,
-    "operatorId": "1092971",
-    "operatorTitle": "Doğuş Şarj Sistemleri Pazarlama Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "D-Charge",
-    "cityId": "34",
-    "districtId": "427",
-    "sockets": [
-      {
-        "id": 567099,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/46498",
         "power": 22
       }
     ]
@@ -315121,7 +314677,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "77",
@@ -322750,38 +322306,6 @@
     ]
   },
   {
-    "id": 14762910,
-    "lat": 39.90921,
-    "lng": 32.764338,
-    "title": "Maidan Avm Ankara",
-    "address": "Mustafa Kemal 2118 4  Çankaya/Ankara",
-    "phone": "0850 339 99 37",
-    "reportUrl": "https://zes.net/bize-ulasin",
-    "reservationUrl": "https://zes.net/bize-ulasin",
-    "operatorId": "919287",
-    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "zes",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 579662,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/47939",
-        "power": 180
-      },
-      {
-        "id": 579663,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/47940",
-        "power": 180
-      }
-    ]
-  },
-  {
     "id": 14762911,
     "lat": 38.448053,
     "lng": 27.180165,
@@ -325932,31 +325456,23 @@
     "id": 14763126,
     "lat": 36.225405,
     "lng": 32.38495,
-    "title": "Erçağ Dinlenme Tesisi, Mersin",
-    "address": "Tekmen  Bozyazı/Mersin",
-    "phone": "4448303",
-    "reportUrl": "https://esarj.com/",
+    "title": null,
+    "address": null,
+    "phone": null,
+    "reportUrl": null,
     "reservationUrl": null,
-    "operatorId": "930848",
-    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "eşarj",
-    "cityId": "33",
-    "districtId": "406",
+    "operatorId": null,
+    "operatorTitle": null,
+    "serviceType": null,
+    "brand": null,
+    "cityId": null,
+    "districtId": null,
     "sockets": [
       {
-        "id": 580136,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48071",
-        "power": 120
+        "id": 580136
       },
       {
-        "id": 580137,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48072",
-        "power": 120
+        "id": 580137
       }
     ]
   },
@@ -326811,7 +326327,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "81",
@@ -327127,7 +326643,7 @@
     "reportUrl": "https://ovolt.com.tr/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "20",
@@ -327159,7 +326675,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -329375,80 +328891,6 @@
     ]
   },
   {
-    "id": 14763400,
-    "lat": 39.912132,
-    "lng": 32.804029,
-    "title": "Koç Kuleleri",
-    "address": "Söğütözü Söğütözü 2/0  Çankaya/Ankara",
-    "phone": "0850 755 98 98",
-    "reportUrl": "https://www.watmobilite.com/iletisim",
-    "reservationUrl": null,
-    "operatorId": "929436",
-    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "wat mobilite",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 580745,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/21531",
-        "power": 120
-      },
-      {
-        "id": 580746,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/21532",
-        "power": 120
-      },
-      {
-        "id": 580747,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/21533",
-        "power": 22
-      },
-      {
-        "id": 580748,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/21534",
-        "power": 22
-      },
-      {
-        "id": 580749,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40982",
-        "power": 22
-      },
-      {
-        "id": 580750,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40983",
-        "power": 22
-      },
-      {
-        "id": 580751,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40984",
-        "power": 22
-      },
-      {
-        "id": 580752,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/40985",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14763403,
     "lat": 37.83007,
     "lng": 27.844373,
@@ -330348,7 +329790,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -330889,7 +330331,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "57",
@@ -331376,102 +330818,6 @@
     ]
   },
   {
-    "id": 14763529,
-    "lat": 40.189567,
-    "lng": 29.127725,
-    "title": "Bursa Teknik Üniversitesi Mimar Sinan Yerleşkesi Batı Kapısı",
-    "address": "Mimarsinan Eflak 177  Yıldırım/Bursa",
-    "phone": "+908502427275",
-    "reportUrl": "https://www.electrise.com.tr/iletisim/",
-    "reservationUrl": null,
-    "operatorId": "1079978",
-    "operatorTitle": "Charge Teknoloji Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Electrise",
-    "cityId": "16",
-    "districtId": "203",
-    "sockets": [
-      {
-        "id": 581038,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48587",
-        "power": 22
-      },
-      {
-        "id": 581039,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48588",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14763530,
-    "lat": 40.189982,
-    "lng": 29.130492,
-    "title": "Bursa Teknik Üniversitesi Mimar Sinan Yerleşkesi C Blok Otopark",
-    "address": "Mimarsinan Eflak 177  Yıldırım/Bursa",
-    "phone": "+908502427275",
-    "reportUrl": "https://www.electrise.com.tr/iletisim/",
-    "reservationUrl": null,
-    "operatorId": "1079978",
-    "operatorTitle": "Charge Teknoloji Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Electrise",
-    "cityId": "16",
-    "districtId": "203",
-    "sockets": [
-      {
-        "id": 581040,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48589",
-        "power": 22
-      },
-      {
-        "id": 581041,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48590",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14763531,
-    "lat": 40.186597,
-    "lng": 29.102419,
-    "title": "Bursa Teknik Üniversitesi Yıldırım Bayezid Yerleşkesi Spor Salonu Otoparkı",
-    "address": "Mimarsinan Eğitim 85  Yıldırım/Bursa",
-    "phone": "+908502427275",
-    "reportUrl": "https://www.electrise.com.tr/iletisim/",
-    "reservationUrl": null,
-    "operatorId": "1079978",
-    "operatorTitle": "Charge Teknoloji Sanayi Ve Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "Electrise",
-    "cityId": "16",
-    "districtId": "203",
-    "sockets": [
-      {
-        "id": 581042,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48591",
-        "power": 22
-      },
-      {
-        "id": 581043,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/48592",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14763534,
     "lat": 41.183163,
     "lng": 28.734783,
@@ -331608,7 +330954,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -331620,45 +330966,6 @@
         "subType": "acType2",
         "socketNumber": "SKT/387",
         "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14763545,
-    "lat": 36.848084,
-    "lng": 30.761775,
-    "title": "Shakespeare Cafe Fener",
-    "address": "Fener Fener 1  Muratpaşa/Antalya",
-    "phone": "+90 850 811 72 75",
-    "reportUrl": "https://sharz.net/iletisim",
-    "reservationUrl": null,
-    "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
-    "serviceType": "public",
-    "brand": "SHARZ.NET",
-    "cityId": "7",
-    "districtId": "99",
-    "sockets": [
-      {
-        "id": 581064,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/629",
-        "power": 22
-      },
-      {
-        "id": 581065,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48595",
-        "power": 60
-      },
-      {
-        "id": 581066,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/48596",
-        "power": 60
       }
     ]
   },
@@ -332023,7 +331330,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "10",
@@ -339035,7 +338342,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -344044,7 +343351,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "59",
@@ -344069,7 +343376,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "7",
@@ -344094,7 +343401,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "81",
@@ -350586,31 +349893,6 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/13441",
-        "power": 22
-      }
-    ]
-  },
-  {
-    "id": 14764902,
-    "lat": 38.888602,
-    "lng": 29.982755,
-    "title": "Mersu Alabalık",
-    "address": "Saraycık  Bozüyük/Bilecik",
-    "phone": "+908507778658",
-    "reportUrl": "https://www.voltrun.com/",
-    "reservationUrl": null,
-    "operatorId": "1093161",
-    "operatorTitle": "Voltrun Enerji Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "VOLTRUN",
-    "cityId": "11",
-    "districtId": "146",
-    "sockets": [
-      {
-        "id": 583985,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/27068",
         "power": 22
       }
     ]
@@ -371477,7 +370759,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "46",
@@ -383234,38 +382516,6 @@
     ]
   },
   {
-    "id": 14787458,
-    "lat": 40.107605,
-    "lng": 29.142416,
-    "title": "Ceylan Splend’or Uludağ",
-    "address": "Kirazlı Gelişim 18  Osmangazi/Bursa",
-    "phone": "08502428862",
-    "reportUrl": "https://tuncmatikcharge.com/iletisim/",
-    "reservationUrl": "https://tuncmatikcharge.com/iletisim/",
-    "operatorId": "1006519",
-    "operatorTitle": "Tunçmatik Şarj Teknolojileri Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "tunçmatik",
-    "cityId": "16",
-    "districtId": "201",
-    "sockets": [
-      {
-        "id": 609097,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/53382",
-        "power": 22
-      },
-      {
-        "id": 609098,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/53383",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14787460,
     "lat": 39.332305,
     "lng": 26.700161,
@@ -390616,7 +389866,7 @@
     "reportUrl": "https://sharz.net/tr",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "20",
@@ -392663,7 +391913,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "48",
@@ -394603,45 +393853,6 @@
     ]
   },
   {
-    "id": 14788419,
-    "lat": 39.893654,
-    "lng": 32.678061,
-    "title": "Mesa Plaza Avm",
-    "address": "Koru 4  Çankaya/Ankara",
-    "phone": "08503399937",
-    "reportUrl": "https://zes.net/bize-ulasin",
-    "reservationUrl": "https://zes.net/bize-ulasin",
-    "operatorId": "919287",
-    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "zes",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 611084,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/54630",
-        "power": 180
-      },
-      {
-        "id": 611085,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/54631",
-        "power": 60
-      },
-      {
-        "id": 611086,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/54632",
-        "power": 60
-      }
-    ]
-  },
-  {
     "id": 14788420,
     "lat": 41.017727,
     "lng": 28.696799,
@@ -395378,38 +394589,6 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/54658",
         "power": 400
-      }
-    ]
-  },
-  {
-    "id": 14788447,
-    "lat": 39.909262,
-    "lng": 32.764665,
-    "title": "Maidan Avm Açık Otopark",
-    "address": "Mustafa Kemal 2118 4  Çankaya/Ankara",
-    "phone": "08503399937",
-    "reportUrl": "https://zes.net/bize-ulasin",
-    "reservationUrl": "https://zes.net/bize-ulasin",
-    "operatorId": "919287",
-    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "zes",
-    "cityId": "6",
-    "districtId": "80",
-    "sockets": [
-      {
-        "id": 611151,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/54659",
-        "power": 180
-      },
-      {
-        "id": 611152,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/54660",
-        "power": 180
       }
     ]
   },
@@ -400661,6 +399840,52 @@
     ]
   },
   {
+    "id": 14788818,
+    "lat": 41.067406,
+    "lng": 28.674772,
+    "title": "Referans Bahçeşehir",
+    "address": "Bahçeşehir 2.kısım Yenibahar  Başakşehir/İstanbul",
+    "phone": "08504500537",
+    "reportUrl": "https://kessarj.com/geribildirim",
+    "reservationUrl": null,
+    "operatorId": "1106130",
+    "operatorTitle": "Klr Enerji Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "KES",
+    "cityId": "34",
+    "districtId": "424",
+    "sockets": [
+      {
+        "id": 611982,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/28347",
+        "power": 22
+      },
+      {
+        "id": 611983,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/28768",
+        "power": 22
+      },
+      {
+        "id": 611984,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/28769",
+        "power": 22
+      },
+      {
+        "id": 611985,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/28770",
+        "power": 22
+      }
+    ]
+  },
+  {
     "id": 14788819,
     "lat": 41.038574,
     "lng": 28.772157,
@@ -401979,7 +401204,7 @@
     "reportUrl": "https://sharz.net/",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -408315,66 +407540,6 @@
     ]
   },
   {
-    "id": 14789536,
-    "lat": 41.052855,
-    "lng": 28.891718,
-    "title": "Forum İstanbul",
-    "address": "Kocatepe Paşa 3  Bayrampaşa/İstanbul",
-    "phone": "0850 808 86 72",
-    "reportUrl": "https://torasarj.com/",
-    "reservationUrl": null,
-    "operatorId": "952415",
-    "operatorTitle": "Tora Teknik Hizmetler İşletme Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "TORA",
-    "cityId": "34",
-    "districtId": "422",
-    "sockets": [
-      {
-        "id": 613270,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/56228",
-        "power": 60
-      },
-      {
-        "id": 613271,
-        "type": "dc",
-        "subType": "dcChademo",
-        "socketNumber": "SKT/56229",
-        "power": 60
-      },
-      {
-        "id": 613272,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/56230",
-        "power": 22
-      },
-      {
-        "id": 613273,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/56231",
-        "power": 60
-      },
-      {
-        "id": 613274,
-        "type": "dc",
-        "subType": "dcChademo",
-        "socketNumber": "SKT/56232",
-        "power": 60
-      },
-      {
-        "id": 613275,
-        "type": "ac",
-        "subType": "acType2",
-        "socketNumber": "SKT/56233",
-        "power": 22
-      }
-    ]
-  },
-  {
     "id": 14789558,
     "lat": 41.161691,
     "lng": 28.883809,
@@ -413905,7 +413070,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "34",
@@ -420992,48 +420157,6 @@
     ]
   },
   {
-    "id": 14800694,
-    "lat": 40.997476,
-    "lng": 29.101079,
-    "title": null,
-    "address": null,
-    "phone": null,
-    "reportUrl": null,
-    "reservationUrl": null,
-    "operatorId": null,
-    "operatorTitle": null,
-    "serviceType": null,
-    "brand": null,
-    "cityId": null,
-    "districtId": null,
-    "sockets": [
-      {
-        "id": 625617
-      },
-      {
-        "id": 625618
-      },
-      {
-        "id": 625619
-      },
-      {
-        "id": 625620
-      },
-      {
-        "id": 625621
-      },
-      {
-        "id": 625622
-      },
-      {
-        "id": 625623
-      },
-      {
-        "id": 625624
-      }
-    ]
-  },
-  {
     "id": 14800699,
     "lat": 37.93431,
     "lng": 40.20253,
@@ -427971,31 +427094,6 @@
     ]
   },
   {
-    "id": 14801180,
-    "lat": 40.682519,
-    "lng": 36.563921,
-    "title": "Özgür Petrol Erbaa Dc 2",
-    "address": "Kelkit 166-2  Erbaa/Tokat",
-    "phone": "4446099",
-    "reportUrl": "https://www.isarj.com/",
-    "reservationUrl": null,
-    "operatorId": "1037665",
-    "operatorTitle": "İspirli Şarj Hizmetleri Ticaret Anonim Şirketi",
-    "serviceType": "public",
-    "brand": "i-şarj",
-    "cityId": "60",
-    "districtId": "791",
-    "sockets": [
-      {
-        "id": 626703,
-        "type": "dc",
-        "subType": "dcCcs",
-        "socketNumber": "SKT/58129",
-        "power": 320
-      }
-    ]
-  },
-  {
     "id": 14801181,
     "lat": 40.907932,
     "lng": 33.632016,
@@ -428747,7 +427845,7 @@
     "reportUrl": "https://www.sharz.net",
     "reservationUrl": null,
     "operatorId": "929899",
-    "operatorTitle": "Evs Elektrikli Şarj Sistemleri San.ve Tic.a.ş.",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
     "serviceType": "public",
     "brand": "SHARZ.NET",
     "cityId": "71",
@@ -429075,6 +428173,38 @@
     ]
   },
   {
+    "id": 14801233,
+    "lat": 37.7834,
+    "lng": 30.5461,
+    "title": "Iyaş Açık Otopark",
+    "address": "Fatih 4502/1 1  Merkez/Isparta",
+    "phone": "4443299",
+    "reportUrl": "https://www.bladecoenergy.com/ev/#iletisim",
+    "reservationUrl": "https://play.google.com/store/apps/details?id=com.bladeco.bladecocharge&pcampaignid=web_share",
+    "operatorId": "1037818",
+    "operatorTitle": "Bladeco Alüminyum Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "BLADECO",
+    "cityId": "32",
+    "districtId": "396",
+    "sockets": [
+      {
+        "id": 626896,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58173",
+        "power": 320
+      },
+      {
+        "id": 626897,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58174",
+        "power": 320
+      }
+    ]
+  },
+  {
     "id": 14801235,
     "lat": 40.790524,
     "lng": 29.97859,
@@ -429213,6 +428343,1822 @@
         "subType": "dcCcs",
         "socketNumber": "SKT/58202",
         "power": 200
+      }
+    ]
+  },
+  {
+    "id": 14801257,
+    "lat": 39.6449,
+    "lng": 27.778,
+    "title": "Zeplin Ugo Otomotiv",
+    "address": "Edremit Yolu Üzeri 200 /A  Karesi/Balıkesir",
+    "phone": "08504740303",
+    "reportUrl": "https://zeplinenerji.com.tr/",
+    "reservationUrl": "https://zeplinenerji.com.tr/",
+    "operatorId": "993552",
+    "operatorTitle": "Zeplin Turizm Araç Kiralama Mobilite Ve Enerji Yatırımları Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ZEPLİN CAR rental",
+    "cityId": "10",
+    "districtId": "977",
+    "sockets": [
+      {
+        "id": 626950,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58210",
+        "power": 160
+      },
+      {
+        "id": 626951,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58211",
+        "power": 160
+      }
+    ]
+  },
+  {
+    "id": 14801258,
+    "lat": 39.8975,
+    "lng": 32.7613,
+    "title": "Zeplin Bilkent Ticaret Merkezi",
+    "address": "Üniversiteler Şehit Mustafa Tayyarcan 6/1  Çankaya/Ankara",
+    "phone": "08504740303",
+    "reportUrl": "https://zeplinenerji.com.tr/",
+    "reservationUrl": "https://zeplinenerji.com.tr/",
+    "operatorId": "993552",
+    "operatorTitle": "Zeplin Turizm Araç Kiralama Mobilite Ve Enerji Yatırımları Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ZEPLİN CAR rental",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 626952,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58212",
+        "power": 120
+      },
+      {
+        "id": 626953,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58213",
+        "power": 120
+      },
+      {
+        "id": 626954,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58214",
+        "power": 120
+      },
+      {
+        "id": 626955,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58215",
+        "power": 120
+      },
+      {
+        "id": 626956,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58216",
+        "power": 120
+      },
+      {
+        "id": 626957,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58217",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801265,
+    "lat": 37.796366,
+    "lng": 27.940252,
+    "title": "Aydın Denizli Otoyolu 7.km Aydın Yönü",
+    "address": "Feler Şahnalı Şahnalı 1  Efeler/Aydın",
+    "phone": "08503399937",
+    "reportUrl": "https://zes.net/bize-ulasin",
+    "reservationUrl": "https://zes.net/bize-ulasin",
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "9",
+    "districtId": "975",
+    "sockets": [
+      {
+        "id": 626968,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58227",
+        "power": 400
+      },
+      {
+        "id": 626969,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58228",
+        "power": 400
+      }
+    ]
+  },
+  {
+    "id": 14801272,
+    "lat": 40.997476,
+    "lng": 29.101079,
+    "title": "Arcona / Dijitalpark Teknokent",
+    "address": "Barbaros Şebboy 4/C  Ataşehir/İstanbul",
+    "phone": "0850 811 4020",
+    "reportUrl": "https://arconasarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1004005",
+    "operatorTitle": "Arcona Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "AARCONA",
+    "cityId": "34",
+    "districtId": "418",
+    "sockets": [
+      {
+        "id": 626976,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/41104",
+        "power": 22
+      },
+      {
+        "id": 626977,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/41105",
+        "power": 22
+      },
+      {
+        "id": 626978,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/41106",
+        "power": 22
+      },
+      {
+        "id": 626979,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/41108",
+        "power": 22
+      },
+      {
+        "id": 626980,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/41109",
+        "power": 22
+      },
+      {
+        "id": 626981,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/55088",
+        "power": 22
+      },
+      {
+        "id": 626982,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/57661",
+        "power": 22
+      },
+      {
+        "id": 626983,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58233",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801273,
+    "lat": 39.596777,
+    "lng": 26.966804,
+    "title": "Metro Market Edremit",
+    "address": "Edremit Balıkesir Yolu 3  Edremit/Balıkesir",
+    "phone": "0850 339 99 37",
+    "reportUrl": "https://zes.net/anasayfa",
+    "reservationUrl": "https://zes.net/anasayfa",
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "10",
+    "districtId": "133",
+    "sockets": [
+      {
+        "id": 626984,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/10385",
+        "power": 60
+      },
+      {
+        "id": 626985,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58234",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801278,
+    "lat": 39.437496,
+    "lng": 31.559413,
+    "title": "Tşof Sivrihisar Dc",
+    "address": "Kurşunlu  Sivrihisar/Eskişehir",
+    "phone": "0850 339 99 37",
+    "reportUrl": "https://zes.net/bize-ulasin",
+    "reservationUrl": null,
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "26",
+    "districtId": "339",
+    "sockets": [
+      {
+        "id": 626986,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31637",
+        "power": 180
+      },
+      {
+        "id": 626987,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31638",
+        "power": 180
+      },
+      {
+        "id": 626988,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31639",
+        "power": 180
+      },
+      {
+        "id": 626989,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/31640",
+        "power": 180
+      },
+      {
+        "id": 626990,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58235",
+        "power": 180
+      },
+      {
+        "id": 626991,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58236",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801285,
+    "lat": 37.926,
+    "lng": 40.1629,
+    "title": "Asplus Çeysa Serhat Plaza",
+    "address": "Fırat 507  Kayapınar/Diyarbakır",
+    "phone": "08503080021",
+    "reportUrl": "https://asplussarj.com/",
+    "reservationUrl": "https://asplussarj.com/",
+    "operatorId": "1107656",
+    "operatorTitle": "Asplus Şarj İstasyonları İşletmeleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ASPLUS",
+    "cityId": "21",
+    "districtId": "270",
+    "sockets": [
+      {
+        "id": 627010,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58255",
+        "power": 22
+      },
+      {
+        "id": 627011,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58256",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801286,
+    "lat": 38.754,
+    "lng": 35.3809,
+    "title": "Cns Solar",
+    "address": "Anbar 519  Melikgazi/Kayseri",
+    "phone": "08502425267",
+    "reportUrl": "https://cnssolarsarj.com/",
+    "reservationUrl": null,
+    "operatorId": "697930",
+    "operatorTitle": "Cns Solar Taahhüt Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "CNS Solar ŞARJ",
+    "cityId": "38",
+    "districtId": "519",
+    "sockets": [
+      {
+        "id": 627012,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58258",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801288,
+    "lat": 39.980415,
+    "lng": 32.686881,
+    "title": "Taşkent Cadde",
+    "address": "Yuvaköy  Yenimahalle/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "78",
+    "sockets": [
+      {
+        "id": 627015,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58261",
+        "power": 120
+      },
+      {
+        "id": 627016,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58262",
+        "power": 120
+      },
+      {
+        "id": 627017,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58263",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801289,
+    "lat": 39.7911,
+    "lng": 32.8525,
+    "title": "Zirve Konutları",
+    "address": "Eymir  Gölbaşı/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "66",
+    "sockets": [
+      {
+        "id": 627018,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58264",
+        "power": 22
+      },
+      {
+        "id": 627019,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58265",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801290,
+    "lat": 39.791357,
+    "lng": 32.85076,
+    "title": "Zirve Meydan",
+    "address": "Eymir  Gölbaşı/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "66",
+    "sockets": [
+      {
+        "id": 627020,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58266",
+        "power": 120
+      },
+      {
+        "id": 627021,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58267",
+        "power": 120
+      },
+      {
+        "id": 627022,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58268",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801291,
+    "lat": 40.0132,
+    "lng": 32.9023,
+    "title": "Kuzey Ankara Toki",
+    "address": "Baraj Kılıçaslan  Altındağ/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "59",
+    "sockets": [
+      {
+        "id": 627023,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58269",
+        "power": 22
+      },
+      {
+        "id": 627024,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58270",
+        "power": 22
+      },
+      {
+        "id": 627025,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58271",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801292,
+    "lat": 39.830823,
+    "lng": 32.708376,
+    "title": "İnfo İncek",
+    "address": "Alacaatlı Kanuni Sultan Süleyman 128/A  Çankaya/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627026,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58272",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801293,
+    "lat": 39.831602,
+    "lng": 32.70836,
+    "title": "İnfo İncek",
+    "address": "Alacaatlı Mah Kanuni Sultan Süleyman 128/A  Çankaya/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627027,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58274",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801294,
+    "lat": 39.9632,
+    "lng": 32.8067,
+    "title": "Çağlayan Evleri",
+    "address": "Ragıp Tüzün Asımbey  Yenimahalle/Ankara",
+    "phone": "08503027599",
+    "reportUrl": "https://skyworldotosarj.com/iletisim/",
+    "reservationUrl": null,
+    "operatorId": "1040849",
+    "operatorTitle": "Sky World Solar Enerji Anonım Şirketi",
+    "serviceType": "public",
+    "brand": "Sky World Solar Enerji",
+    "cityId": "6",
+    "districtId": "78",
+    "sockets": [
+      {
+        "id": 627028,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58275",
+        "power": 22
+      },
+      {
+        "id": 627029,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58276",
+        "power": 22
+      },
+      {
+        "id": 627030,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58277",
+        "power": 120
+      },
+      {
+        "id": 627031,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58278",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801295,
+    "lat": 41.18295,
+    "lng": 29.07453,
+    "title": "Kahraman Balık",
+    "address": "Rumeli Kavağı İskele Meydanı Caddesi 15  Sarıyer/İstanbul",
+    "phone": "5333800436",
+    "reportUrl": "https://ctgelektrik.com/#iletisim",
+    "reservationUrl": null,
+    "operatorId": "1052133",
+    "operatorTitle": "Ctg Elektrik Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "CTG ELEKTRİK ANONİM ŞİRKETİ",
+    "cityId": "34",
+    "districtId": "443",
+    "sockets": [
+      {
+        "id": 627032,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/42351",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801302,
+    "lat": 38.755973,
+    "lng": 35.366359,
+    "title": "Anbar Mh. Osman Kavuncu Blv. (addıs Ababa Coffee Önü)",
+    "address": "Anbar  Melikgazi/Kayseri",
+    "phone": "08508118638",
+    "reportUrl": "https://ksarj.com/",
+    "reservationUrl": null,
+    "operatorId": "992908",
+    "operatorTitle": "Hunat Enerji Yatırım Ve Danışmanlık Sanayi Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "K-ŞARJ",
+    "cityId": "38",
+    "districtId": "519",
+    "sockets": [
+      {
+        "id": 627035,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58279",
+        "power": 240
+      },
+      {
+        "id": 627036,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58280",
+        "power": 240
+      }
+    ]
+  },
+  {
+    "id": 14801309,
+    "lat": 40.682519,
+    "lng": 36.563921,
+    "title": "Özgür Petrol Erbaa Dc 2",
+    "address": "Kelkit 166-2  Erbaa/Tokat",
+    "phone": "4446099",
+    "reportUrl": "https://www.isarj.com/",
+    "reservationUrl": null,
+    "operatorId": "1037665",
+    "operatorTitle": "İspirli Şarj Hizmetleri Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "i-şarj",
+    "cityId": "60",
+    "districtId": "791",
+    "sockets": [
+      {
+        "id": 627056,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58129",
+        "power": 320
+      },
+      {
+        "id": 627057,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58289",
+        "power": 320
+      }
+    ]
+  },
+  {
+    "id": 14801311,
+    "lat": 41.052855,
+    "lng": 28.891718,
+    "title": "Forum İstanbul",
+    "address": "Kocatepe Paşa 3  Bayrampaşa/İstanbul",
+    "phone": "0850 808 86 72",
+    "reportUrl": "https://torasarj.com/",
+    "reservationUrl": null,
+    "operatorId": "952415",
+    "operatorTitle": "Tora Teknik Hizmetler İşletme Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "TORA",
+    "cityId": "34",
+    "districtId": "422",
+    "sockets": [
+      {
+        "id": 627058,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/56228",
+        "power": 60
+      },
+      {
+        "id": 627059,
+        "type": "dc",
+        "subType": "dcChademo",
+        "socketNumber": "SKT/56229",
+        "power": 60
+      },
+      {
+        "id": 627060,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/56230",
+        "power": 22
+      },
+      {
+        "id": 627061,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/56231",
+        "power": 60
+      },
+      {
+        "id": 627062,
+        "type": "dc",
+        "subType": "dcChademo",
+        "socketNumber": "SKT/56232",
+        "power": 60
+      },
+      {
+        "id": 627063,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/56233",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801313,
+    "lat": 40.107605,
+    "lng": 29.142416,
+    "title": "Ceylan Splend’or Uludağ",
+    "address": "Kirazlı Gelişim 18  Osmangazi/Bursa",
+    "phone": "08502428862",
+    "reportUrl": "https://tuncmatikcharge.com/iletisim/",
+    "reservationUrl": "https://tuncmatikcharge.com/iletisim/",
+    "operatorId": "1006519",
+    "operatorTitle": "Tunçmatik Şarj Teknolojileri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "tunçmatik",
+    "cityId": "16",
+    "districtId": "201",
+    "sockets": [
+      {
+        "id": 627064,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53382",
+        "power": 22
+      },
+      {
+        "id": 627065,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/53383",
+        "power": 22
+      },
+      {
+        "id": 627066,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58290",
+        "power": 22
+      },
+      {
+        "id": 627067,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58291",
+        "power": 60
+      },
+      {
+        "id": 627068,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58292",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801322,
+    "lat": 40.988888,
+    "lng": 29.192032,
+    "title": "Mirkelam Dinlenme Tesisi 3  (güney)-ank. Yönü",
+    "address": "Eyüp Sultan Samandıra  Sancaktepe/İstanbul",
+    "phone": "08502020251",
+    "reportUrl": "https://www.enyakit.com.tr/iletisim",
+    "reservationUrl": "https://onelink.to/nqfxmu",
+    "operatorId": "918383",
+    "operatorTitle": "En Yakıt Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EN YAKIT",
+    "cityId": "34",
+    "districtId": "442",
+    "sockets": [
+      {
+        "id": 627069,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58293",
+        "power": 180
+      },
+      {
+        "id": 627070,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58294",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801324,
+    "lat": 36.848084,
+    "lng": 30.761775,
+    "title": "Shakespeare Cafe Fener",
+    "address": "Fener Fener 1  Muratpaşa/Antalya",
+    "phone": "+90 850 811 72 75",
+    "reportUrl": "https://sharz.net/iletisim",
+    "reservationUrl": null,
+    "operatorId": "929899",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "SHARZ.NET",
+    "cityId": "7",
+    "districtId": "99",
+    "sockets": [
+      {
+        "id": 627071,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/48595",
+        "power": 60
+      },
+      {
+        "id": 627072,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/48596",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801327,
+    "lat": 36.790401,
+    "lng": 28.129016,
+    "title": "Golden Key Hisarönü",
+    "address": "Hisarönü Bördübet  Marmaris/Muğla",
+    "phone": "0850 762 06 00",
+    "reportUrl": "https://geldol.com/",
+    "reservationUrl": null,
+    "operatorId": "1004378",
+    "operatorTitle": "Er Elektronik Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "GEL DOL",
+    "cityId": "48",
+    "districtId": "656",
+    "sockets": [
+      {
+        "id": 627078,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58295",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801328,
+    "lat": 36.825208,
+    "lng": 28.06956,
+    "title": "Golden Key Bördübet",
+    "address": "Hisarönü Bördübet  Marmaris/Muğla",
+    "phone": "0850 762 06 00",
+    "reportUrl": "https://geldol.com/",
+    "reservationUrl": null,
+    "operatorId": "1004378",
+    "operatorTitle": "Er Elektronik Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "GEL DOL",
+    "cityId": "48",
+    "districtId": "656",
+    "sockets": [
+      {
+        "id": 627079,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58296",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801337,
+    "lat": 39.938291,
+    "lng": 41.126769,
+    "title": "Hizmetiçi Eğitim Enstitüsü",
+    "address": "Ilıca 29  Aziziye/Erzurum",
+    "phone": "+90 850 777 86 58",
+    "reportUrl": "https://www.voltrun.com",
+    "reservationUrl": null,
+    "operatorId": "1093161",
+    "operatorTitle": "Voltrun Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "VOLTRUN",
+    "cityId": "25",
+    "districtId": "309",
+    "sockets": [
+      {
+        "id": 627083,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58297",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801349,
+    "lat": 40.736158,
+    "lng": 31.743071,
+    "title": "Kartaltepe Otel Bolu",
+    "address": "Sadun Bozbey Alpağutbey 10  Merkez/Bolu",
+    "phone": "5447905046",
+    "reportUrl": "https://www.sharz.net",
+    "reservationUrl": null,
+    "operatorId": "929899",
+    "operatorTitle": "Evs Elektrikli Şarj Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "SHARZ.NET",
+    "cityId": "14",
+    "districtId": "174",
+    "sockets": [
+      {
+        "id": 627098,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58310",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801362,
+    "lat": 40.2172,
+    "lng": 28.7552,
+    "title": "Otojet - Totalenergies Hamit Karadayı Petrol",
+    "address": "Başköy İzmir Yolu 712  Nilüfer/Bursa",
+    "phone": "05395195703",
+    "reportUrl": "https://www.oto-jet.com.tr/bize-ulasin.html",
+    "reservationUrl": "https://www.oto-jet.com.tr/bize-ulasin.html",
+    "operatorId": "5533",
+    "operatorTitle": "Otojet Enerji Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otojet",
+    "cityId": "16",
+    "districtId": "198",
+    "sockets": [
+      {
+        "id": 627123,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58337",
+        "power": 240
+      },
+      {
+        "id": 627124,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58339",
+        "power": 240
+      }
+    ]
+  },
+  {
+    "id": 14801363,
+    "lat": 40.016,
+    "lng": 32.8228,
+    "title": "Forum Ankara",
+    "address": "Ovacık 695.  Keçiören/Ankara",
+    "phone": "08502816166",
+    "reportUrl": "https://qcharge.io/iletisim",
+    "reservationUrl": null,
+    "operatorId": "932023",
+    "operatorTitle": "Meta Mobilite Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Q Charge",
+    "cityId": "6",
+    "districtId": "71",
+    "sockets": [
+      {
+        "id": 627125,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58335",
+        "power": 120
+      },
+      {
+        "id": 627126,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58336",
+        "power": 120
+      },
+      {
+        "id": 627127,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58338",
+        "power": 120
+      },
+      {
+        "id": 627128,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58340",
+        "power": 120
+      },
+      {
+        "id": 627129,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58341",
+        "power": 120
+      },
+      {
+        "id": 627130,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58342",
+        "power": 120
+      },
+      {
+        "id": 627131,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58343",
+        "power": 120
+      },
+      {
+        "id": 627132,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58344",
+        "power": 120
+      },
+      {
+        "id": 627133,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58345",
+        "power": 120
+      },
+      {
+        "id": 627134,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58346",
+        "power": 120
+      },
+      {
+        "id": 627135,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58347",
+        "power": 120
+      },
+      {
+        "id": 627136,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58348",
+        "power": 120
+      },
+      {
+        "id": 627137,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58349",
+        "power": 120
+      },
+      {
+        "id": 627138,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58350",
+        "power": 120
+      },
+      {
+        "id": 627139,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58351",
+        "power": 120
+      },
+      {
+        "id": 627140,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58352",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801364,
+    "lat": 38.436333,
+    "lng": 27.210333,
+    "title": "Has Otomotiv, Bornova, İzmir",
+    "address": "Karacaoğlan 6244. 113  Bornova/İzmir",
+    "phone": "4448303",
+    "reportUrl": "https://esarj.com/",
+    "reservationUrl": null,
+    "operatorId": "930848",
+    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "eşarj",
+    "cityId": "35",
+    "districtId": "461",
+    "sockets": [
+      {
+        "id": 627141,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/44224",
+        "power": 45
+      },
+      {
+        "id": 627142,
+        "type": "dc",
+        "subType": "dcChademo",
+        "socketNumber": "SKT/44225",
+        "power": 45
+      },
+      {
+        "id": 627143,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58354",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14801372,
+    "lat": 38.1969,
+    "lng": 26.8357,
+    "title": "Dericiler Tarım Ürünleri Mandıracılık Hay. Paz. Nak. Turz. San. Ve Tic. Ltd. Şti",
+    "address": "Camikebir 45 6/1  Seferihisar/İzmir",
+    "phone": "0232 502 21 21",
+    "reportUrl": "https://www.gerilimenerji.com/",
+    "reservationUrl": null,
+    "operatorId": "1041172",
+    "operatorTitle": "Gerilim Yenilenebilir Enerji Ve Teknolojileri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "GERİLİM ENERJİ",
+    "cityId": "35",
+    "districtId": "477",
+    "sockets": [
+      {
+        "id": 627144,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58357",
+        "power": 33
+      }
+    ]
+  },
+  {
+    "id": 14801385,
+    "lat": 39.90921,
+    "lng": 32.764338,
+    "title": "Maidan Avm Ankara",
+    "address": "Mustafa Kemal 2118 4  Çankaya/Ankara",
+    "phone": "0850 339 99 37",
+    "reportUrl": "https://zes.net/bize-ulasin",
+    "reservationUrl": "https://zes.net/bize-ulasin",
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627145,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/47939",
+        "power": 180
+      },
+      {
+        "id": 627146,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/47940",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801386,
+    "lat": 39.909262,
+    "lng": 32.764665,
+    "title": "Maidan Avm Açık Otopark",
+    "address": "Mustafa Kemal 2118 4  Çankaya/Ankara",
+    "phone": "08503399937",
+    "reportUrl": "https://zes.net/bize-ulasin",
+    "reservationUrl": "https://zes.net/bize-ulasin",
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627147,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/54659",
+        "power": 180
+      },
+      {
+        "id": 627148,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/54660",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801387,
+    "lat": 39.893654,
+    "lng": 32.678061,
+    "title": "Mesa Plaza Avm",
+    "address": "Koru 4  Çankaya/Ankara",
+    "phone": "08503399937",
+    "reportUrl": "https://zes.net/bize-ulasin",
+    "reservationUrl": "https://zes.net/bize-ulasin",
+    "operatorId": "919287",
+    "operatorTitle": "Zes Dijital Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "zes",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627149,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/54630",
+        "power": 180
+      },
+      {
+        "id": 627150,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/54631",
+        "power": 60
+      },
+      {
+        "id": 627151,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/54632",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801390,
+    "lat": 40.6808,
+    "lng": 36.55043,
+    "title": "Nur Petrol Opet",
+    "address": "Yavuz Sultan Selim Samsun Yolu 253  Erbaa/Tokat",
+    "phone": "05447905046",
+    "reportUrl": "https://ovolt.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1108533",
+    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ovolt",
+    "cityId": "60",
+    "districtId": "791",
+    "sockets": [
+      {
+        "id": 627192,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58368",
+        "power": 120
+      },
+      {
+        "id": 627193,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58369",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801397,
+    "lat": 39.987651,
+    "lng": 32.788928,
+    "title": "Anadolu Apartmanı",
+    "address": "Avcılar 1030 1  Yenimahalle/Ankara",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "6",
+    "districtId": "78",
+    "sockets": [
+      {
+        "id": 627194,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58370",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14801398,
+    "lat": 36.772072,
+    "lng": 28.812751,
+    "title": "Omr Mühendislik",
+    "address": "Hürriyet Merkez Sanayi 29  Dalaman/Muğla",
+    "phone": "5011731150",
+    "reportUrl": "https://solinvedcharge.com/contact",
+    "reservationUrl": null,
+    "operatorId": "1279702",
+    "operatorTitle": "Alka Solar Enerji Mühendislik Sanayi Ve Ticaret Limited Şirketi",
+    "serviceType": "public",
+    "brand": "solinved",
+    "cityId": "48",
+    "districtId": "651",
+    "sockets": [
+      {
+        "id": 627195,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58371",
+        "power": 11
+      }
+    ]
+  },
+  {
+    "id": 14801401,
+    "lat": 39.912132,
+    "lng": 32.804029,
+    "title": "Koç Kuleleri",
+    "address": "Söğütözü Söğütözü 2/0  Çankaya/Ankara",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com/iletisim",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627206,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/21531",
+        "power": 120
+      },
+      {
+        "id": 627207,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/21532",
+        "power": 120
+      },
+      {
+        "id": 627208,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/21533",
+        "power": 22
+      },
+      {
+        "id": 627209,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/21534",
+        "power": 22
+      },
+      {
+        "id": 627210,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/40982",
+        "power": 22
+      },
+      {
+        "id": 627211,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/40983",
+        "power": 22
+      },
+      {
+        "id": 627212,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/40984",
+        "power": 22
+      },
+      {
+        "id": 627213,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/40985",
+        "power": 22
+      },
+      {
+        "id": 627214,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58380",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801432,
+    "lat": 39.589234,
+    "lng": 26.886499,
+    "title": "Güre Termal Resort & Spa Kazdağları, Edremit - Dc",
+    "address": "Güre Salih Reis 2  Edremit/Balıkesir",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "10",
+    "districtId": "133",
+    "sockets": [
+      {
+        "id": 627327,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58421",
+        "power": 160
+      },
+      {
+        "id": 627328,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58422",
+        "power": 160
+      }
+    ]
+  },
+  {
+    "id": 14801442,
+    "lat": 36.858065,
+    "lng": 30.775311,
+    "title": "Bal Plaza",
+    "address": "Çağlayan 142  Muratpaşa/Antalya",
+    "phone": "0850 755 98 98",
+    "reportUrl": "https://www.watmobilite.com",
+    "reservationUrl": null,
+    "operatorId": "929436",
+    "operatorTitle": "Wat Mobilite Çözümleri Teknoloji Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "wat mobilite",
+    "cityId": "7",
+    "districtId": "99",
+    "sockets": [
+      {
+        "id": 627339,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58424",
+        "power": 120
+      },
+      {
+        "id": 627340,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58425",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801443,
+    "lat": 41.040901,
+    "lng": 29.005075,
+    "title": "Shangri-la Bosphorus Hotel, İstanbul",
+    "address": "Sinanpaşa Hayrettin İskelesi 1  Beşiktaş/İstanbul",
+    "phone": "444 83 03",
+    "reportUrl": "https://esarj.com/",
+    "reservationUrl": null,
+    "operatorId": "930848",
+    "operatorTitle": "Eşarj Elektrikli Araçlar Şarj Sistemleri Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "eşarj",
+    "cityId": "34",
+    "districtId": "428",
+    "sockets": [
+      {
+        "id": 627341,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58426",
+        "power": 30
+      }
+    ]
+  },
+  {
+    "id": 14801445,
+    "lat": 40.760358,
+    "lng": 29.972974,
+    "title": "Otojet Görpet",
+    "address": "Ovacık D-100 Karoyolu 14  Başiskele/Kocaeli",
+    "phone": "05423949999",
+    "reportUrl": "https://www.oto-jet.com.tr/bize-ulasin.html",
+    "reservationUrl": "https://www.oto-jet.com.tr/bize-ulasin.html",
+    "operatorId": "5533",
+    "operatorTitle": "Otojet Enerji Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otojet",
+    "cityId": "41",
+    "districtId": "544",
+    "sockets": [
+      {
+        "id": 627342,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/6085",
+        "power": 60
+      },
+      {
+        "id": 627343,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/6086",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801446,
+    "lat": 40.476496,
+    "lng": 29.304478,
+    "title": "Örgün Petrol Fatih",
+    "address": "Fatih Bursa Yalova 9  Orhangazi/Bursa",
+    "phone": "08504746011",
+    "reportUrl": "https://ovolt.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1108533",
+    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ovolt",
+    "cityId": "16",
+    "districtId": "200",
+    "sockets": [
+      {
+        "id": 627344,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/37339",
+        "power": 60
+      },
+      {
+        "id": 627345,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/37340",
+        "power": 60
+      }
+    ]
+  },
+  {
+    "id": 14801447,
+    "lat": 39.9099,
+    "lng": 32.77596,
+    "title": "Astorşarj Kentpark Avm Elektrikli Araç Şarj İstasyonu",
+    "address": "Mustafa Kemal Eskişehir Yolu 7.km 164  Çankaya/Ankara",
+    "phone": "05067272177",
+    "reportUrl": "https://astorsarj.com.tr/",
+    "reservationUrl": "https://astorsarj.com.tr/",
+    "operatorId": "919121",
+    "operatorTitle": "Astor Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ASTOR",
+    "cityId": "6",
+    "districtId": "80",
+    "sockets": [
+      {
+        "id": 627346,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58427",
+        "power": 400
+      },
+      {
+        "id": 627347,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58428",
+        "power": 400
+      },
+      {
+        "id": 627348,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58429",
+        "power": 400
+      },
+      {
+        "id": 627349,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58430",
+        "power": 400
+      },
+      {
+        "id": 627350,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58431",
+        "power": 180
+      },
+      {
+        "id": 627351,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58432",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801448,
+    "lat": 40.981959,
+    "lng": 29.131983,
+    "title": "Ataşehir Brandium Avm",
+    "address": "Küçükbakkalköy Dudullu Dudullu 23-2  Ümraniye/İstanbul",
+    "phone": "08502428356",
+    "reportUrl": "https://kessarj.com",
+    "reservationUrl": null,
+    "operatorId": "1106130",
+    "operatorTitle": "Klr Enerji Sistemleri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "KES",
+    "cityId": "34",
+    "districtId": "451",
+    "sockets": [
+      {
+        "id": 627352,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58433",
+        "power": 120
+      },
+      {
+        "id": 627353,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58434",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14801449,
+    "lat": 38.453672,
+    "lng": 27.18183,
+    "title": "Baro Bahçe Sosyal Tesisi",
+    "address": "Mansuroğlu 288/7  Bayraklı/İzmir",
+    "phone": "08502020251",
+    "reportUrl": "https://www.enyakit.com.tr/iletisim",
+    "reservationUrl": "https://onelink.to/nqfxmu",
+    "operatorId": "918383",
+    "operatorTitle": "En Yakıt Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "EN YAKIT",
+    "cityId": "35",
+    "districtId": "458",
+    "sockets": [
+      {
+        "id": 627354,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58435",
+        "power": 180
+      },
+      {
+        "id": 627355,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58436",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14801454,
+    "lat": 40.099455,
+    "lng": 27.674055,
+    "title": "Güven Oto Elektrik",
+    "address": "Gündoğdu 3024 4-f  Gönen/Balıkesir",
+    "phone": "08507778658",
+    "reportUrl": "https://www.voltrun.com/",
+    "reservationUrl": null,
+    "operatorId": "1093161",
+    "operatorTitle": "Voltrun Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "VOLTRUN",
+    "cityId": "10",
+    "districtId": "136",
+    "sockets": [
+      {
+        "id": 627356,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/42037",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801455,
+    "lat": 39.887422,
+    "lng": 29.983119,
+    "title": "Mersu Alabalık",
+    "address": "Saraycık  Bozüyük/Bilecik",
+    "phone": "+908507778658",
+    "reportUrl": "https://www.voltrun.com/",
+    "reservationUrl": null,
+    "operatorId": "1093161",
+    "operatorTitle": "Voltrun Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "VOLTRUN",
+    "cityId": "11",
+    "districtId": "146",
+    "sockets": [
+      {
+        "id": 627357,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/27068",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14801465,
+    "lat": 40.848554,
+    "lng": 31.100156,
+    "title": "Zırhlı Gross Düzce",
+    "address": "Taşköprü 16044. 3/2  Merkez/Düzce",
+    "phone": "5458605779",
+    "reportUrl": "https://www.gotedygo.com/bizeulasin",
+    "reservationUrl": null,
+    "operatorId": "1091495",
+    "operatorTitle": "Tedy Enerji Ve Teknoloji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "gotedygo",
+    "cityId": "81",
+    "districtId": "955",
+    "sockets": [
+      {
+        "id": 627360,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58437",
+        "power": 180
+      },
+      {
+        "id": 627361,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/58438",
+        "power": 180
+      },
+      {
+        "id": 627362,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/58439",
+        "power": 22
       }
     ]
   }
