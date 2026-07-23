@@ -28370,6 +28370,13 @@
         "subType": "acType2",
         "socketNumber": "SKT/12667",
         "power": 22
+      },
+      {
+        "id": 409983,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/12668",
+        "power": 22
       }
     ]
   },
@@ -469448,6 +469455,102 @@
     ]
   },
   {
+    "id": 14838908,
+    "lat": 39.6583,
+    "lng": 37.0091,
+    "title": "Ekenler Petrol, Sivas Merkez - Dc",
+    "address": "Mescitli 192  Merkez/Sivas",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "58",
+    "districtId": "772",
+    "sockets": [
+      {
+        "id": 652990,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66551",
+        "power": 120
+      },
+      {
+        "id": 652991,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66552",
+        "power": 120
+      }
+    ]
+  },
+  {
+    "id": 14838910,
+    "lat": 40.12897,
+    "lng": 37.94063,
+    "title": "Fırat Bulvarı, Kayapınar - Dc",
+    "address": "Fırat 127/1  Kayapınar/Diyarbakır",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "21",
+    "districtId": "270",
+    "sockets": [
+      {
+        "id": 652992,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66556",
+        "power": 160
+      },
+      {
+        "id": 652993,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66557",
+        "power": 160
+      }
+    ]
+  },
+  {
+    "id": 14838912,
+    "lat": 39.479587,
+    "lng": 26.234623,
+    "title": "Alis Farm Hotel, Ayvacık - Dc",
+    "address": "Sivrice  Ayvacık/Çanakkale",
+    "phone": "+90 850 242 42 47",
+    "reportUrl": "https://otopriz.com.tr",
+    "reservationUrl": null,
+    "operatorId": "133819",
+    "operatorTitle": "Dicle Kök Enerji Yatırım Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "Otopriz",
+    "cityId": "17",
+    "districtId": "206",
+    "sockets": [
+      {
+        "id": 652994,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66558",
+        "power": 120
+      },
+      {
+        "id": 652995,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66559",
+        "power": 120
+      }
+    ]
+  },
+  {
     "id": 14838918,
     "lat": 41.2307,
     "lng": 28.11413,
@@ -469781,6 +469884,183 @@
         "type": "ac",
         "subType": "acType2",
         "socketNumber": "SKT/66585",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14838942,
+    "lat": 38.734,
+    "lng": 35.5234,
+    "title": "Cns Erciyesevler-3",
+    "address": "Erciyesevler  Kocasinan/Kayseri",
+    "phone": "08502425267",
+    "reportUrl": "https://cnssolarsarj.com/",
+    "reservationUrl": "https://cnssolarsarj.com/",
+    "operatorId": "697930",
+    "operatorTitle": "Cns Solar Taahhüt Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "CNS Solar ŞARJ",
+    "cityId": "38",
+    "districtId": "518",
+    "sockets": [
+      {
+        "id": 653028,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66590",
+        "power": 240
+      },
+      {
+        "id": 653029,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66591",
+        "power": 240
+      },
+      {
+        "id": 653030,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/66592",
+        "power": 22
+      },
+      {
+        "id": 653031,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/66593",
+        "power": 22
+      }
+    ]
+  },
+  {
+    "id": 14838947,
+    "lat": 39.9907,
+    "lng": 32.6437,
+    "title": "Astorşarj Kaşmir Avm",
+    "address": "Göksu  Etimesgut/Ankara",
+    "phone": "0850 400 00 00",
+    "reportUrl": "https://astorsarj.com.tr/",
+    "reservationUrl": "https://astorsarj.com.tr/",
+    "operatorId": "919121",
+    "operatorTitle": "Astor Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ASTOR",
+    "cityId": "6",
+    "districtId": "64",
+    "sockets": [
+      {
+        "id": 653037,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66605",
+        "power": 320
+      },
+      {
+        "id": 653038,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66606",
+        "power": 320
+      },
+      {
+        "id": 653039,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66607",
+        "power": 320
+      },
+      {
+        "id": 653040,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66608",
+        "power": 320
+      }
+    ]
+  },
+  {
+    "id": 14838948,
+    "lat": 40.007248,
+    "lng": 32.806965,
+    "title": "Astorşarj Ovacık Evakule",
+    "address": "Yükseltepe  Keçiören/Ankara",
+    "phone": "0850 400 00 00",
+    "reportUrl": "https://astorsarj.com.tr/",
+    "reservationUrl": "https://astorsarj.com.tr/",
+    "operatorId": "919121",
+    "operatorTitle": "Astor Enerji Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ASTOR",
+    "cityId": "6",
+    "districtId": "71",
+    "sockets": [
+      {
+        "id": 653041,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66609",
+        "power": 180
+      },
+      {
+        "id": 653042,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66610",
+        "power": 180
+      }
+    ]
+  },
+  {
+    "id": 14838951,
+    "lat": 40.810167,
+    "lng": 32.894424,
+    "title": "Çerkeş Belediyesi",
+    "address": "Yeni İnönü 28  Çerkeş/Çankırı",
+    "phone": "0 850 474 60 11",
+    "reportUrl": "https://www.ovolt.com.tr/",
+    "reservationUrl": null,
+    "operatorId": "1108533",
+    "operatorTitle": "Ovolt Şarj Teknolojileri Sanayi Ve Ticaret Anonim Şirketi",
+    "serviceType": "public",
+    "brand": "ovolt",
+    "cityId": "18",
+    "districtId": "228",
+    "sockets": [
+      {
+        "id": 653049,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66613",
+        "power": 60
+      },
+      {
+        "id": 653050,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66614",
+        "power": 60
+      },
+      {
+        "id": 653051,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66615",
+        "power": 60
+      },
+      {
+        "id": 653052,
+        "type": "dc",
+        "subType": "dcCcs",
+        "socketNumber": "SKT/66616",
+        "power": 60
+      },
+      {
+        "id": 653053,
+        "type": "ac",
+        "subType": "acType2",
+        "socketNumber": "SKT/66617",
         "power": 22
       }
     ]
