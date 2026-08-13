@@ -509,6 +509,7 @@ export class App {
 
     this.locationService = new LocationService({
       geocoder: this.mapComponent.geocoder,
+      map: this.mapComponent.map!,
       translate,
       showTemporaryMessage,
       onLocationSet,

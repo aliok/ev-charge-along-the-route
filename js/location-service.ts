@@ -66,6 +66,7 @@ interface ExtendedWindow extends Window {
 
 interface LocationServiceDependencies {
   geocoder: google.maps.Geocoder;
+  map: google.maps.Map;
   translate: (key: string, params?: TranslationParams) => string;
   showTemporaryMessage: (text: string, isError?: boolean) => void;
   onLocationSet: (data: {
@@ -90,6 +91,7 @@ interface LocationServiceDependencies {
  */
 export class LocationService {
   private readonly geocoder: google.maps.Geocoder;
+  private readonly placesService: google.maps.places.PlacesService;
   private readonly translate: (key: string, params?: TranslationParams) => string;
   private readonly showTemporaryMessage: (text: string, isError?: boolean) => void;
   private readonly onLocationSet: (data: {
@@ -109,6 +111,7 @@ export class LocationService {
 
   constructor(deps: LocationServiceDependencies) {
     this.geocoder = deps.geocoder;
+    this.placesService = new google.maps.places.PlacesService(deps.map);
     this.translate = deps.translate;
     this.showTemporaryMessage = deps.showTemporaryMessage;
     this.onLocationSet = deps.onLocationSet;
@@ -267,13 +270,7 @@ export class LocationService {
 
     if (placeId) {
       logger.debug('Clicked on Google feature:', placeId);
-      this._geocodeAndSetLocation(
-        targetType,
-        {
-          placeId: placeId,
-        },
-        PARSED_TYPE_FEATURE_CLICK
-      );
+      this._handleFeatureClick(targetType, placeId);
     } else if (clickedLatLng) {
       logger.debug('Clicked on base map:', clickedLatLng.toString());
       this._geocodeAndSetLocation(
@@ -288,6 +285,44 @@ export class LocationService {
         }
       );
     }
+  }
+
+  private _handleFeatureClick(type: LocationType, placeId: string): void {
+    this.showTemporaryMessage(
+      this.translate('messageProcessingLocation', { parsedType: PARSED_TYPE_FEATURE_CLICK }),
+      false
+    );
+
+    this.placesService.getDetails(
+      { placeId, fields: ['name', 'geometry', 'formatted_address', 'address_components', 'types'] },
+      (place, status) => {
+        if (
+          status !== google.maps.places.PlacesServiceStatus.OK ||
+          !place?.geometry?.location
+        ) {
+          this._geocodeAndSetLocation(type, { placeId }, PARSED_TYPE_FEATURE_CLICK);
+          return;
+        }
+
+        const geocoderResult: google.maps.GeocoderResult = {
+          address_components: place.address_components ?? [],
+          formatted_address: place.name || place.formatted_address || '',
+          geometry: {
+            ...place.geometry,
+            location_type: google.maps.GeocoderLocationType.ROOFTOP,
+          } as google.maps.GeocoderGeometry,
+          place_id: placeId,
+          types: place.types ?? [],
+        };
+
+        this._handleParsedLocationResult(
+          type,
+          [geocoderResult],
+          google.maps.GeocoderStatus.OK,
+          PARSED_TYPE_FEATURE_CLICK
+        );
+      }
+    );
   }
 
   /**
