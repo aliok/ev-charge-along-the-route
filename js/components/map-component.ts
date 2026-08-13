@@ -105,7 +105,7 @@ export class MapComponent {
     }
 
     const autocompleteOptions: google.maps.places.AutocompleteOptions = {
-      fields: ['geometry', 'name', 'address_components'],
+      fields: ['geometry', 'name', 'address_components', 'formatted_address'],
       componentRestrictions: {
         country: 'TR',
       },

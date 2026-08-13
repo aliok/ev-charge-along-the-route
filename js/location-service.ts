@@ -102,7 +102,7 @@ export class LocationService {
     startInput: HTMLInputElement;
     endInput: HTMLInputElement;
   };
-  private readonly services: {
+  private services: {
     autocompleteStart: google.maps.places.Autocomplete | null;
     autocompleteEnd: google.maps.places.Autocomplete | null;
   };
@@ -114,6 +114,14 @@ export class LocationService {
     this.onLocationSet = deps.onLocationSet;
     this.ui = deps.ui;
     this.services = deps.services;
+  }
+
+  updateAutocompleteRefs(
+    autocompleteStart: google.maps.places.Autocomplete | null,
+    autocompleteEnd: google.maps.places.Autocomplete | null
+  ): void {
+    this.services.autocompleteStart = autocompleteStart;
+    this.services.autocompleteEnd = autocompleteEnd;
   }
 
   /**
@@ -151,13 +159,12 @@ export class LocationService {
         return;
       }
 
-      // Treat autocomplete result as a feature click for translation purposes
       const geocoderResult = this._placeResultToGeocoderResult(place);
       this._handleParsedLocationResult(
         type,
         [geocoderResult],
         google.maps.GeocoderStatus.OK,
-        PARSED_TYPE_FEATURE_CLICK
+        PARSED_TYPE_ADDRESS_NAME
       );
     };
   }

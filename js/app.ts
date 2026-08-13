@@ -537,6 +537,11 @@ export class App {
           this.locationService!.onPlaceChanged(type)
         );
 
+        this.locationService.updateAutocompleteRefs(
+          this.mapComponent.autocompleteStart,
+          this.mapComponent.autocompleteEnd
+        );
+
         // Sync with legacy state
         state.autocompleteStart = this.mapComponent.autocompleteStart;
         state.autocompleteEnd = this.mapComponent.autocompleteEnd;
