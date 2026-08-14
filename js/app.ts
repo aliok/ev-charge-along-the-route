@@ -11,6 +11,11 @@ import {
   DEFAULT_DISTANCE_THRESHOLD,
   defaultFilters,
   STATIONS_JSON_PATH,
+  PLACES_STORAGE_KEY,
+  PLACES_ZOOM_STORAGE_KEY,
+  STARRED_PLACES_STORAGE_KEY,
+  HIDDEN_PLACES_STORAGE_KEY,
+  PLACE_TYPE_GROUPS,
 } from './config.js';
 
 import { createLogger } from './logger.js';
@@ -37,7 +42,11 @@ import {
   updateMarker,
   updateMarkerDetourText,
   initializeStationInfoPanel,
+  openStationInfoPanel,
+  updateStationInfoPanel,
   closeStationInfoPanel,
+  panMapForPanel,
+  setOnPanelClose,
 } from './markers.js';
 
 import {
@@ -46,6 +55,7 @@ import {
   setDestinationWaypoint,
   removeWaypoint,
   handleAddStationToRoute,
+  handleAddPlaceToRoute,
   handleWaypointAction,
   clearAllWaypoints,
   getStartWaypoint,
@@ -60,6 +70,7 @@ import {
   MarkerComponent,
   DetourComponent,
   StationDataComponent,
+  TouristAttractionComponent,
 } from './components/index.js';
 
 import { StationData, ExtendedMarker } from './state.js';
@@ -141,6 +152,23 @@ import {
   validateUIElements,
   waypointsListContainer,
   hideAllPois,
+  exploreInput,
+  clearExploreBtn,
+  pasteExploreBtn,
+  useLocationExploreBtn,
+  directionsModeBtn,
+  exploreModeBtn,
+  updateModeUI,
+  attractionToggleButton,
+  placesPanel,
+  closePlacesBtn,
+  placesVisibleToggle,
+  placesSelectAllBtn,
+  placesUnselectAllBtn,
+  placesStarredToggle,
+  togglePlacesPanel,
+  placesZoomSlider,
+  placesZoomValue,
 } from './ui.js';
 
 // Legacy state import - will be phased out as components take over
@@ -158,12 +186,18 @@ export class App {
   public markerComponent!: MarkerComponent;
   public detourComponent!: DetourComponent;
   public stationDataComponent: StationDataComponent;
+  public touristAttractionComponent: TouristAttractionComponent | null = null;
 
   // Services
   public locationService: LocationService | null = null;
 
   // Visibility state
   public arePoisVisible: boolean = true;
+
+  // Explore mode state
+  private exploreSearchLocation: google.maps.LatLng | null = null;
+  private exploreSearchName: string = '';
+  private autocompleteExplore: google.maps.places.Autocomplete | null = null;
 
   constructor() {
     this.mapComponent = new MapComponent({
@@ -190,6 +224,8 @@ export class App {
     if (!this.initializeUI()) {
       return;
     }
+
+    this.buildPlacesSections();
 
     this.setupCallbacks();
 
@@ -408,6 +444,139 @@ export class App {
       // Initialize marker component
       this.markerComponent = new MarkerComponent(this.mapComponent.map);
 
+      // Initialize marker clustering
+      if (this.mapComponent.map) {
+        const mc = this.markerComponent;
+        const map = this.mapComponent.map;
+        const isTouch = mc.isTouchDevice();
+
+        const clusterRenderer: markerClusterer.Renderer = {
+          render: (cluster: markerClusterer.Cluster) => {
+            const count = cluster.count;
+            let size = 30;
+            let fontSize = 12;
+            if (count >= 50) {
+              size = 46;
+              fontSize = 15;
+            } else if (count >= 10) {
+              size = 38;
+              fontSize = 13;
+            }
+            const el = document.createElement('div');
+            el.style.cssText = `
+              width: ${size}px; height: ${size}px;
+              background: #2563eb; color: #fff;
+              border-radius: 50%; display: flex;
+              align-items: center; justify-content: center;
+              font-weight: 700; font-size: ${fontSize}px;
+              box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+              border: 2px solid #fff; cursor: pointer;
+            `;
+            el.textContent = String(count);
+            const clusterMarker = new google.maps.marker.AdvancedMarkerElement({
+              position: cluster.position,
+              content: el,
+              zIndex: 1000 + count,
+            });
+
+            // Register so click handler can find the cluster marker
+            const key = `${cluster.position.lat().toFixed(6)},${cluster.position.lng().toFixed(6)}`;
+            mc.registerClusterMarker(key, cluster, clusterMarker);
+
+            // Desktop: hover to spiderfy small clusters
+            if (!isTouch && mc.canSpiderfy(cluster)) {
+              const clusterData = cluster;
+              el.addEventListener('mouseenter', () => {
+                mc.spiderfy(clusterData, clusterMarker);
+              });
+            }
+
+            return clusterMarker;
+          },
+        };
+
+        const onClusterClick = (
+          _event: google.maps.MapMouseEvent,
+          cluster: markerClusterer.Cluster,
+        ) => {
+          if (mc.canSpiderfy(cluster)) {
+            const entry = mc.getClusterMarkerByPosition(
+              cluster.position.lat(),
+              cluster.position.lng()
+            );
+            if (entry) {
+              mc.spiderfy(cluster, entry.marker);
+            }
+          } else if (cluster.bounds) {
+            map.fitBounds(cluster.bounds);
+          }
+        };
+
+        this.markerComponent.initClusterer(map, clusterRenderer, onClusterClick);
+      }
+
+      // Initialize tourist attraction component
+      if (this.mapComponent.map) {
+        this.touristAttractionComponent = new TouristAttractionComponent(this.mapComponent.map);
+        const placesSearchStatus = document.getElementById('places-search-status');
+        if (placesSearchStatus) {
+          this.touristAttractionComponent.onProgress = (searches) => {
+            if (searches.size === 0) {
+              placesSearchStatus.style.display = 'none';
+              return;
+            }
+            const lines: string[] = [];
+            for (const [type, page] of searches) {
+              lines.push(`${this.touristAttractionComponent!.emojiForType(type)} ${this.touristAttractionComponent!.labelForType(type)} ${page}/3`);
+            }
+            placesSearchStatus.innerHTML = lines.join('<br>');
+            placesSearchStatus.style.display = 'block';
+          };
+        }
+        const savedZoom = getStorageItem<number>(PLACES_ZOOM_STORAGE_KEY);
+        if (savedZoom != null && placesZoomSlider && placesZoomValue) {
+          placesZoomSlider.value = String(savedZoom);
+          placesZoomValue.textContent = String(savedZoom);
+          this.touristAttractionComponent.setMinZoom(savedZoom);
+        }
+        const savedStarred = getStorageItem<{ ids: string[]; meta: { id: string; name: string; lat: number; lng: number }[] }>(STARRED_PLACES_STORAGE_KEY);
+        if (savedStarred && Array.isArray(savedStarred.ids)) {
+          this.touristAttractionComponent.setStarredPlaceIds(new Set(savedStarred.ids));
+          if (Array.isArray(savedStarred.meta)) this.touristAttractionComponent.restorePlaceMetadata(savedStarred.meta);
+        } else if (Array.isArray(savedStarred)) {
+          this.touristAttractionComponent.setStarredPlaceIds(new Set(savedStarred as unknown as string[]));
+        }
+        const savedHidden = getStorageItem<{ ids: string[]; meta: { id: string; name: string; lat: number; lng: number }[] }>(HIDDEN_PLACES_STORAGE_KEY);
+        if (savedHidden && Array.isArray(savedHidden.ids)) {
+          this.touristAttractionComponent.setHiddenPlaceIds(new Set(savedHidden.ids));
+          if (Array.isArray(savedHidden.meta)) this.touristAttractionComponent.restorePlaceMetadata(savedHidden.meta);
+        } else if (Array.isArray(savedHidden)) {
+          this.touristAttractionComponent.setHiddenPlaceIds(new Set(savedHidden as unknown as string[]));
+        }
+        this.touristAttractionComponent.onStarChange = () => {
+          this.persistPlacePreferences();
+          this.updateHiddenPlacesList();
+          this.updateStarredPlacesList();
+        };
+        this.touristAttractionComponent.onOpenPanel = (content) => openStationInfoPanel(content);
+        this.touristAttractionComponent.onUpdatePanel = (content) => updateStationInfoPanel(content);
+        this.touristAttractionComponent.onClosePanel = () => closeStationInfoPanel();
+        this.touristAttractionComponent.onPanToMarker = (pos) => panMapForPanel(pos);
+        setOnPanelClose(() => this.touristAttractionComponent?.deselectPlaceMarker());
+        this.touristAttractionComponent.fetchMissingPlaceNames();
+        const savedPlaceTypes = getStorageItem<string[]>(PLACES_STORAGE_KEY);
+        if (Array.isArray(savedPlaceTypes) && savedPlaceTypes.length > 0) {
+          placesPanel?.querySelectorAll<HTMLInputElement>('input[name="placeType"]').forEach(cb => {
+            cb.checked = savedPlaceTypes.includes(cb.value);
+          });
+          this.syncAllGroupCheckboxes();
+          this.touristAttractionComponent.setEnabledTypes(savedPlaceTypes);
+          attractionToggleButton?.classList.add('has-selection');
+        }
+        this.updateHiddenPlacesList();
+        this.updateStarredPlacesList();
+      }
+
       // Initialize filter component
       this.filterComponent = new FilterComponent({
         preferencesComponent: this.preferencesComponent,
@@ -459,8 +628,15 @@ export class App {
       addVersionDisplay(APP_VERSION);
     }
 
+    // Initialize explore autocomplete
+    this.initializeExploreAutocomplete();
+
     // Setup event listeners
     this.setupEventListeners();
+
+    // Start in explore mode
+    state.appMode = 'explore';
+    updateModeUI('explore');
 
     console.log('Map services and listeners setup finished.');
   }
@@ -557,6 +733,47 @@ export class App {
       setInputPlaceholder('start', unavailableMessage);
       setInputDisabled('end', true);
       setInputPlaceholder('end', unavailableMessage);
+    }
+  }
+
+  private initializeExploreAutocomplete(): void {
+    if (!exploreInput || !this.mapComponent.map) return;
+
+    try {
+      const autocompleteOptions: google.maps.places.AutocompleteOptions = {
+        fields: ['geometry', 'name', 'formatted_address'],
+        componentRestrictions: { country: 'TR' },
+        strictBounds: false,
+      };
+
+      this.autocompleteExplore = new google.maps.places.Autocomplete(
+        exploreInput,
+        autocompleteOptions
+      );
+
+      this.autocompleteExplore.addListener('place_changed', () => {
+        const place = this.autocompleteExplore?.getPlace();
+        if (!place?.geometry?.location) {
+          showTemporaryMessage(translate('messageInvalidLocation'), true);
+          return;
+        }
+
+        const location = place.geometry.location;
+        this.exploreSearchLocation = location;
+        this.exploreSearchName = place.name || place.formatted_address || '';
+
+        this.mapComponent.map?.panTo(location);
+        this.mapComponent.map?.setZoom(13);
+
+        if (exploreInput) {
+          exploreInput.value = this.exploreSearchName;
+          if (clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+        }
+      });
+
+      console.log('Explore autocomplete setup complete.');
+    } catch (error) {
+      console.error('Error setting up explore autocomplete:', error);
     }
   }
 
@@ -672,8 +889,56 @@ export class App {
     // Map click
     this.mapComponent.addClickListener(event => this.handleMapClick(event));
 
+    // Viewport change — refresh stations in explore mode, collapse spiderfied clusters
+    this.mapComponent.map?.addListener('idle', () => {
+      this.markerComponent.unspiderfy();
+      if (state.appMode === 'explore' && !this.routeComponent.isRouteActive) {
+        this.applyFilters();
+      }
+      this.touristAttractionComponent?.onMapIdle();
+    });
+
+    // Zoom indicator
+    const zoomIndicator = document.getElementById('zoom-level-indicator');
+    const updateZoomIndicator = () => {
+      const z = this.mapComponent.map?.getZoom();
+      if (zoomIndicator && z != null) zoomIndicator.textContent = `Z${Math.round(z)}`;
+    };
+    this.mapComponent.map?.addListener('zoom_changed', updateZoomIndicator);
+    updateZoomIndicator();
+
     // Map type buttons
     mapTypeButtons.forEach(button => button.addEventListener('click', handleMapTypeChange));
+
+    // Places panel
+    attractionToggleButton?.addEventListener('click', togglePlacesPanel);
+    closePlacesBtn?.addEventListener('click', togglePlacesPanel);
+    placesVisibleToggle?.addEventListener('change', () => {
+      this.touristAttractionComponent?.setVisible(placesVisibleToggle!.checked);
+    });
+    placesSelectAllBtn?.addEventListener('click', () => {
+      placesPanel?.querySelectorAll<HTMLInputElement>('input[name="placeType"]').forEach(cb => { cb.checked = true; });
+      placesPanel?.querySelectorAll<HTMLInputElement>('.places-group-checkbox').forEach(cb => { cb.checked = true; cb.indeterminate = false; });
+      this.handlePlaceTypeChange();
+    });
+    placesUnselectAllBtn?.addEventListener('click', () => {
+      placesPanel?.querySelectorAll<HTMLInputElement>('input[name="placeType"]').forEach(cb => { cb.checked = false; });
+      placesPanel?.querySelectorAll<HTMLInputElement>('.places-group-checkbox').forEach(cb => { cb.checked = false; cb.indeterminate = false; });
+      this.handlePlaceTypeChange();
+    });
+    placesStarredToggle?.addEventListener('click', () => {
+      if (!this.touristAttractionComponent) return;
+      const newVal = !this.touristAttractionComponent.showStarredOnly;
+      if (newVal && this.touristAttractionComponent.starredIds.size === 0) return;
+      this.touristAttractionComponent.setShowStarredOnly(newVal);
+      placesStarredToggle!.textContent = newVal ? translate('placesShowStarred') : translate('placesShowAll');
+    });
+    placesZoomSlider?.addEventListener('input', () => {
+      const val = parseInt(placesZoomSlider!.value, 10);
+      if (placesZoomValue) placesZoomValue.textContent = String(val);
+      this.touristAttractionComponent?.setMinZoom(val);
+      setStorageItem(PLACES_ZOOM_STORAGE_KEY, val);
+    });
 
     // Filter panel
     filterToggleButton?.addEventListener('click', toggleFilterPanel);
@@ -742,6 +1007,29 @@ export class App {
     document.addEventListener('keydown', event => this.handleKeyDown(event));
     document.addEventListener('click', handleDocumentClickForDropdown);
 
+    // Mode switching
+    directionsModeBtn?.addEventListener('click', () => this.switchToDirectionsMode());
+    exploreModeBtn?.addEventListener('click', () => this.switchToExploreMode());
+
+    // Explore input handlers
+    exploreInput?.addEventListener('input', () => {
+      if (exploreInput && clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+    });
+    clearExploreBtn?.addEventListener('click', () => {
+      if (exploreInput) {
+        exploreInput.value = '';
+        if (clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+        this.exploreSearchLocation = null;
+        this.exploreSearchName = '';
+      }
+    });
+    pasteExploreBtn?.addEventListener('click', () => {
+      this.handleExplorePaste();
+    });
+    useLocationExploreBtn?.addEventListener('click', () => {
+      this.handleExploreUseLocation();
+    });
+
     // Resize
     window.addEventListener('resize', handleResize);
     handleResize();
@@ -787,8 +1075,8 @@ export class App {
 
     setOptimizeRouteButtonEnabled(false);
 
-    const stationWaypoints = state.routeWaypoints.filter(wp => wp.type === 'station');
-    const waypointsForApi = stationWaypoints.map(wp => ({
+    const intermediateWaypoints = state.routeWaypoints.filter(wp => wp.type === 'station' || wp.type === 'place');
+    const waypointsForApi = intermediateWaypoints.map(wp => ({
       location: wp.location,
       stopover: true,
     }));
@@ -797,7 +1085,7 @@ export class App {
       origin: this.routeComponent.startLocation,
       destination: this.routeComponent.endLocation,
       waypoints: waypointsForApi,
-      optimizeWaypoints: useOptimization && stationWaypoints.length >= 2,
+      optimizeWaypoints: useOptimization && intermediateWaypoints.length >= 2,
       travelMode: google.maps.TravelMode.DRIVING,
     };
 
@@ -846,11 +1134,11 @@ export class App {
           // Handle optimization order
         }
 
-        setOptimizeRouteButtonEnabled(stationWaypoints.length >= 2);
+        setOptimizeRouteButtonEnabled(intermediateWaypoints.length >= 2);
       } else {
         console.error('Directions request failed:', status);
         showTemporaryMessage(translate('messageRouteCalcFailed'), true);
-        setOptimizeRouteButtonEnabled(stationWaypoints.length >= 2);
+        setOptimizeRouteButtonEnabled(intermediateWaypoints.length >= 2);
       }
     });
   }
@@ -959,8 +1247,8 @@ export class App {
       return;
     }
 
-    const stationWps = state.routeWaypoints.filter(wp => wp.type === 'station');
-    const allPoints = [startWp, ...stationWps, destWp];
+    const intermediateWps = state.routeWaypoints.filter(wp => wp.type === 'station' || wp.type === 'place');
+    const allPoints = [startWp, ...intermediateWps, destWp];
 
     const locationsString = allPoints
       .map(wp => {
@@ -1015,6 +1303,18 @@ export class App {
           }
         });
       }
+    } else if (state.appMode === 'explore') {
+      const bounds = this.mapComponent.map?.getBounds();
+      if (bounds) {
+        this.stationDataComponent.allStationData.forEach(station => {
+          if (this.filterComponent.poiMatchesFilters(station)) {
+            const pos = new google.maps.LatLng(station.lat, station.lng);
+            if (bounds.contains(pos)) {
+              stationsThatShouldBeVisible.add(String(station.id));
+            }
+          }
+        });
+      }
     }
 
     // Get IDs of stations that are in the route - these should always stay visible
@@ -1023,13 +1323,13 @@ export class App {
     );
 
     // Remove markers that shouldn't be visible
-    for (const [stationId, marker] of this.markerComponent.visiblePoiMarkers.entries()) {
-      // Don't remove markers that are part of the route
+    const toRemove: string[] = [];
+    for (const [stationId] of this.markerComponent.visiblePoiMarkers.entries()) {
       if (!stationsThatShouldBeVisible.has(stationId) && !stationsInRoute.has(stationId)) {
-        marker.map = null;
-        this.markerComponent.visiblePoiMarkers.delete(stationId);
+        toRemove.push(stationId);
       }
     }
+    toRemove.forEach(stationId => this.markerComponent.removePoiMarker(stationId));
 
     // Sync with legacy state
     state.visiblePoiMarkers = this.markerComponent.visiblePoiMarkers;
@@ -1041,15 +1341,14 @@ export class App {
         if (stationData) {
           const newMarker = createMarkerForStation(stationData);
           if (newMarker) {
-            // Only hide if pois are not visible AND this station is NOT in the route
-            if (!this.arePoisVisible && !stationsInRoute.has(stationId)) {
-              newMarker.map = null;
-            }
-            this.markerComponent.visiblePoiMarkers.set(stationId, newMarker);
+            this.markerComponent.addPoiMarker(stationId, newMarker);
           }
         }
       }
     });
+
+    // Re-render clusters after batch updates
+    this.markerComponent.renderClusters();
 
     // Update favorite badges
     this.markerComponent.visiblePoiMarkers.forEach(marker => {
@@ -1071,6 +1370,129 @@ export class App {
   /**
    * Handles filter change
    */
+  buildPlacesSections(): void {
+    const container = document.getElementById('places-sections-container');
+    if (!container) return;
+
+    for (const group of PLACE_TYPE_GROUPS) {
+      const section = document.createElement('div');
+      section.className = 'places-section';
+
+      const h4 = document.createElement('h4');
+      const groupCb = document.createElement('input');
+      groupCb.type = 'checkbox';
+      groupCb.className = 'places-group-checkbox';
+      h4.appendChild(groupCb);
+      const labelSpan = document.createElement('span');
+      labelSpan.setAttribute('data-i18n-key', group.labelKey);
+      labelSpan.textContent = translate(group.labelKey);
+      h4.appendChild(labelSpan);
+      section.appendChild(h4);
+
+      const cbContainer = document.createElement('div');
+      cbContainer.className = 'places-checkboxes';
+
+      const childCheckboxes: HTMLInputElement[] = [];
+      for (const type of group.types) {
+        const label = document.createElement('label');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.name = 'placeType';
+        cb.value = type;
+        label.appendChild(cb);
+        const span = document.createElement('span');
+        span.setAttribute('data-i18n-key', `place_${type}`);
+        span.textContent = translate(`place_${type}`);
+        label.appendChild(document.createTextNode(' '));
+        label.appendChild(span);
+        cbContainer.appendChild(label);
+        childCheckboxes.push(cb);
+
+        cb.addEventListener('change', () => {
+          this.syncGroupCheckbox(groupCb, childCheckboxes);
+          this.handlePlaceTypeChange();
+        });
+      }
+
+      groupCb.addEventListener('change', () => {
+        childCheckboxes.forEach(cb => { cb.checked = groupCb.checked; });
+        groupCb.indeterminate = false;
+        this.handlePlaceTypeChange();
+      });
+
+      section.appendChild(cbContainer);
+      container.appendChild(section);
+    }
+  }
+
+  private syncGroupCheckbox(groupCb: HTMLInputElement, children: HTMLInputElement[]): void {
+    const total = children.length;
+    const checked = children.filter(cb => cb.checked).length;
+    groupCb.checked = checked === total;
+    groupCb.indeterminate = checked > 0 && checked < total;
+  }
+
+  syncAllGroupCheckboxes(): void {
+    const container = document.getElementById('places-sections-container');
+    if (!container) return;
+    const sections = container.querySelectorAll('.places-section');
+    sections.forEach(section => {
+      const groupCb = section.querySelector<HTMLInputElement>('.places-group-checkbox');
+      const children = Array.from(section.querySelectorAll<HTMLInputElement>('input[name="placeType"]'));
+      if (groupCb && children.length > 0) {
+        this.syncGroupCheckbox(groupCb, children);
+      }
+    });
+  }
+
+  handlePlaceTypeChange(): void {
+    const checked: string[] = [];
+    placesPanel?.querySelectorAll<HTMLInputElement>('input[name="placeType"]:checked').forEach(input => {
+      checked.push(input.value);
+    });
+    this.touristAttractionComponent?.setEnabledTypes(checked);
+    attractionToggleButton?.classList.toggle('has-selection', checked.length > 0);
+    setStorageItem(PLACES_STORAGE_KEY, checked);
+  }
+
+  persistPlacePreferences(): void {
+    if (!this.touristAttractionComponent) return;
+    const meta = this.touristAttractionComponent.getAllPlaceMetadata();
+    setStorageItem(STARRED_PLACES_STORAGE_KEY, { ids: [...this.touristAttractionComponent.starredIds], meta });
+    setStorageItem(HIDDEN_PLACES_STORAGE_KEY, { ids: [...this.touristAttractionComponent.hiddenIds], meta });
+  }
+
+  updateHiddenPlacesList(): void {
+    const container = document.getElementById('hidden-places-list');
+    const section = document.getElementById('hidden-places-section');
+    if (!container || !this.touristAttractionComponent) return;
+    const hidden = this.touristAttractionComponent.getHiddenPlaces();
+    if (hidden.length === 0) {
+      if (section) section.style.display = 'none';
+      return;
+    }
+    if (section) section.style.display = 'block';
+    container.innerHTML = hidden.map(p =>
+      `<div class="place-list-item"><a class="place-list-name" href="#" onclick="event.preventDefault();handleGoToPlace('${p.id}')">${p.name}</a><div class="place-list-actions"><button class="place-list-btn" title="${translate('placeUnhide')}" onclick="handleUnhidePlace('${p.id}')">👁</button></div></div>`
+    ).join('');
+  }
+
+  updateStarredPlacesList(): void {
+    const container = document.getElementById('starred-places-list');
+    const section = document.getElementById('starred-places-section');
+    if (!container || !this.touristAttractionComponent) return;
+    const starred = this.touristAttractionComponent.getStarredPlaces();
+    if (starred.length === 0) {
+      if (section) section.style.display = 'none';
+      return;
+    }
+    if (section) section.style.display = 'block';
+    container.innerHTML = starred.map(p => {
+      const escaped = p.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      return `<div class="place-list-item"><a class="place-list-name" href="#" onclick="event.preventDefault();handleGoToPlace('${p.id}')">${p.name}</a><div class="place-list-actions"><button class="place-list-btn" title="${translate('placeAddToRoute')}" onclick="handleAddPlaceToRoute('${p.id}','${escaped}',${p.lat},${p.lng})">➕</button><button class="place-list-btn" title="${translate('placeUnstar')}" onclick="handleToggleStarPlace('${p.id}')">✕</button></div></div>`;
+    }).join('');
+  }
+
   handleFilterChange(): void {
     if (!this.filterComponent) {
       console.warn('Filter component not initialized yet.');
@@ -1293,14 +1715,134 @@ export class App {
     updateInfoWindowIfVisible(marker);
   }
 
+  // ==================== Mode Switching ====================
+
+  private switchToDirectionsMode(): void {
+    state.appMode = 'directions';
+    updateModeUI('directions');
+
+    if (this.exploreSearchLocation && this.exploreSearchName) {
+      setStartWaypoint(this.exploreSearchLocation, this.exploreSearchName);
+      setInputValue('start', this.exploreSearchName);
+      if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
+      updateMarker('start', this.exploreSearchLocation, this.exploreSearchName);
+      updateRouteBuilderUI();
+      updateGmapsButtonState();
+    }
+
+    this.exploreSearchLocation = null;
+    this.exploreSearchName = '';
+    if (exploreInput) exploreInput.value = '';
+
+    hideAllPois(resetSelectedMarkerZIndex);
+    closeStationInfoPanel();
+    this.applyFilters();
+    updateControlVisibility();
+  }
+
+  private switchToExploreMode(): void {
+    this.clearAllInputsAndRoute();
+
+    state.appMode = 'explore';
+    updateModeUI('explore');
+
+    this.applyFilters();
+    updateControlVisibility();
+  }
+
+  private handleExplorePaste(): void {
+    navigator.clipboard
+      .readText()
+      .then(text => {
+        if (!text.trim()) return;
+        if (!exploreInput) return;
+
+        exploreInput.value = text.trim();
+        if (clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+
+        const geocoder = this.mapComponent.geocoder;
+        if (!geocoder) return;
+
+        geocoder.geocode({ address: text.trim() }, (results, status) => {
+          if (
+            status === google.maps.GeocoderStatus.OK &&
+            results?.[0]?.geometry?.location
+          ) {
+            const location = results[0].geometry.location;
+            if (!isPlaceInTurkey({ geometry: { location }, address_components: results[0].address_components })) {
+              showTemporaryMessage(translate('messageNotInTurkey', { parsedType: 'Paste' }), true);
+              return;
+            }
+            this.exploreSearchLocation = location;
+            this.exploreSearchName = results[0].formatted_address || text.trim();
+            if (exploreInput) exploreInput.value = this.exploreSearchName;
+            if (exploreInput && clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+            this.mapComponent.map?.panTo(location);
+            this.mapComponent.map?.setZoom(13);
+          } else {
+            showTemporaryMessage(translate('messagePastedNoResults'), true);
+          }
+        });
+      })
+      .catch(() => {
+        showTemporaryMessage(translate('messagePastedError'), true);
+      });
+  }
+
+  private handleExploreUseLocation(): void {
+    if (!navigator.geolocation) {
+      showTemporaryMessage(translate('messageGeoNotSupported'), true);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const location = new google.maps.LatLng(
+          position.coords.latitude,
+          position.coords.longitude
+        );
+        this.exploreSearchLocation = location;
+        this.exploreSearchName = translate('locationTypeCurrentLocation');
+        if (exploreInput) {
+          exploreInput.value = this.exploreSearchName;
+          if (clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+        }
+        this.mapComponent.map?.panTo(location);
+        this.mapComponent.map?.setZoom(13);
+      },
+      error => {
+        const errorKeys: Record<number, string> = {
+          [GeolocationPositionError.PERMISSION_DENIED]: 'messageGeoPermissionDenied',
+          [GeolocationPositionError.POSITION_UNAVAILABLE]: 'messageGeoUnavailable',
+          [GeolocationPositionError.TIMEOUT]: 'messageGeoTimeout',
+        };
+        showTemporaryMessage(
+          translate(errorKeys[error.code] || 'messageCurrentLocationError'),
+          true
+        );
+      }
+    );
+  }
+
   // ==================== Event Handlers ====================
 
   /**
    * Handles map click
    */
   private handleMapClick(event: google.maps.MapMouseEvent): void {
-    // Close station info panel if open
     closeStationInfoPanel();
+    this.touristAttractionComponent?.closePanel();
+
+    const placeId = (event as { placeId?: string }).placeId;
+    if (placeId && event.latLng && this.touristAttractionComponent) {
+      event.stop?.();
+      this.touristAttractionComponent.showPlaceById(placeId, event.latLng);
+      return;
+    }
+
+    if (state.appMode === 'explore') {
+      return;
+    }
 
     event.stop?.();
     event.domEvent?.stopPropagation();
@@ -1378,14 +1920,19 @@ export class App {
 
       // Note: Station info panel closes itself on ESC via its own handler
 
+      this.touristAttractionComponent?.closePanel();
+
+      if (placesPanel?.classList.contains('open')) {
+        togglePlacesPanel();
+        closedSomething = true;
+      }
+
       if (filterPanel?.classList.contains('open')) {
-        console.log('Escape key pressed, closing Filter Panel.');
         toggleFilterPanel();
         closedSomething = true;
       }
 
       if (routeBuilderPanel?.classList.contains('open')) {
-        console.log('Escape key pressed, closing Route Builder Panel.');
         toggleRouteBuilderPanel();
         closedSomething = true;
       }
@@ -1395,7 +1942,16 @@ export class App {
 
     if (!isInputFocused && (event.key === 'x' || event.key === 'X')) {
       event.preventDefault();
-      this.clearAllInputsAndRoute();
+      if (state.appMode === 'explore') {
+        if (exploreInput) {
+          exploreInput.value = '';
+          if (clearExploreBtn) handleInputChange(exploreInput, clearExploreBtn);
+        }
+        this.exploreSearchLocation = null;
+        this.exploreSearchName = '';
+      } else {
+        this.clearAllInputsAndRoute();
+      }
     }
   }
 
@@ -1597,6 +2153,12 @@ declare global {
     _initMapReady: boolean;
     _initMapImpl: (() => void) | null;
     handleAddStationToRoute: (stationId: string) => void;
+    handleAddPlaceToRoute: (placeId: string, name: string, lat: number, lng: number) => void;
+    handleSetDirections: (name: string, lat: number, lng: number) => void;
+    handleToggleStarPlace: (placeId: string) => void;
+    handleToggleHidePlace: (placeId: string) => void;
+    handleUnhidePlace: (placeId: string) => void;
+    handleGoToPlace: (placeId: string) => void;
     handleInfoWindowBrandAction: (brandName: string, action: BrandAction) => void;
     handleIgnoreStationClick: (stationId: string) => void;
     retryDetourCalculation: (stationId: string) => void;
@@ -1682,6 +2244,70 @@ if (typeof window !== 'undefined') {
 }
 
 window.handleAddStationToRoute = handleAddStationToRoute;
+window.handleAddPlaceToRoute = handleAddPlaceToRoute;
+window.handleSetDirections = (name: string, lat: number, lng: number) => {
+  const app = getApp();
+  const location = new google.maps.LatLng(lat, lng);
+  const hasStart = getStartWaypoint();
+  const hasDest = getDestinationWaypoint();
+
+  if (state.appMode === 'explore') {
+    state.appMode = 'directions';
+    updateModeUI('directions');
+    if (exploreInput) exploreInput.value = '';
+    setStartWaypoint(location, name);
+    setInputValue('start', name);
+    if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
+    updateMarker('start', location, name);
+    updateRouteBuilderUI();
+    updateGmapsButtonState();
+    closeStationInfoPanel();
+    app.touristAttractionComponent?.closePanel();
+    app.applyFilters();
+    updateControlVisibility();
+  } else if (!hasStart) {
+    setStartWaypoint(location, name);
+    setInputValue('start', name);
+    if (startInput && clearStartBtn) handleInputChange(startInput, clearStartBtn);
+    updateMarker('start', location, name);
+    updateRouteBuilderUI();
+    updateGmapsButtonState();
+    closeStationInfoPanel();
+    app.touristAttractionComponent?.closePanel();
+    if (getDestinationWaypoint()) app.calculateRoute();
+  } else if (!hasDest) {
+    setDestinationWaypoint(location, name);
+    setInputValue('end', name);
+    if (endInput && clearEndBtn) handleInputChange(endInput, clearEndBtn);
+    updateMarker('end', location, name);
+    updateRouteBuilderUI();
+    updateGmapsButtonState();
+    closeStationInfoPanel();
+    app.touristAttractionComponent?.closePanel();
+    app.calculateRoute();
+  }
+};
+window.handleToggleStarPlace = (placeId: string) => {
+  const app = getApp();
+  if (!app.touristAttractionComponent) return;
+  app.touristAttractionComponent.toggleStar(placeId);
+  app.touristAttractionComponent.refreshCurrentPopup();
+};
+window.handleToggleHidePlace = (placeId: string) => {
+  const app = getApp();
+  if (!app.touristAttractionComponent) return;
+  app.touristAttractionComponent.toggleHidden(placeId);
+};
+window.handleUnhidePlace = (placeId: string) => {
+  const app = getApp();
+  if (!app.touristAttractionComponent) return;
+  app.touristAttractionComponent.unhide(placeId);
+};
+window.handleGoToPlace = (placeId: string) => {
+  const app = getApp();
+  if (!app.touristAttractionComponent) return;
+  app.touristAttractionComponent.goToPlace(placeId);
+};
 window.handleInfoWindowBrandAction = (brandName: string, action: BrandAction) => {
   getApp().handleInfoWindowBrandAction(brandName, action);
 };

@@ -40,6 +40,30 @@ export const IGNORED_STATIONS_STORAGE_KEY = 'evRouteIgnoredStations';
 export const DEFAULT_DISTANCE_THRESHOLD = 5;
 export const DEFAULT_MAP_TYPE_ID = 'roadmap' as const;
 
+// --- Places Layer ---
+export const MIN_ATTRACTION_ZOOM = 12;
+export const ATTRACTION_DEBOUNCE_MS = 500;
+export const PLACE_TYPE_GROUPS: readonly { labelKey: string; types: readonly string[] }[] = [
+  { labelKey: 'placeGroupCulture', types: ['tourist_attraction', 'museum', 'art_gallery', 'library', 'university'] },
+  { labelKey: 'placeGroupNature', types: ['park', 'zoo', 'aquarium', 'campground'] },
+  { labelKey: 'placeGroupReligious', types: ['mosque', 'church', 'synagogue', 'hindu_temple'] },
+  { labelKey: 'placeGroupEntertainment', types: ['amusement_park', 'stadium', 'casino', 'movie_theater', 'night_club', 'spa', 'bowling_alley', 'gym'] },
+  { labelKey: 'placeGroupFood', types: ['restaurant', 'cafe', 'bar', 'bakery', 'supermarket'] },
+  { labelKey: 'placeGroupShopping', types: ['shopping_mall', 'book_store', 'clothing_store', 'jewelry_store', 'department_store', 'electronics_store'] },
+  { labelKey: 'placeGroupTransport', types: ['airport', 'train_station', 'bus_station', 'subway_station', 'lodging'] },
+  { labelKey: 'placeGroupHealth', types: ['hospital', 'pharmacy', 'doctor', 'dentist', 'physiotherapist'] },
+  { labelKey: 'placeGroupAutomotive', types: ['car_dealer', 'car_rental', 'car_wash', 'car_repair', 'gas_station'] },
+  { labelKey: 'placeGroupFinance', types: ['atm', 'bank', 'accounting', 'insurance_agency'] },
+  { labelKey: 'placeGroupPersonalCare', types: ['hair_care', 'beauty_salon', 'laundry'] },
+  { labelKey: 'placeGroupServices', types: ['post_office', 'travel_agency', 'locksmith', 'plumber', 'electrician', 'real_estate_agency', 'lawyer', 'storage', 'funeral_home'] },
+  { labelKey: 'placeGroupPets', types: ['pet_store', 'veterinary_care'] },
+  { labelKey: 'placeGroupGovernment', types: ['local_government_office', 'fire_station', 'police', 'courthouse', 'city_hall', 'embassy'] },
+] as const;
+export const PLACES_STORAGE_KEY = 'evRoutePlaces_v1';
+export const PLACES_ZOOM_STORAGE_KEY = 'evRoutePlacesZoom_v1';
+export const STARRED_PLACES_STORAGE_KEY = 'evRouteStarredPlaces_v1';
+export const HIDDEN_PLACES_STORAGE_KEY = 'evRouteHiddenPlaces_v1';
+
 // --- Default Filter States ---
 export const defaultFilters = {
   connectorType: 'ALL',

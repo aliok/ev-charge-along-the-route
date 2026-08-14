@@ -14,6 +14,10 @@ test.describe('Location Input - Autocomplete Selection', () => {
       return window.appState?.autocompleteStart !== null &&
              window.appState?.autocompleteEnd !== null;
     }, { timeout: 10000 });
+
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
   });
 
   test('should trigger autocomplete dropdown when typing', async ({ page }) => {
@@ -96,6 +100,10 @@ test.describe('Location Input - Clear Functionality', () => {
       return window.appState?.autocompleteStart !== null &&
              window.appState?.autocompleteEnd !== null;
     }, { timeout: 10000 });
+
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
   });
 
   test('should show/hide clear button based on input value', async ({ page }) => {
@@ -243,6 +251,10 @@ test.describe('Location Input - Paste Button', () => {
     const loadingOverlay = page.locator('#loading-overlay');
     await expect(loadingOverlay).toHaveClass(/hidden/, { timeout: 15000 });
 
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
+
     // Grant clipboard permissions
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
   });
@@ -305,6 +317,10 @@ test.describe('Location Input - Use Location Button', () => {
 
     const loadingOverlay = page.locator('#loading-overlay');
     await expect(loadingOverlay).toHaveClass(/hidden/, { timeout: 15000 });
+
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
 
     // Mock geolocation
     await page.context().grantPermissions(['geolocation']);

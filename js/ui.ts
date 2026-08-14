@@ -65,6 +65,15 @@ let offsetStartDecBtn: HTMLButtonElement | null = null;
 let offsetDestIncBtn: HTMLButtonElement | null = null;
 let offsetDestDecBtn: HTMLButtonElement | null = null;
 let routeBuilderToggleButton: HTMLElement | null = null;
+let attractionToggleButton: HTMLElement | null = null;
+let placesPanel: HTMLElement | null = null;
+let closePlacesBtn: HTMLElement | null = null;
+let placesVisibleToggle: HTMLInputElement | null = null;
+let placesSelectAllBtn: HTMLElement | null = null;
+let placesUnselectAllBtn: HTMLElement | null = null;
+let placesStarredToggle: HTMLElement | null = null;
+let placesZoomSlider: HTMLInputElement | null = null;
+let placesZoomValue: HTMLElement | null = null;
 let routeBuilderPanel: HTMLElement | null = null;
 let closeRouteBuilderBtn: HTMLElement | null = null;
 let waypointsListContainer: HTMLElement | null = null;
@@ -73,6 +82,14 @@ let routeSummaryContainer: HTMLElement | null = null;
 let optimizeRouteBtn: HTMLButtonElement | null = null;
 let togglePoiVisibilityBtn: HTMLButtonElement | null = null;
 let openRouteInGmapsBtn: HTMLButtonElement | null = null;
+let exploreInputGroup: HTMLElement | null = null;
+let directionsInputGroup: HTMLElement | null = null;
+let exploreInput: HTMLInputElement | null = null;
+let clearExploreBtn: HTMLElement | null = null;
+let pasteExploreBtn: HTMLElement | null = null;
+let useLocationExploreBtn: HTMLButtonElement | null = null;
+let directionsModeBtn: HTMLElement | null = null;
+let exploreModeBtn: HTMLElement | null = null;
 
 // --- UI Initialization ---
 export function getUIElements(): void {
@@ -125,6 +142,15 @@ export function getUIElements(): void {
   offsetDestIncBtn = document.getElementById('offset-dest-inc') as HTMLButtonElement | null;
   offsetDestDecBtn = document.getElementById('offset-dest-dec') as HTMLButtonElement | null;
   routeBuilderToggleButton = document.getElementById('route-builder-toggle-btn');
+  attractionToggleButton = document.getElementById('attraction-toggle-btn');
+  placesPanel = document.getElementById('places-panel');
+  closePlacesBtn = document.getElementById('close-places-btn');
+  placesVisibleToggle = document.getElementById('places-visible-toggle') as HTMLInputElement | null;
+  placesSelectAllBtn = document.getElementById('places-select-all-btn');
+  placesUnselectAllBtn = document.getElementById('places-unselect-all-btn');
+  placesStarredToggle = document.getElementById('places-starred-toggle');
+  placesZoomSlider = document.getElementById('places-zoom-slider') as HTMLInputElement | null;
+  placesZoomValue = document.getElementById('places-zoom-value');
   routeBuilderPanel = document.getElementById('route-builder-panel');
   closeRouteBuilderBtn = document.getElementById('close-route-builder-btn');
   waypointsListContainer = document.getElementById('route-waypoints-list-container');
@@ -137,6 +163,16 @@ export function getUIElements(): void {
   openRouteInGmapsBtn = document.getElementById(
     'open-route-in-gmaps-btn'
   ) as HTMLButtonElement | null;
+  exploreInputGroup = document.getElementById('explore-input-group');
+  directionsInputGroup = document.getElementById('directions-input-group');
+  exploreInput = document.getElementById('explore-input') as HTMLInputElement | null;
+  clearExploreBtn = document.getElementById('clear-explore-btn');
+  pasteExploreBtn = document.getElementById('paste-explore-btn');
+  useLocationExploreBtn = document.getElementById(
+    'use-location-explore-btn'
+  ) as HTMLButtonElement | null;
+  directionsModeBtn = document.getElementById('directions-mode-btn');
+  exploreModeBtn = document.getElementById('explore-mode-btn');
 }
 
 export function validateUIElements(): boolean {
@@ -184,7 +220,15 @@ export function validateUIElements(): boolean {
     routeSummaryContainer &&
     optimizeRouteBtn &&
     togglePoiVisibilityBtn &&
-    openRouteInGmapsBtn
+    openRouteInGmapsBtn &&
+    exploreInputGroup &&
+    directionsInputGroup &&
+    exploreInput &&
+    clearExploreBtn &&
+    pasteExploreBtn &&
+    useLocationExploreBtn &&
+    directionsModeBtn &&
+    exploreModeBtn
   );
 }
 
@@ -214,12 +258,12 @@ export function updateRouteBuilderUI(
 
     const isFirst = index === 0;
     const isLast = index >= state.routeWaypoints.length - 1;
-    const isStation = wp.type === 'station';
+    const isIntermediate = wp.type === 'station' || wp.type === 'place';
 
-    const disableUp = isFirst || !isStation || state.routeWaypoints[index - 1]?.type === 'start';
+    const disableUp = isFirst || !isIntermediate || state.routeWaypoints[index - 1]?.type === 'start';
     const disableDown =
-      isLast || !isStation || state.routeWaypoints[index + 1]?.type === 'destination';
-    const disableRemove = !isStation;
+      isLast || !isIntermediate || state.routeWaypoints[index + 1]?.type === 'destination';
+    const disableRemove = !isIntermediate;
 
     let iconHTML = '';
     let line1Content = '';
@@ -231,8 +275,10 @@ export function updateRouteBuilderUI(
     } else if (wp.type === 'destination') {
       iconHTML = '<span class="waypoint-icon">🏁</span>';
       line1Content = `<span class="waypoint-label">${wp.name}</span>`;
+    } else if (wp.type === 'place') {
+      iconHTML = '<span class="waypoint-icon">📌</span>';
+      line1Content = `<span class="waypoint-label">${wp.name}</span>`;
     } else if (wp.type === 'station') {
-      // Find station data to get brand logo and details
       const stationData = state.allStationData.find(s => String(s.id) === String(wp.id));
       if (stationData) {
         const faviconUrl = getFaviconUrlFromReportUrl(stationData.reportUrl);
@@ -263,7 +309,7 @@ export function updateRouteBuilderUI(
             </div>
         `;
 
-    if (isStation && line2Content) {
+    if (isIntermediate && line2Content) {
       // Two-line layout for stations
       itemDiv.innerHTML = `
                 ${iconHTML}
@@ -417,6 +463,20 @@ export function updateOffsetControlsVisibility(): void {
   }
 }
 
+export function updateModeUI(mode: 'explore' | 'directions'): void {
+  if (!exploreInputGroup || !directionsInputGroup || !distanceContainer) return;
+
+  if (mode === 'explore') {
+    exploreInputGroup.classList.remove('hidden');
+    directionsInputGroup.classList.add('hidden');
+    distanceContainer.classList.add('hidden');
+  } else {
+    exploreInputGroup.classList.add('hidden');
+    directionsInputGroup.classList.remove('hidden');
+    distanceContainer.classList.remove('hidden');
+  }
+}
+
 export function updateControlVisibility(): void {
   if (!controlPanel || !inputContainer || !hamburgerButton || !distanceContainer) {
     console.error('Cannot update control visibility: UI elements missing.');
@@ -431,11 +491,19 @@ export function updateControlVisibility(): void {
       distanceContainer.classList.remove('hidden');
     } else {
       inputContainer.classList.remove('hidden');
-      distanceContainer.classList.remove('hidden');
+      if (state.appMode === 'directions') {
+        distanceContainer.classList.remove('hidden');
+      } else {
+        distanceContainer.classList.add('hidden');
+      }
     }
   } else {
     inputContainer.classList.remove('hidden');
-    distanceContainer.classList.remove('hidden');
+    if (state.appMode === 'directions') {
+      distanceContainer.classList.remove('hidden');
+    } else {
+      distanceContainer.classList.add('hidden');
+    }
     hamburgerButton.classList.add('hidden');
     controlPanel.classList.remove('pr-16');
   }
@@ -489,6 +557,13 @@ export function toggleRouteBuilderPanel(): void {
   if (!routeBuilderPanel) return;
   routeBuilderPanel.classList.toggle('open');
 }
+
+function togglePlacesPanelFn(): void {
+  if (!placesPanel) return;
+  const isOpen = placesPanel.classList.toggle('open');
+  attractionToggleButton?.classList.toggle('active', isOpen);
+}
+const togglePlacesPanel = togglePlacesPanelFn;
 
 export function toggleFilterPanel(): void {
   if (!filterPanel) return;
@@ -975,4 +1050,22 @@ export {
   optimizeRouteBtn,
   togglePoiVisibilityBtn,
   openRouteInGmapsBtn,
+  exploreInputGroup,
+  directionsInputGroup,
+  exploreInput,
+  clearExploreBtn,
+  pasteExploreBtn,
+  useLocationExploreBtn,
+  directionsModeBtn,
+  exploreModeBtn,
+  attractionToggleButton,
+  placesPanel,
+  closePlacesBtn,
+  placesVisibleToggle,
+  placesSelectAllBtn,
+  placesUnselectAllBtn,
+  placesStarredToggle,
+  placesZoomSlider,
+  placesZoomValue,
+  togglePlacesPanel,
 };

@@ -52,7 +52,7 @@ export interface LiveSocketData {
 // Type for live socket data - can be array, false (error), or null (loading)
 export type LiveSocketDataState = LiveSocketData[] | false | null;
 
-type WaypointType = 'start' | 'destination' | 'station';
+type WaypointType = 'start' | 'destination' | 'station' | 'place';
 
 export interface Waypoint {
   type: WaypointType;
@@ -68,9 +68,14 @@ export interface Filters {
   mapTypeId?: string;
 }
 
+export type AppMode = 'explore' | 'directions';
+
 // --- Global State Object ---
 // All application state is stored in this object for easy access and mutation
 const state = {
+  // App Mode
+  appMode: 'explore' as AppMode,
+
   // Map & Services
   map: null as google.maps.Map | null,
   directionsService: null as google.maps.DirectionsService | null,

@@ -8,6 +8,10 @@ test.describe('Application UI Functionality', () => {
     // Wait for loading overlay to disappear
     const loadingOverlay = page.locator('#loading-overlay');
     await expect(loadingOverlay).toHaveClass(/hidden/, { timeout: 15000 });
+
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
   });
 
   test('should load the application with functional map', async ({ page }) => {

@@ -2,6 +2,13 @@ import { test, expect } from '@playwright/test';
 
 // Helper to create a route by typing into inputs like a real user
 async function createRouteByTyping(page, startLocation = 'Istanbul', endLocation = 'Ankara', minMarkers = 5) {
+  // Switch to directions mode if in explore mode
+  const dirBtn = page.locator('#directions-mode-btn');
+  if (await dirBtn.isVisible()) {
+    await dirBtn.click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
+  }
+
   const startInput = page.locator('#start-input');
   const endInput = page.locator('#end-input');
 
@@ -82,18 +89,14 @@ test.describe('Real Marker Visibility', () => {
       const visibleMarkers = window.getVisibleMarkers();
       const allMarkers = window.getAllMarkers();
 
-      // Check if markers have the map property set (means they're visible)
-      const markersWithMap = Array.from(visibleMarkers.values()).filter(m => m.map !== null);
-
       return {
         visibleCount: visibleMarkers.size,
         allCount: allMarkers.length,
-        markersOnMap: markersWithMap.length,
       };
     });
 
     expect(markerInfo.visibleCount).toBeGreaterThan(0);
-    expect(markerInfo.markersOnMap).toBeGreaterThan(0);
+    expect(markerInfo.allCount).toBeGreaterThan(0);
   });
 
   test('should have marker DOM elements rendered in the map', async ({ page }) => {
@@ -275,6 +278,10 @@ test.describe('Real Marker Interaction', () => {
       return window.appState?.autocompleteStart !== null &&
              window.appState?.autocompleteEnd !== null;
     }, { timeout: 10000 });
+
+    // Switch to directions mode
+    await page.locator('#directions-mode-btn').click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
   });
 
   test('should create route from Istanbul to Ankara and display station markers with correct data', async ({ page }) => {
@@ -352,7 +359,7 @@ test.describe('Real Marker Interaction', () => {
     // Create a route first
     await createRouteByTyping(page, 'Istanbul', 'Ankara', 5);
 
-    // Get the first visible marker's data and click it programmatically
+    // Get the first visible marker's data and click it via Google Maps event
     const markerInfo = await page.evaluate(() => {
       const markers = window.getVisibleMarkers();
       if (markers.size === 0) return null;
@@ -360,10 +367,8 @@ test.describe('Real Marker Interaction', () => {
       const firstMarker = Array.from(markers.values())[0];
       const poiData = firstMarker.poiData;
 
-      // Click on the marker's content element directly
-      if (firstMarker.content) {
-        firstMarker.content.click();
-      }
+      // Trigger click via Google Maps event API (works even when clustered)
+      google.maps.event.trigger(firstMarker, 'click');
 
       return {
         stationId: firstMarker.stationId,

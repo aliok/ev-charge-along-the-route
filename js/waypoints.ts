@@ -142,6 +142,42 @@ export function handleAddStationToRoute(stationId: string | number): void {
 }
 
 /**
+ * Adds a place to the route as a waypoint
+ */
+export function handleAddPlaceToRoute(placeId: string, name: string, lat: number, lng: number): void {
+  if (state.routeWaypoints.some(wp => wp.type === 'place' && wp.id === placeId)) {
+    callbacks.showTemporaryMessage?.(
+      callbacks.translate?.('messagePlaceAlreadyInRoute') ?? 'Place already in route',
+      false
+    );
+    return;
+  }
+
+  const waypoint: Waypoint = {
+    type: 'place',
+    id: placeId,
+    name,
+    location: new google.maps.LatLng(lat, lng),
+  };
+
+  const destinationIndex = state.routeWaypoints.findIndex(wp => wp.type === 'destination');
+  if (destinationIndex !== -1) {
+    state.routeWaypoints.splice(destinationIndex, 0, waypoint);
+  } else {
+    state.routeWaypoints.push(waypoint);
+  }
+
+  callbacks.showTemporaryMessage?.(
+    callbacks.translate?.('messagePlaceAddedToRoute', { name }) ?? `${name} added to route`,
+    false
+  );
+  callbacks.updateRouteBuilderUI?.();
+  callbacks.calculateRoute?.(true);
+  callbacks.updateGmapsButtonState?.();
+  callbacks.updatePoiVisibilityButtonUI?.();
+}
+
+/**
  * Handles waypoint actions (remove, move up, move down)
  */
 export function handleWaypointAction(event: MouseEvent): void {

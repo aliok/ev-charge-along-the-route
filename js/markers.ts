@@ -73,6 +73,12 @@ export function setupMarkerCallbacks(callbacks: MarkerCallbacks): void {
   }
 }
 
+let onPanelCloseCallback: (() => void) | null = null;
+
+export function setOnPanelClose(callback: () => void): void {
+  onPanelCloseCallback = callback;
+}
+
 // --- Station Info Panel Management ---
 export function initializeStationInfoPanel(): void {
   stationInfoPanel = document.getElementById('station-info-panel');
@@ -195,6 +201,42 @@ export function openStationInfoPanel(content: string): void {
   logger.debug('Station info panel opened');
 }
 
+export function panMapForPanel(position: google.maps.LatLng | google.maps.LatLngLiteral): void {
+  if (!state.map) return;
+  const projection = state.map.getProjection();
+  const latLng = position instanceof google.maps.LatLng
+    ? position
+    : new google.maps.LatLng(position.lat, position.lng);
+
+  if (!projection) {
+    state.map.panTo(latLng);
+    return;
+  }
+
+  const isMobile = window.innerWidth <= 768;
+  const scale = Math.pow(2, state.map.getZoom() || 10);
+  const worldCoordinate = projection.fromLatLngToPoint(latLng);
+  if (!worldCoordinate) {
+    state.map.panTo(latLng);
+    return;
+  }
+
+  if (isMobile) {
+    const pixelOffsetY = (window.innerHeight * 0.25) / scale;
+    const newCenter = projection.fromPointToLatLng(
+      new google.maps.Point(worldCoordinate.x, worldCoordinate.y + pixelOffsetY)
+    );
+    if (newCenter) state.map.panTo(newCenter);
+  } else {
+    const visibleWidth = window.innerWidth - 418;
+    const pixelOffsetX = -(visibleWidth * 0.1) / scale;
+    const newCenter = projection.fromPointToLatLng(
+      new google.maps.Point(worldCoordinate.x + pixelOffsetX, worldCoordinate.y)
+    );
+    if (newCenter) state.map.panTo(newCenter);
+  }
+}
+
 export function closeStationInfoPanel(): void {
   if (!stationInfoPanel) {
     logger.error('Station info panel not initialized');
@@ -205,6 +247,7 @@ export function closeStationInfoPanel(): void {
   // Reset any inline transform from swipe gesture
   stationInfoPanel.style.transform = '';
   resetSelectedMarkerZIndex();
+  onPanelCloseCallback?.();
 
   // Reset map padding
   if (state.map) {
@@ -319,9 +362,7 @@ export function createMarkerForStation(stationData: StationData): ExtendedMarker
     marker.cachedInfoWindowContent = null;
 
     marker.addListener('click', () => {
-      if (marker.map != null) {
-        fetchPoiDetails(marker, marker.poiData!, false);
-      }
+      fetchPoiDetails(marker, marker.poiData!, false);
     });
 
     container.addEventListener('mouseover', () => {
@@ -691,9 +732,9 @@ function buildInfoWindowHtml(
   const escHintHtml = `<span class="esc-hint hidden sm:inline">${translate('iwEscHint')}</span>`;
 
   let addToRouteButtonHtml = '';
-  const canAddToRoute =
-    state.routeWaypoints.some(wp => wp.type === 'start') &&
-    state.routeWaypoints.some(wp => wp.type === 'destination');
+  const hasStart = state.routeWaypoints.some(wp => wp.type === 'start');
+  const hasDest = state.routeWaypoints.some(wp => wp.type === 'destination');
+  const canAddToRoute = hasStart && hasDest;
   const isAlreadyInRoute = state.routeWaypoints.some(
     wp => wp.type === 'station' && wp.id === String(poiData.id)
   );
@@ -708,11 +749,30 @@ function buildInfoWindowHtml(
              `;
   }
 
+  let directionsButtonHtml = '';
+  if (!canAddToRoute) {
+    const stationName = (poiData.brand || poiData.title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    let directionsLabel: string;
+    if (state.appMode === 'explore') {
+      directionsLabel = translate('buttonDirections');
+    } else if (!hasStart) {
+      directionsLabel = translate('buttonSetSource');
+    } else {
+      directionsLabel = translate('buttonSetDestination');
+    }
+    directionsButtonHtml = `
+                <button class="directions-btn"
+                        onclick="handleSetDirections('${stationName}',${poiData.lat},${poiData.lng})">
+                    ${directionsLabel}
+                </button>
+             `;
+  }
+
   return `
             <div class="poi-info-window">
                  <img src="${logoSrc}" class="info-logo" alt="${translate('markerLogoAlt', { name: poiData.brand || poiData.title || poiData.id })}" onerror="this.src='${DEFAULT_EV_SVG_DATA_URI}'; this.onerror=null;">
                  <div class="title-area">
-                     <h3>${mainTitle}${addToRouteButtonHtml}</h3>
+                     <h3>${mainTitle}${addToRouteButtonHtml}${directionsButtonHtml}</h3>
                  </div>
                 ${subTitle}
                 ${detourSection}
@@ -779,58 +839,7 @@ export async function fetchPoiDetails(
   }
 
   if (!suppressInfoWindowOpen && state.map && marker.position) {
-    // Pan to marker (adjust padding based on screen size)
-    const isMobile = window.innerWidth <= 768;
-
-    // Calculate offset to position marker in visible area (not behind panel)
-    const projection = state.map.getProjection();
-    if (projection) {
-      const markerLatLng = marker.position;
-
-      if (isMobile) {
-        // Mobile: Position marker in upper portion of screen (above 60vh bottom sheet)
-        const scale = Math.pow(2, state.map.getZoom() || 10);
-        const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
-
-        if (worldCoordinate) {
-          const pixelOffsetY = (window.innerHeight * 0.25) / scale; // Move marker well above the panel
-
-          const newWorldCoordinate = new google.maps.Point(
-            worldCoordinate.x,
-            worldCoordinate.y + pixelOffsetY
-          );
-
-          const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
-          if (newCenter) {
-            state.map.panTo(newCenter);
-          }
-        }
-      } else {
-        // Desktop: Position marker in center-right area (to the right of left panel)
-        const scale = Math.pow(2, state.map.getZoom() || 10);
-        const worldCoordinate = projection.fromLatLngToPoint(markerLatLng);
-
-        if (worldCoordinate) {
-          // Offset to move marker right (account for 418px left panel)
-          // Position marker at approximately 60% from left edge of visible area
-          const visibleWidth = window.innerWidth - 418;
-          const pixelOffsetX = -(visibleWidth * 0.1) / scale; // Slight offset from center of visible area
-
-          const newWorldCoordinate = new google.maps.Point(
-            worldCoordinate.x + pixelOffsetX,
-            worldCoordinate.y
-          );
-
-          const newCenter = projection.fromPointToLatLng(newWorldCoordinate);
-          if (newCenter) {
-            state.map.panTo(newCenter);
-          }
-        }
-      }
-    } else {
-      // Fallback if projection is not available
-      state.map.panTo(marker.position);
-    }
+    panMapForPanel(marker.position);
 
     const initialContent = buildInfoWindowHtml(marker, poiData, null, 'loading', initialDetourHtml);
     openStationInfoPanel(initialContent);

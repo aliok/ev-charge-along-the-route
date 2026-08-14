@@ -2,6 +2,13 @@ import { test, expect } from '@playwright/test';
 
 // Helper to create a route by typing into inputs like a real user
 async function createRouteByTyping(page, startLocation = 'Istanbul', endLocation = 'Ankara', minMarkers = 5) {
+  // Switch to directions mode if in explore mode
+  const dirBtn = page.locator('#directions-mode-btn');
+  if (await dirBtn.isVisible()) {
+    await dirBtn.click();
+    await page.waitForSelector('#directions-input-group:not(.hidden)', { timeout: 5000 });
+  }
+
   const startInput = page.locator('#start-input');
   const endInput = page.locator('#end-input');
 
