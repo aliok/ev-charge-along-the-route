@@ -1420,6 +1420,7 @@ input.input-loading {
         box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         padding-top: 1.5rem;
         transition: transform 0.3s ease-in-out;
+        overflow-y: hidden;
     }
 
     /* Allow instant transform when dragging (no transition) */
