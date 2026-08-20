@@ -1384,6 +1384,7 @@ input.input-loading {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    padding-bottom: 2rem;
 }
 
 /* Mobile: Bottom Sheet */
